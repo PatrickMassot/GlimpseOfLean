@@ -1,5 +1,4 @@
 import Lean
-import Std.Tactic.OpenPrivate
 
 import Mathlib.Tactic.LibrarySearch
 import Mathlib.Tactic.Propose
@@ -55,7 +54,7 @@ parse it by simply using the forall parser. -/
 Note that this takes advantage of the fact that `(x : α) → p x` notation is
 never used for propositions, so we can match on this result and rewrite it. -/
 @[scoped delab forallE]
-def delabPi : Delab := do
+def delabPi : Delab := whenPPOption Lean.getPPNotation do
   let stx ← delabForall
   -- Replacements
   let stx : Term ←
@@ -79,7 +78,70 @@ def delabPi : Delab := do
 
 end PiNotation
 
-open PiNotation
+section SupInfNotation
+open Lean Lean.PrettyPrinter.Delaborator
+
+/-!
+Improvements to the unexpanders in `Mathlib.Order.CompleteLattice`.
+
+These are implemented as delaborators directly.
+-/
+
+@[delab app.supᵢ]
+def supᵢ_delab : Delab := whenPPOption Lean.getPPNotation do
+  let #[_, _, ι, f] := (← SubExpr.getExpr).getAppArgs | failure
+  unless f.isLambda do failure
+  let prop ← Meta.isProp ι
+  let dep := f.bindingBody!.hasLooseBVar 0
+  let ppTypes ← getPPOption getPPFunBinderTypes
+  let stx ← SubExpr.withAppArg do
+    let dom ← SubExpr.withBindingDomain delab
+    withBindingBodyUnusedName $ fun x => do
+      let x : TSyntax `ident := .mk x
+      let body ← delab
+      if prop && !dep then
+        `(⨆ (_ : $dom), $body)
+      else if prop || ppTypes then
+        `(⨆ ($x:ident : $dom), $body)
+      else
+        `(⨆ $x:ident, $body)
+  -- Cute binders
+  let stx : Term ←
+    match stx with
+    | `(⨆ $x:ident, ⨆ (_ : $y:ident ∈ $s), $body)
+    | `(⨆ ($x:ident : $_), ⨆ (_ : $y:ident ∈ $s), $body) =>
+      if x == y then `(⨆ $x:ident ∈ $s, $body) else pure stx
+    | _ => pure stx
+  return stx
+
+@[delab app.infᵢ]
+def infᵢ_delab : Delab := whenPPOption Lean.getPPNotation do
+  let #[_, _, ι, f] := (← SubExpr.getExpr).getAppArgs | failure
+  unless f.isLambda do failure
+  let prop ← Meta.isProp ι
+  let dep := f.bindingBody!.hasLooseBVar 0
+  let ppTypes ← getPPOption getPPFunBinderTypes
+  let stx ← SubExpr.withAppArg do
+    let dom ← SubExpr.withBindingDomain delab
+    withBindingBodyUnusedName $ fun x => do
+      let x : TSyntax `ident := .mk x
+      let body ← delab
+      if prop && !dep then
+        `(⨅ (_ : $dom), $body)
+      else if prop || ppTypes then
+        `(⨅ ($x:ident : $dom), $body)
+      else
+        `(⨅ $x:ident, $body)
+  -- Cute binders
+  let stx : Term ←
+    match stx with
+    | `(⨅ $x:ident, ⨅ (_ : $y:ident ∈ $s), $body)
+    | `(⨅ ($x:ident : $_), ⨅ (_ : $y:ident ∈ $s), $body) =>
+      if x == y then `(⨅ $x:ident ∈ $s, $body) else pure stx
+    | _ => pure stx
+  return stx
+
+end SupInfNotation
 
 -- The mathlib version is unusable because it is stated in terms of ≤
 lemma ge_max_iff {α : Type _} [LinearOrder α] {p q r : α} : r ≥ max p q  ↔ r ≥ p ∧ r ≥ q :=
