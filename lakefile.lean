@@ -5,9 +5,11 @@ def moreLeanArgs := #[
   "-Dpp.unicode.fun=true" -- pretty-prints `fun a ↦ b`
 ]
 
+def moreServerArgs := moreLeanArgs
 
 package glimpseOfLean where
   moreLeanArgs := moreLeanArgs
+  moreServerArgs := moreServerArgs
 
 @[default_target]
 lean_lib GlimpseOfLean where 
