@@ -49,6 +49,8 @@ example (a : ℝ) : a > 0 → (a^2)^2 > 0 := by
 
 /- # Equivalences
 
+## Using equivalences to rewrite statements
+
 In the previous file, we saw how to rewrite using equalities.
 The analogue operation with mathematical statements is rewriting using
 equivalences. This is also done using the `rw` tactic.
@@ -63,16 +65,17 @@ In order to announce an intermediate statement we use:
 
   `have my_name : my statement,`
 
-This triggers the apparition of a new goal: proving the statement. After this is done
-the statement becomes available under the name `my_name`.
-We can focus on the current goal by typing tactics between curly braces.
+This triggers the apparition of a new goal: proving the statement. The proof
+need to start with a central dot `·` and, if the proof is more than one line long,
+it should be indented.
+After the proof is done, the statement becomes available under the name `my_name`.
 -/
 
 example {a b c : ℝ} : c + a ≤ c + b ↔ a ≤ b := by
   rw [← sub_nonneg]
   have key : (c + b) - (c + a) = b - a -- Here we introduce an intermediate statement named key
-  { ring }  -- and prove it between curly braces
-  rw [key] -- we can now use the key statement. This rewriting uses an equality result] not an equivalence
+  · ring   -- and prove it after a `·`
+  rw [key] -- we can now use `key`. This `rw` uses an equality result, not an equivalence
   rw [sub_nonneg] -- and switch back to reach the tautology a ≤ b ↔ a ≤ b
 
 
@@ -82,20 +85,20 @@ We can also write the above proof using `calc`:
 
 example {a b c : ℝ} : c + a ≤ c + b ↔ a ≤ b := by
   have key : (c + b) - (c + a) = b - a
-  { ring }
+  · ring
   calc c + a ≤ c + b ↔ 0 ≤ (c + b) - (c + a) := by rw [sub_nonneg]
-                 _ ↔ 0 ≤ b - a := by rw [key]
-                 _ ↔ a ≤ b := by rw [sub_nonneg]
-
+  _                  ↔ 0 ≤ b - a             := by rw [key]
+  _                  ↔ a ≤ b                 := by rw [sub_nonneg]
 
 /-
-Let's prove a variation (without invoking commutativity of addition since this would spoil our fun).
+Let's prove a variation (without invoking commutativity of addition to reduce to the previous proof
+since this would spoil our fun).
 -/
 
 example {a b : ℝ} (c : ℝ) : a + c ≤ b + c ↔ a ≤ b := by
   -- sorry
   have key : (b + c) - (a + c) = b - a
-  { ring }
+  · ring
   rw [← sub_nonneg]
   rw [key]
   rw [sub_nonneg]
@@ -103,28 +106,31 @@ example {a b : ℝ} (c : ℝ) : a + c ≤ b + c ↔ a ≤ b := by
 
 
 /-
-Let's see how we could use this lemma. It is already in the core library, under the name `add_le_add_iff_right`:
+Let's see how we could use this lemma. It is already in the core library, under the name
+`add_le_add_iff_right`:
 
-  `add_le_add_iff_right (c : ℝ) : a + c ≤ b + c ↔ a ≤ b`
+`add_le_add_iff_right (c : ℝ) : a + c ≤ b + c ↔ a ≤ b`
 
-This can be read as: "`add_le_add_iff_right` is a function that will take as input a real number c
-and will output a proof of `a + c ≤ b + c ↔ a ≤ b`".
+This can be read as: "`add_le_add_iff_right` is a function that will take as input a real
+number `c` and will output a proof of `a + c ≤ b + c ↔ a ≤ b`".
 -/
 
 example {a b : ℝ}  (ha : 0 ≤ a) : b ≤ a + b := by
   calc b = 0 + b := by ring
-     _ ≤ a + b := by { rw [add_le_add_iff_right b] ; exact ha  }
+  _      ≤ a + b := by { rw [add_le_add_iff_right b] ; exact ha  }
 
 /-
-In the second line in the above proof is a bit silly: we use statement rewriting to reduce the goal
-to our assumption `ha`, but it would be more natural to see the equivalence as a double implication.
-We can access the two implications of an equivalence `h : P ↔ Q` as `h.1 : P → Q` and `h.2 : Q → P`.
-This allows to rewrite the above proof as:
+## Using equivalences as pairs of implications
+
+In the second line in the above proof is a bit silly: we use statement rewriting to reduce
+the goal to our assumption `ha`, but it would be more natural to see the equivalence as a
+double implication. We can access the two implications of an equivalence `h : P ↔ Q` as
+`h.1 : P → Q` and `h.2 : Q → P`. This allows to rewrite the above proof as:
 -/
 
 example {a b : ℝ}  (ha : 0 ≤ a) : b ≤ a + b := by
   calc b = 0 + b := by ring
-     _   ≤ a + b := by exact (add_le_add_iff_right b).2 ha
+  _      ≤ a + b := by exact (add_le_add_iff_right b).2 ha
 
 
 /- Let's do a variant using `add_le_add_iff_left a : a + b ≤ a + c ↔ b ≤ c` instead. -/
@@ -132,15 +138,23 @@ example {a b : ℝ}  (ha : 0 ≤ a) : b ≤ a + b := by
 example (a b : ℝ) (hb : 0 ≤ b) : a ≤ a + b := by
   -- sorry
   calc a = a + 0 := by ring
-       _ ≤ a + b := by exact (add_le_add_iff_left a).mpr hb
+  _      ≤ a + b := by exact (add_le_add_iff_left a).mpr hb
   -- sorry
+/-
+## Proving equivalences
 
+In order to prove an equivalence one can use `rw` until the
+goal is the tautology `P ↔ P`, just as one can do with equalities.
+
+One can also separately prove the two implications using the `constructor`
+tactic. As suggested by its name, this tactic has greater scope.
+-/
 
 /-
-Before moving on to conjunction, let us make sure Lean doesn't
-need so much help to prove equalities or inequalities that
-linearly follow from known known equalities and inequalities.
-This is the job of the `linarith` tactic.
+Before moving on, let us make sure Lean doesn't need so much help to
+prove equalities or inequalities that linearly follow from known
+equalities and inequalities. This is the job of the linear arithmetic
+tactic: `linarith`.
 -/
 
 example (a b : ℝ) (hb : 0 ≤ b) : a ≤ a + b := by
@@ -159,3 +173,11 @@ example (a b c d : ℝ) (hab : a ≤ b) (hcd : c ≤ d) : a + c ≤ b + d := by
   -- sorry
   linarith
   -- sorry
+
+/-
+This is the end of this file where you learned how to handle implications and
+equivalences. You learned about tactics:
+* `apply`
+* `have`
+
+-/

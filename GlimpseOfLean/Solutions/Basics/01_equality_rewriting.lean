@@ -42,7 +42,7 @@ example (a b : ℝ) : (a + b)^2 = a^2 + 2*a*b + b^2 := by
 Let us now see how to compute using assumptions relating the involved numbers.
 This uses the fundamental property of equality: if two
 mathematical objects A and B are equal then, in any statement involving A, one can replace A
-by B. This operation is called rewriting, and the Lean "tactic" for this is `rw`.
+by B. This operation is called rewriting, and the Lean tactic for this is `rw`.
 Carefully step through the proof below and try to understand what is happening.
 -/
 example (a b c : ℝ) (h : a = b + c) (h' : b = d - e) : a + e = d + c := by
@@ -80,8 +80,8 @@ example (a b c : ℝ) (h : a = b + c) (h' : a + e = d + c) : b + c + e = d + c :
   rw [h']
 
 /-
-Whenever you see a symbol that you don't see on your keyboard, such as ←, you can put your
-mouse cursor above it and learn from a tooltip how to type it.
+Whenever you see in a Lean file a symbol that you don't see on your keyboard, such as ←,
+you can put your mouse cursor above it and learn from a tooltip how to type it.
 
 Note this rewriting from right to left story is all about sides in the equality you want to
 *use*, not about sides in what you want to *prove*. The `rw [← h]` goes from right to left in
@@ -97,8 +97,9 @@ example (a b c : ℝ) (h : a = b + c) : (b+c)^2 - c^2 = (a+c)*(a-c) := by
   ring
   -- sorry
 
-/-
-In the previous example, we rewrote the goal using a local assumption. But we can
+/- ## Rewriting usual a lemma
+
+In the previous examples, we rewrote the goal using a local assumption. But we can
 also use lemmas. For instance let us prove that `a*b - b*a = 0` the hard way, without
 the `ring` tactic but using lemmas `mul_comm` and `sub_self`.
 In particular `mul_comm a b` is a proof of `a*b = b*a` and
@@ -109,49 +110,78 @@ example (a b : ℝ) : a*b - b*a = 0 := by
   rw [mul_comm a b, sub_self (b*a)]
 
 /-
-If we don't provide arguments to the lemmas, Lean will rewrite the first the first
-matching subexpression. In our example this is good enough. Sometimes more control is needed.
+If we don't provide arguments to the lemmas, Lean will rewrite the first matching
+subexpression. In our example this is good enough. Sometimes more control is needed.
 -/
+
 example (a b : ℝ) : a*b - b*a = 0 := by
   rw [mul_comm, sub_self]
 
+/-
+Let's do an exercise using lemmas `mul_comm`, that we already saw, and
+`mul_assoc x y z : (x * y) * z = x * (y * z)`.
+-/
+
+example (a b c : ℝ) : a * (b * c) = b * (a * c) := by
+  -- sorry
+  rw [← mul_assoc]
+  -- "rw mul_comm," doesn't do what we want.
+  rw [mul_comm a b]
+  rw [mul_assoc]
+  -- sorry
 
 /-
+Remember this is only for training, Lean knows how to do this alone.
+-/
+
+example (a b c : ℝ) : a * (b * c) = b * (a * c) := by
+  ring
+
+/- ## Rewriting in a local assumption
+
 We can also perform rewriting in an assumption of the local context, using for instance
   `rw [mul_comm a b] at hyp`
 in order to replace `a*b` by `b*a` in assumption `hyp`.
 
-Also we use the `exact` tactic, which allows to provide a direct proof term.
-In this example, the argument is the name of an assumption, but it could also
-be a lemma applied to some arguments.
+In the example below, we also use the `exact` tactic, which allows to provide a
+direct proof. In this example, the argument is the name of an assumption,
+but it could also be a lemma applied to some arguments.
 -/
 
 example (a b c d : ℝ) (hyp : c = d*a - b) (hyp' : b = a*d) : c = 0 := by
   rw [hyp'] at hyp
   rw [mul_comm d a] at hyp
   rw [sub_self] at hyp
-  exact hyp -- Our assumption `hyp` is now exactly what we have to prove
+  -- Our assumption `hyp` is now exactly what we have to prove
+  exact hyp
 
-/-
+/- ## Calculation layout using calc
+
 What is written in the above example is very far away from what we would write on
 paper. Let's now see how to get a more natural layout (and also return to using `ring`
 instead of explicit lemma invocations).
 After each `:=` below, the goal is to prove equality with the preceding line
 (or the left-hand on the first line).
+Carefuly check you understand this by putting your cursor after each `by` and looking
+at the tactic state.
 -/
 
 example (a b c d : ℝ) (hyp : c = b*a - d) (hyp' : d = a*b) : c = 0 := by
   calc c = b*a - d   := by rw [hyp]
-   _     = b*a - a*b := by rw [hyp']
-   _     = 0         := by ring
+  _      = b*a - a*b := by rw [hyp']
+  _      = 0         := by ring
 
 
 /-
-From a practical point of view, when writing such a proof, it is convenient to:
+From a practical point of view, when writing such a proof, it is sometimes convenient to:
 * pause the tactic state view update in VScode by clicking the Pause icon button
-  in the top right corner of the Lean Goal buffer
-* write the full calculation, ending each line with ": by ?_"
+  in the top right corner of the Lean Infoview panel.
+* write the full calculation, ending each line with ":= ?_"
 * resume tactic state update by clicking the Play icon button and fill in proofs.
+
+Also note that the alignment of the underscores is somewhat flexible but not completely
+random. Putting all of them below the c of `calc` is definitely safe. Aligning the equal
+signs and `:=` signs is useless but looks tidy.
 
 Let's do another example using this method.
 -/
@@ -159,6 +189,15 @@ Let's do another example using this method.
 example (a b c d : ℝ) (hyp : c = d*a + b) (hyp' : b = a*d) : c = 2*a*d := by
   -- sorry
   calc c = d*a + b    := by rw [hyp]
-       _ = d*a + a*d  := by rw [hyp']
-       _ = 2*a*d      := by ring
+  _      = d*a + a*d  := by rw [hyp']
+  _      = 2*a*d      := by ring
   -- sorry
+
+/-
+Congratulations, this is the end of your first exercise file! You've seen what typing
+a Lean proof looks like and have learned about the following tactics:
+* `ring`
+* `rw`
+* `exact`
+* `calc`
+-/

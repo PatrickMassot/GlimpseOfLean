@@ -198,6 +198,9 @@ lemma isSup_SupTop : isSupFun (SupTop : Set (Topology X) → Topology X) := by
 
 instance : CompleteLattice (Topology X) := CompleteLattice.mk_of_Sup isSup_SupTop
 
+lemma isOpen_Sup {s : Set (Topology X)} {V : Set X} : (Sup s).isOpen V ↔ ∀ T ∈ s, T.isOpen V :=
+  Iff.rfl
+
 def push (f : X → Y) (T : Topology X) : Topology Y where
   isOpen := fun V ↦ T.isOpen (f ⁻¹' V)
   isOpen_unionᵢ := by
@@ -209,35 +212,48 @@ def push (f : X → Y) (T : Topology X) : Topology Y where
     rw [Set.preimage_interᵢ]
     exact T.isOpen_interᵢ hs hι
 
+notation f "⁎" => push f
+
 lemma push_push (f : X → Y) (g : Y →Z) (T : Topology X) :
     push g (push f T) = push (g ∘ f) T := by
   ext V
   rfl
 
-
 def Continuous (T : Topology X) (T' : Topology Y) (f : X → Y) := push f T ≤ T'
 
 def pull (f : X → Y) (T : Topology Y) : Topology X := mk_right (push f) T
+
+notation f " ⃰" => pull f
 
 def ProductTopology {ι : Type} {X : ι → Type} (T : Π i, Topology (X i)) : Topology (Π i, X i) :=
 Inf (Set.range (fun i ↦ pull (fun x ↦ x i) (T i)))
 
 lemma push_Sup (f : X → Y) {t : Set (Topology X)} : push f (Sup t) = Sup (push f '' t) := by
   ext V
-  change _ ↔ ∀ T ∈ push f '' t, _
-  rw [Set.ball_image_iff]
+  rw [isOpen_Sup, Set.ball_image_iff]
   rfl
 
 lemma ContinuousProductTopIff {ι : Type} {X : ι → Type} (T : Π i, Topology (X i))
   {Z : Type} (TZ : Topology Z) {f : Z → Π i, X i}:
-    Continuous TZ (ProductTopology T) f ↔ ∀ i,  Continuous TZ (T i) (fun z ↦ f z i) := by
-  unfold Continuous ProductTopology
+    Continuous TZ (ProductTopology T) f ↔ ∀ i,  Continuous TZ (T i) (fun z ↦ f z i) :=
+calc
+  Continuous TZ (ProductTopology T) f
+  _ ↔ push f TZ ∈ lowerBounds (Set.range (fun i ↦ pull (fun x ↦ x i) (T i))) := by
+        rw [CompleteLattice.I_isInf]
+        exact Iff.rfl
+  _ ↔ ∀ i, push f TZ ≤ pull (fun x ↦ x i) (T i)                              := by rw [lowerBounds_range]
+  _ ↔ ∀ i, push (fun x ↦ x i) (push f TZ) ≤ T i                              := by
+        apply forall_congr'
+        intro i
+        rw [pull, ← adjunction_of_Sup (fun s ↦ push_Sup _), push_push]
+  _ ↔ ∀ i,  Continuous TZ (T i) (fun z ↦ f z i) := Iff.rfl
+  /- unfold Continuous ProductTopology
   rw [← CompleteLattice.I_isInf, lowerBounds_range]
   apply forall_congr'
   intro i
   unfold pull
   rw [← adjunction_of_Sup (fun s ↦ push_Sup _), push_push]
-  rfl
+  rfl -/
 
 end Topology
 end Tuto
