@@ -1,0 +1,26 @@
+{
+        "files.exclude": {
+            "**/.git": true,
+            "**/.svn": true,
+            "**/.hg": true,
+            "**/CVS": true,
+            "**/.DS_Store": true,
+            "**/.DS_yml": true,
+            "**/_target": true,
+            "**/leanpkg.*": true,
+            "**/.gitpod.yml": true,
+            "**/.vscode": true,
+            "**/*.olean": true
+        },
+        "lean.input.leader": ",",
+        "editor.fontFamily": "'DejaVu sans mono'",
+        "editor.minimap.enabled": false,
+        "window.titleBarStyle": "custom",
+	"lean4.input.customTranslations": {
+		"^*": " ⃰",
+		"_*": "⁎",
+		"pull": " ⃰",
+		"push": "⁎"
+    	}
+    }
+    
