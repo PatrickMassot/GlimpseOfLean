@@ -212,10 +212,10 @@ def push (f : X → Y) (T : Topology X) : Topology Y where
     rw [Set.preimage_interᵢ]
     exact T.isOpen_interᵢ hs hι
 
-notation f "⁎" => push f
+postfix:1024 "⁎" => push
 
 lemma push_push (f : X → Y) (g : Y →Z) (T : Topology X) :
-    push g (push f T) = push (g ∘ f) T := by
+    g ⁎ (f ⁎ T) = (g ∘ f) ⁎ T := by
   ext V
   rfl
 
@@ -223,12 +223,12 @@ def Continuous (T : Topology X) (T' : Topology Y) (f : X → Y) := push f T ≤ 
 
 def pull (f : X → Y) (T : Topology Y) : Topology X := mk_right (push f) T
 
-notation f " ⃰" => pull f
+postfix:1024 " ⃰" => pull
 
 def ProductTopology {ι : Type} {X : ι → Type} (T : Π i, Topology (X i)) : Topology (Π i, X i) :=
-Inf (Set.range (fun i ↦ pull (fun x ↦ x i) (T i)))
+Inf (Set.range (fun i ↦ (fun x ↦ x i)  ⃰ (T i)))
 
-lemma push_Sup (f : X → Y) {t : Set (Topology X)} : push f (Sup t) = Sup (push f '' t) := by
+lemma push_Sup (f : X → Y) {t : Set (Topology X)} : f ⁎ (Sup t) = Sup (f ⁎ '' t) := by
   ext V
   rw [isOpen_Sup, Set.ball_image_iff]
   rfl
@@ -238,15 +238,15 @@ lemma ContinuousProductTopIff {ι : Type} {X : ι → Type} (T : Π i, Topology 
     Continuous TZ (ProductTopology T) f ↔ ∀ i,  Continuous TZ (T i) (fun z ↦ f z i) :=
 calc
   Continuous TZ (ProductTopology T) f
-  _ ↔ push f TZ ∈ lowerBounds (Set.range (fun i ↦ pull (fun x ↦ x i) (T i))) := by
+  _ ↔ f ⁎ TZ ∈ lowerBounds (Set.range (fun i ↦ (fun x ↦ x i)  ⃰ (T i))) := by
         rw [CompleteLattice.I_isInf]
         exact Iff.rfl
-  _ ↔ ∀ i, push f TZ ≤ pull (fun x ↦ x i) (T i)                              := by rw [lowerBounds_range]
-  _ ↔ ∀ i, push (fun x ↦ x i) (push f TZ) ≤ T i                              := by
+  _ ↔ ∀ i, f ⁎ TZ ≤ (fun x ↦ x i)  ⃰ (T i)        := by rw [lowerBounds_range]
+  _ ↔ ∀ i, (fun x ↦ x i) ⁎ (f ⁎ TZ) ≤ T i        := by
         apply forall_congr'
         intro i
         rw [pull, ← adjunction_of_Sup (fun s ↦ push_Sup _), push_push]
-  _ ↔ ∀ i,  Continuous TZ (T i) (fun z ↦ f z i) := Iff.rfl
+  _ ↔ ∀ i,  Continuous TZ (T i) (fun z ↦ f z i)  := Iff.rfl
   /- unfold Continuous ProductTopology
   rw [← CompleteLattice.I_isInf, lowerBounds_range]
   apply forall_congr'
