@@ -113,10 +113,10 @@ example (p q r : Prop) : (p → (q → r)) ↔ p ∧ q → r := by
     · exact hq
   -- sorry
 
-  /- Of course Lean doesn't need any help to prove this kind of logical tautologies.
-  This is the job of the `tauto` tactic. -/
-  example (p q r : Prop) : (p → (q → r)) ↔ p ∧ q → r := by
-    tauto
+/- Of course Lean doesn't need any help to prove this kind of logical tautologies.
+This is the job of the `tauto` tactic. -/
+example (p q r : Prop) : (p → (q → r)) ↔ p ∧ q → r := by
+  tauto
 
 
 /- This is the end of this file about `∃` and `∧`. You've learned about tactics
