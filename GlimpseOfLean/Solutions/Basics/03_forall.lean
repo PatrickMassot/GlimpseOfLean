@@ -2,7 +2,8 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Algebra.Group.Pi
 
 namespace Forall
-/-
+/- # Universal quantifiers
+
 In this file, we'll learn about the `∀` quantifier.
 
 Let `P` be a predicate on a type `X`. This means for every mathematical
@@ -14,8 +15,8 @@ a proof `h x` of `P x`.
 This already explains the main way to use an assumption or lemma which
 starts with a `∀`.
 
-In order to prove `∀ x, P x`, we use `intros x` to fix an arbitrary object
-with type `X`, and call it `x`.
+In order to prove `∀ x, P x`, we use `intro x` to fix an arbitrary object
+with type `X`, and call it `x` (`intro` stands for "introduce").
 
 Note also we don't need to give the type of `x` in the expression `∀ x, P x`
 as long as the type of `P` is clear to Lean, which can then infer the type of `x`.
@@ -41,12 +42,12 @@ example (f g : ℝ → ℝ) (hf : even_fun f) (hg : even_fun g) : even_fun (f + 
   -- We need to prove ∀ x, (f+g)(-x) = (f+g)(x)
   unfold even_fun
   -- Let x be any real number
-  intros x
+  intro x
   -- and let's compute
-  calc (f + g) (-x) = f (-x) + g (-x) := rfl
-  _ = f x + g (-x) := by rw [hf x]
-  _ = f x + g x := by rw [hg x]
-  _ = (f + g) x := rfl
+  calc (f + g) (-x) = f (-x) + g (-x)  := rfl
+  _                 = f x + g (-x)     := by rw [hf x]
+  _                 = f x + g x        := by rw [hg x]
+  _                 = (f + g) x        := rfl
 
 
 /-
@@ -65,12 +66,12 @@ The last line is not necessary however, since it only proves
 something that is true by definition, and is not followed by
 a `rw`.
 
-Also, Lean doesn't need to be told that hf should be specialized to
-x before rewriting, exactly as in the first file 01_equality_rewriting.
+Also, Lean doesn't need to be told that `hf` should be specialized to
+`x` before rewriting, exactly as in the first file.
 
-One last trick is that `rw` can take a list of expressions to use for
+Recall also that `rw` can take a list of expressions to use for
 rewriting. For instance `rw [h₁, h₂, h₃]` is equivalent to three
-lines `rw h₁`, `rw h₂` and `rw h₃`. Note that you can inspect the tactic
+lines `rw [h₁]`, `rw [h₂]` and `rw [h₃]`. Note that you can inspect the tactic
 state between those rewrites when reading a proof using this syntax. You
 simply need to move the cursor inside the list.
 
@@ -78,20 +79,20 @@ Hence we can compress the above proof to:
 -/
 
 example (f g : ℝ → ℝ) : even_fun f → even_fun g →  even_fun (f + g) := by
-  intros hf hg x
-  calc (f + g) (-x) = f (-x) + g (-x) := rfl
-  _ = f x + g x := by rw [hf, hg]
+  intro hf hg x
+  calc (f + g) (-x) = f (-x) + g (-x)  := rfl
+  _                 = f x + g x        := by rw [hf, hg]
 
 /-
-Now let's practice. If you need to learn how to type a unicode symbol
-you can put your mouse cursor above the symbol and wait for one second.
+Now let's practice. Recall that if you need to learn how to type a unicode
+symbol you can put your mouse cursor above the symbol and wait for one second.
 -/
 
 example (f g : ℝ → ℝ) (hf : even_fun f) : even_fun (g ∘ f) := by
   -- sorry
-  intros x
-  calc (g ∘ f) (-x) = g (f (-x)) := rfl
-  _ = g (f x) := by rw [hf]
+  intro x
+  calc (g ∘ f) (-x) = g (f (-x))   := rfl
+  _                 = g (f x)      := by rw [hf]
   -- sorry
 
 /-
@@ -107,24 +108,25 @@ def non_increasing (f : ℝ → ℝ) := ∀ x₁ x₂, x₁ ≤ x₂ → f x₁ 
 /- Let's be very explicit and use forward reasoning first. -/
 example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_decreasing g) : non_decreasing (g ∘ f) := by
   -- Let x₁ and x₂ be real numbers such that x₁ ≤ x₂
-  intros x₁ x₂ h
+  intro x₁ x₂ h
   -- Since f is non-decreasing, f x₁ ≤ f x₂.
-  have step₁ :  f x₁ ≤ f x₂
-  { exact hf x₁ x₂ h }
+  have step₁ : f x₁ ≤ f x₂
+  · exact hf x₁ x₂ h
   -- Since g is non-decreasing, we then get g (f x₁) ≤ g (f x₂).
   exact hg (f x₁) (f x₂) step₁
 
 /-
-In the above proof, note how inconvenient it is to specify x₁ and x₂ in `hf x₁ x₂ h` since
-they could be inferred from the type of h.
+In the above proof, note how inconvenient it is to specify `x₁` and `x₂` in `hf x₁ x₂ h` since
+they could be inferred from the type of `hf`.
 We could have written `hf _ _ h` and Lean would have filled the holes denoted by `_`.
+The same remark applies to the last line.
 
 One possible variation on the above proof is to
 use the `specialize` tactic to replace hf by its specialization to the relevant value.
  -/
 
 example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_decreasing g) : non_decreasing (g ∘ f) := by
-  intros x₁ x₂ h
+  intro x₁ x₂ h
   specialize hf x₁ x₂ h
   exact hg (f x₁) (f x₂) hf
 
@@ -134,19 +136,19 @@ in the assumption. One can very often replace its use by using more complicated 
 directly involving the original assumption, as in the next variation:
 -/
 example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_decreasing g) : non_decreasing (g ∘ f) := by
-  intros x₁ x₂ h
+  intro x₁ x₂ h
   exact hg (f x₁) (f x₂) (hf x₁ x₂ h)
 
 
 /-
 Let's see how backward reasoning would look like here.
 As usual with this style, we use `apply` and enjoy Lean specializing assumptions for us
-using unification.
+using so-called unification.
 -/
 
 example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_decreasing g) : non_decreasing (g ∘ f) := by
   -- Let x₁ and x₂ be real numbers such that x₁ ≤ x₂
-  intros x₁ x₂ h
+  intro x₁ x₂ h
   -- We need to prove (g ∘ f) x₁ ≤ (g ∘ f) x₂.
   -- Since g is non-decreasing, it suffices to prove f x₁ ≤ f x₂
   apply hg
@@ -157,7 +159,16 @@ example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_decreasing g) : no
 
 example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_increasing g) : non_increasing (g ∘ f) := by
   -- sorry
-  intros x₁ x₂ h
+  intro x₁ x₂ h
   apply hg
   exact hf x₁ x₂ h
   -- sorry
+
+/-
+This is the end of this file where you learned how to handle universal quantifiers.
+You learned about tactics:
+* `intro`
+* `unfold`
+* `specialize`
+
+-/
