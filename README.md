@@ -7,3 +7,5 @@ After reading the `Introduction.lean` file, you should read explanations and do 
 Of course you can play with all files from that folder if you have more time.
 
 If you have a lot more time, you should read the book [Mathematics in Lean](https://leanprover-community.github.io/mathematics_in_lean/) (but note that book is currently using the stable version of Lean, Lean 3, whereas this repository uses the brand new Lean 4 which is not yet fully ready for mathematical use).
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/PatrickMassot/glimpse_of_lean)
