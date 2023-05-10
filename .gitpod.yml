@@ -1,0 +1,12 @@
+image:
+  file: .docker/gitpod/Dockerfile
+
+vscode:
+  extensions:
+    - leanprover.lean4
+
+tasks:
+  - init: |
+      lake exe cache get
+  - command: |
+      sudo apt-get --assume-yes install gcc
