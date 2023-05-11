@@ -23,6 +23,10 @@ macro (name := ring) "ring" : tactic =>
   | `($(_) $f:term $g:term $x:term) => `(($f ∘ $g) $x)
   | _ => throw ()
 
+@[app_unexpander abs] def unexpandAbs : Lean.PrettyPrinter.Unexpander
+  | `($(_) $x) => `(|$x|)
+  | _ => throw ()
+
 namespace PiNotation
 open Lean.Parser Term
 open Lean.PrettyPrinter.Delaborator
