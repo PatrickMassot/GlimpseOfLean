@@ -23,7 +23,7 @@ lemma chineseMap_mk' (I : ι → Ideal R) (x : R) (i : ι) :
 rfl
 
 lemma chineseMap_injective (I : ι → Ideal R) : Injective (chineseMap I) := by
-  simp [chineseMap, injective_lift_iff, ker_Pi_Quotient_mk]
+  rw [chineseMap, injective_lift_iff, ker_Pi_Quotient_mk]
 
 lemma coprime_infᵢ_of_coprime {I : Ideal R} {J : ι → Ideal R} {s : Finset ι} (hf : ∀ j ∈ s, I + J j = 1) :
     I + (⨅ j ∈ s, J j) = 1 := by

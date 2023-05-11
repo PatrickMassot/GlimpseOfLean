@@ -131,10 +131,6 @@ actual mathematical content. You now get to choose one file from the `Topics` fo
 The most elementary option is to work on `SequenceLimit`. It is also the most relevant file
 if you are interested in undergrad teaching using Lean.
 
-If you prefer algebra, you can try `ChineseRemainder` instead. This one does *not* try to
-be elementary. It implements a slightly abstract proof of the Chinese remainder theorem
-manipulating as few elements of rings as possible and as much ideals as possible.
-
 If this isn't abstract enough, you should probably go `GaloisAjunctions` which is about
 the most elementary version of abstract non-sense, playing with adjunctions between
 complete lattices. That file ends with a constructor of the product topology and its
