@@ -7,8 +7,8 @@ mathlib has a much more general definition of limits, but here
 we want to practice using the logical operators and relations
 covered in the previous files.
 
-A sequence u is a function from ℕ to ℝ, hence Lean says
-u : ℕ → ℝ
+A sequence `u` is a function from `ℕ` to `ℝ`, hence Lean says
+`u : ℕ → ℝ`
 The definition we'll be using is:
 
 -- Definition of « u tends to l »
@@ -18,13 +18,12 @@ Note the use of `∀ ε > 0, _` which is an abbreviation of
 `∀ ε, ε > 0 → _ `
 
 In particular, a statement like `h : ∀ ε > 0, _`
-can be specialized to a given ε₀ by
+can be specialized to a given `ε₀` by
   `specialize h ε₀ hε₀`
-where hε₀ is a proof of ε₀ > 0.
+where `hε₀` is a proof of `ε₀ > 0`.
 
 Also recall that, wherever Lean expects some proof term, we can
-start a tactic mode proof using the keyword `by` (followed by curly braces
-if you need more than one tactic invocation).
+start a tactic mode proof using the keyword `by`.
 For instance, if the local context contains:
 
 δ : ℝ
@@ -67,9 +66,6 @@ or
 `abs_sub_le  (a c b : ℝ) : |a - b| ≤ |a - c| + |c - b|`
 or the primed version:
 `abs_sub_le' (a c b : ℝ) : |a - b| ≤ |a - c| + |b - c|`
-
-You should probably write them down on a sheet of paper that you keep at
-hand since they are used in many exercises.
 -/
 
 -- Assume `l > 0`. Then `u` ts to `l` implies `u n ≥ l/2` for large enough `n`
@@ -94,13 +90,8 @@ When dealing with max, you can use
 
 `le_max_right p q : q ≤ max p q`
 
-You should probably add them to the sheet of paper where you wrote
-the `abs` lemmas since they are used in many exercises.
-
 Let's see an example.
 -/
-
-
 
 -- If `u` tends to `l` and `v` tends `l'` then `u+v` tends to `l+l'`
 example (hu : seq_limit u l) (hv : seq_limit v l') :
@@ -115,9 +106,9 @@ example (hu : seq_limit u l) (hv : seq_limit v l') :
   rw [ge_max_iff] at hn
   rcases hn with ⟨hn₁, hn₂⟩
   have fact₁ : |u n - l| ≤ ε/2
-  { exact hN₁ n (by linarith) }
+  · exact hN₁ n (by linarith)
   have fact₂ : |v n - l'| ≤ ε/2
-  { exact hN₂ n (by linarith) }
+  · exact hN₂ n (by linarith)
   calc
     |(u + v) n - (l + l')| = |u n + v n - (l + l')|   := rfl
     _ = |(u n - l) + (v n - l')|                      := by ring
@@ -157,8 +148,9 @@ example (hu : seq_limit u l) (hw : seq_limit w l) (h : ∀ n, u n ≤ v n) (h' :
 Recall we listed three variations on the triangle inequality at the beginning of this file.
 -/
 
--- A sequence admits at most one limit
-example : seq_limit u l → seq_limit u l' → l = l' := by
+-- A sequence admits at most one limit. You will be able to use that lemma in the following
+-- exercises.
+lemma uniq_limit : seq_limit u l → seq_limit u l' → l = l' := by
   -- sorry
   intros hl hl'
   apply eq_of_abs_sub_le_all
@@ -170,6 +162,7 @@ example : seq_limit u l → seq_limit u l' → l = l' := by
     _        = |u (max N N') - l| + |u (max N N') - l'| := by rw [abs_sub_comm]
     _        ≤ ε := by linarith [hN _ (le_max_left N N'), hN' _ (le_max_right N N')]
   -- sorry
+
 
 
 /-
@@ -193,31 +186,7 @@ example (M : ℝ) (h : is_seq_sup M u) (h' : non_decreasing u) : seq_limit u M :
   -- sorry
 
 /-
-This file continues the elementary study of limits of sequences.
-It can be skipped if the previous file was too easy, it won't introduce
-any new tactic or trick.
-
-Remember useful lemmas:
-
-`abs_le {x y : ℝ} : |x| ≤ y ↔ -y ≤ x ∧ x ≤ y`
-
-`abs_add (x y : ℝ) : |x + y| ≤ |x| + |y|`
-
-`abs_sub_comm (x y : ℝ) : |x - y| = |y - x|`
-
-`ge_max_iff (p q r) : r ≥ max p q  ↔ r ≥ p ∧ r ≥ q`
-
-`le_max_left p q : p ≤ max p q`
-
-`le_max_right p q : q ≤ max p q`
-
-and the definition:
-
-`def seq_limit (u : ℕ → ℝ) (l : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| ≤ ε`
-
-You can also use a property proved in the previous file:
-
-`unique_limit : seq_limit u l → seq_limit u l' → l = l'`
+We will now play with subsequences.
 
 The new definition we will use is that `φ : ℕ → ℕ` is an extraction
 if it is (strictly) increasing.
@@ -225,12 +194,7 @@ if it is (strictly) increasing.
 `def extraction (φ : ℕ → ℕ) := ∀ n m, n < m → φ n < φ m`
 
 In the following, `φ` will always denote a function from `ℕ` to `ℕ`.
--/
 
-
-
-
-/-
 The next lemma is proved by an easy induction, but we haven't seen induction
 in this tutorial. If you did the natural number game then you can delete
 the proof below and try to reconstruct it.
@@ -243,9 +207,15 @@ lemma id_le_extraction' : extraction φ → ∀ n, n ≤ φ n := by
   | succ n ih => exact Nat.succ_le_of_lt (by linarith [hyp n (n+1) (by linarith)])
 
 
+/-
+In the exercise, we use `∃ n ≥ N, ...` which is the abbreviation of
+`∃ n, n ≥ N ∧ ...`.
+-/
+
 /-- Extractions take arbitrarily large values for arbitrarily large
 inputs. -/
 lemma extraction_ge : extraction φ → ∀ N N', ∃ n ≥ N', φ n ≥ N := by
+  -- sorry
   intro h N N'
   use max N N'
   constructor
@@ -253,6 +223,7 @@ lemma extraction_ge : extraction φ → ∀ N N', ∃ n ≥ N', φ n ≥ N := by
   calc
     N ≤ max N N' := by apply le_max_left
     _ ≤ φ (max N N') := by apply id_le_extraction' h
+  -- sorry
 
 /- A real number `a` is a cluster point of a sequence `u`
 if `u` has a subsequence converging to `a`.
@@ -260,10 +231,6 @@ if `u` has a subsequence converging to `a`.
 `def cluster_point (u : ℕ → ℝ) (a : ℝ) := ∃ φ, extraction φ ∧ seq_limit (u ∘ φ) a`
 -/
 
-/-
-In the exercise, we use `∃ n ≥ N, ...` which is the abbreviation of
-`∃ n, n ≥ N ∧ ...`.
--/
 
 /-- If `a` is a cluster point of `u` then there are values of
 `u` arbitrarily close to `a` for arbitrarily large input. -/
