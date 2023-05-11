@@ -176,6 +176,16 @@ Here `l` stands for "left" and `r` stands for "right". -/
 def adjunction [PartialOrder X] [PartialOrder Y] (l : X → Y) (r : Y → X) :=
   ∀ x y, l x ≤ y ↔ x ≤ r y
 
+/- The example you need to keep in mind is the adjunction between direct image
+and inverse image. Given `f : α → β`, we have:
+* `Set.image f : Set α → Set β` with notation `f ''`
+* `Set.preimage f : Set β → Set α` with notation `f ⁻¹'`
+ -/
+
+example {α β : Type} (f : α → β) : adjunction (Set.image f) (Set.preimage f) := by
+  intros s t
+  exact Set.image_subset_iff
+
 /- In this remaining of the section, `X` and `Y` are complete lattices. -/
 variable [PartialOrder X] [CompleteLattice X] [PartialOrder Y] [CompleteLattice Y]
 
@@ -351,4 +361,89 @@ lemma ContinuousProductTopIff {ι : Type} {X : ι → Type} (T : Π i, Topology 
 sorry
 
 end Topology
+
+
+namespace SubGroups
+
+@[ext]
+structure Subgroup (G : Type) [Group G] where
+  carrier : Set G
+  one_mem : 1 ∈ carrier
+  mul_mem : ∀ ⦃x y : G⦄, x ∈ carrier → y ∈ carrier → x*y ∈ carrier
+  inv_mem : ∀ ⦃x : G⦄, x ∈ carrier → x⁻¹ ∈ carrier
+
+variable {G : Type} [Group G]
+
+instance : PartialOrder (Subgroup G) := PartialOrder.lift Subgroup.carrier (fun H H' ↦ (Subgroup.ext_iff H H').2)
+
+def SubgroupInf (s : Set (Subgroup G)) : Subgroup G where
+  carrier := ⋂ H ∈ s, H.carrier
+  one_mem := sorry
+  mul_mem := sorry
+  inv_mem := sorry
+
+lemma SubgroupInf_is_Inf : isInfFun (SubgroupInf : Set (Subgroup G) → Subgroup G) := by
+  sorry
+
+instance : CompleteLattice (Subgroup G) := CompleteLattice.mk_of_Inf SubgroupInf_is_Inf
+
+def forget (H : Subgroup G) : Set G := H.carrier
+
+def generate : Set G → Subgroup G := mk_left forget
+
+lemma generate_forget_adjunction : adjunction (generate : Set G → Subgroup G) forget := by
+  sorry
+
+variable {G' : Type} [Group G']
+
+def pull (f : G →* G') (H' : Subgroup G') : Subgroup G where
+  carrier := f ⁻¹' H'.carrier
+  one_mem := sorry
+  mul_mem := sorry
+  inv_mem := sorry
+
+/- Let's be really lazy and define subgroup push-forward by adjunction. -/
+
+def push (f : G →* G') : Subgroup G → Subgroup G' := mk_left (pull f)
+
+lemma push_pull_adjunction (f : G →* G') : adjunction (push f) (pull f) := by
+  sorry
+
+end SubGroups
+
+section
+/- Our next concrete target is
+`push_generate (f : G →* G') (S : Set G) : push f (generate S) = generate (f '' S)`
+
+which will require a couple more abstract lemmas. -/
+
+variable {X : Type} [PartialOrder X] [CompleteLattice X]
+         {Y : Type} [PartialOrder Y] [CompleteLattice Y]
+
+
+lemma unique_left {l l' : X → Y} {r : Y → X} (h : adjunction l r) (h' : adjunction l' r) :
+    l = l' := by
+  sorry
+
+lemma unique_right {l : X → Y} {r r' : Y → X} (h : adjunction l r) (h' : adjunction l r') :
+    r = r' := by
+ sorry
+
+variable {Z : Type} [PartialOrder Z] [CompleteLattice Z]
+
+lemma adjunction_compose {l : X → Y} {r : Y → X} (h : adjunction l r)
+  {l' : Y → Z} {r' : Z → Y} (h' : adjunction l' r') : adjunction (l' ∘ l) (r ∘ r') := by
+  sorry
+
+end
+
+namespace SubGroups
+variable {G : Type} [Group G] {G' : Type} [Group G']
+
+/- As a last challenge, we propose the following lemma. -/
+
+lemma push_generate (f : G →* G') (S : Set G) : push f (generate S) = generate (f '' S) := by
+  sorry
+
+end SubGroups
 end Tuto

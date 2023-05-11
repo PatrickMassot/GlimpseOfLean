@@ -5,6 +5,7 @@ import Mathlib.Tactic.Propose
 import Mathlib.Data.Real.Basic
 import Mathlib.RingTheory.Ideal.Quotient
 import Mathlib.RingTheory.Ideal.Operations
+import Mathlib.GroupTheory.Subgroup.Basic
 
 import GlimpseOfLean.Lib.Suggest
 
