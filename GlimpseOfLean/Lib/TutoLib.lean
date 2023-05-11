@@ -71,8 +71,14 @@ def delabPi : Delab := whenPPOption Lean.getPPNotation do
     match stx with
     | `(∀ ($i:ident : $_), $j:ident ∈ $s → $body) =>
       if i == j then `(∀ $i:ident ∈ $s, $body) else pure stx
-    -- | `(∀ ($x:ident : $_), $y:ident > $z → $body) =>
-    --   if x == y then `(∀ $x:ident > $z, $body) else pure stx
+    | `(∀ ($x:ident : $_), $y:ident > $z → $body) =>
+      if x == y then `(∀ $x:ident > $z, $body) else pure stx
+    | `(∀ ($x:ident : $_), $y:ident < $z → $body) =>
+      if x == y then `(∀ $x:ident < $z, $body) else pure stx
+    | `(∀ ($x:ident : $_), $y:ident ≥ $z → $body) =>
+      if x == y then `(∀ $x:ident ≥ $z, $body) else pure stx
+    | `(∀ ($x:ident : $_), $y:ident ≤ $z → $body) =>
+      if x == y then `(∀ $x:ident ≤ $z, $body) else pure stx
     | `(Π ($i:ident : $_), $j:ident ∈ $s → $body) =>
       if i == j then `(Π $i:ident ∈ $s, $body) else pure stx
     | _ => pure stx
@@ -82,6 +88,8 @@ def delabPi : Delab := whenPPOption Lean.getPPNotation do
   | _ => pure stx
 
 end PiNotation
+
+open PiNotation
 
 section SupInfNotation
 open Lean Lean.PrettyPrinter.Delaborator
