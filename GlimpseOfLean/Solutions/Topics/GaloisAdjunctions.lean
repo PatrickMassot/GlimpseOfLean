@@ -314,22 +314,16 @@ lemma isOpen_univ (T : Topology X) : T.isOpen Set.univ := by
 /- The `ext` attribute on the definition of `Topology` tells Lean to automatically build the following
 extensionality lemma:
 `Topology.ext_iff (T T' : Topology X), T = T' ↔ x.isOpen = y.isOpen`
-and it also registers this lemma for use by the `ext` tactic that you will see in action
-in the antisymmetry below.
+and it also registers this lemma for use by the `ext` tactic (we will come back to this below).
 -/
 
 /-- We order `Topology X` using the order dual to the order induced by
 `Set (Set X)`. There are good reasons for this choice but they are beyond the scope of this
 tutorial. -/
-instance : PartialOrder (Topology X) where
-  le := fun T T' ↦ T'.isOpen ≤ T.isOpen
-  le_refl := fun T V hV ↦ hV
-  le_trans := fun T T' T'' h h' V hV ↦ h _ (h' V hV)
-  le_antisymm := by
-    intro T T' h h'
-    ext V
-    tauto
+instance : PartialOrder (Topology X) :=
+PartialOrder.lift (β := OrderDual $ Set (Set X)) Topology.isOpen (fun T T' ↦ (Topology.ext_iff T T').2)
 
+/-- The supremum function on `Topology X`. -/
 def SupTop (s : Set (Topology X)) : Topology X where
   isOpen := fun V ↦ ∀ T ∈ s, T.isOpen V
   isOpen_unionᵢ := by
@@ -339,38 +333,80 @@ def SupTop (s : Set (Topology X)) : Topology X where
     intros ι t ht hι a ha
     exact a.isOpen_interᵢ (fun i ↦ ht i a ha) hι
 
-lemma isSup_SupTop : isSupFun (SupTop : Set (Topology X) → Topology X) := by
-  intro t T
-  constructor
-  · intro hT V hV s hs
-    exact hT hs V hV
-  · intro hT T' hT' V hV
-    exact hT V hV T' hT'
+/-
+Because the supremum function above comes from the supremum function of `OrderDual (Set (Set X))`,
+it is indeed a supremum function. We could state an abstract lemma saying that, but here a direct
+proof is just as easy and a lot of fun.
+-/
+lemma isSup_SupTop : isSupFun (SupTop : Set (Topology X) → Topology X) :=
+fun _ _ ↦ ⟨fun hT _ hV _ hs ↦ hT hs hV, fun hT T' hT' _ hV ↦ hT hV T' hT'⟩
+
+/- We can use our abtract theory to get an infimum function for free, hence a complete lattice
+structure on `Topology X`.
+Note that our abstract theory is indeed doing non-trivial work: the infimum function does *not*
+come from `OrderDual (Set (Set X))`.
+-/
 
 instance : CompleteLattice (Topology X) := CompleteLattice.mk_of_Sup isSup_SupTop
+
+/- Let us restate in complete lattice notation what our construction of `Sup` was. The proof
+is simply saying "this is true by definition". -/
 
 lemma isOpen_Sup {s : Set (Topology X)} {V : Set X} : (Sup s).isOpen V ↔ ∀ T ∈ s, T.isOpen V :=
   Iff.rfl
 
+/- We now start bulding our adjunction between `Topology X` and `Topology Y` induced by any
+map `f : X → Y`. We will build the left adjoint by hand and then invoke our adjoint functor
+theorem.
+-/
+
 def push (f : X → Y) (T : Topology X) : Topology Y where
   isOpen := fun V ↦ T.isOpen (f ⁻¹' V)
   isOpen_unionᵢ := by
+    -- sorry
     intros ι s hs
     rw [Set.preimage_unionᵢ]
     exact T.isOpen_unionᵢ hs
+    -- sorry
   isOpen_interᵢ := by
+    -- sorry
     intros ι s hs hι
     rw [Set.preimage_interᵢ]
     exact T.isOpen_interᵢ hs hι
+    -- sorry
 
 postfix:1024 "⁎" => push
+
+/-- A map `f : X → Y` is continuous with respect to topologies `T` and `T'` if the preimage of
+every open set is open.-/
+def Continuous (T : Topology X) (T' : Topology Y) (f : X → Y) :=  f ⁎ T ≤ T'
+
+/- Let us check the definition is indeed saying what we claimed it says. -/
+example (T : Topology X) (T' : Topology Y) (f : X → Y) :
+  Continuous T T' f ↔ ∀ V, T'.isOpen V → T.isOpen (f ⁻¹' V) :=
+Iff.rfl
+
+/- Note how the following proof uses the `ext` tactic which knows that two topologies are
+equal iff they have the same open sets thanks to the `ext` attribute on the definition
+of `Topology`. -/
 
 lemma push_push (f : X → Y) (g : Y →Z) (T : Topology X) :
     g ⁎ (f ⁎ T) = (g ∘ f) ⁎ T := by
   ext V
-  rfl
+  exact Iff.rfl
 
-def Continuous (T : Topology X) (T' : Topology Y) (f : X → Y) := push f T ≤ T'
+/- We want a right adjoint for `f ⁎` so we need to check it commutes with `Sup`.
+You may want to use
+`Set.ball_image_iff : (∀ y ∈ f '' s, p y) ↔ ∀ x ∈ s, p (f x)`
+where "ball" stands for "bounded for all", ie `∀ x ∈ ...`.
+-/
+
+lemma push_Sup (f : X → Y) {t : Set (Topology X)} : f ⁎ (Sup t) = Sup (f ⁎ '' t) := by
+  -- sorry
+  ext V
+  rw [isOpen_Sup, Set.ball_image_iff]
+  exact Iff.rfl
+  -- sorry
 
 def pull (f : X → Y) (T : Topology Y) : Topology X := mk_right (push f) T
 
@@ -379,14 +415,10 @@ postfix:1024 "^*" => pull
 def ProductTopology {ι : Type} {X : ι → Type} (T : Π i, Topology (X i)) : Topology (Π i, X i) :=
 Inf (Set.range (fun i ↦ (fun x ↦ x i) ^* (T i)))
 
-lemma push_Sup (f : X → Y) {t : Set (Topology X)} : f ⁎ (Sup t) = Sup (f ⁎ '' t) := by
-  ext V
-  rw [isOpen_Sup, Set.ball_image_iff]
-  rfl
-
 lemma ContinuousProductTopIff {ι : Type} {X : ι → Type} (T : Π i, Topology (X i))
   {Z : Type} (TZ : Topology Z) {f : Z → Π i, X i}:
-    Continuous TZ (ProductTopology T) f ↔ ∀ i,  Continuous TZ (T i) (fun z ↦ f z i) :=
+    Continuous TZ (ProductTopology T) f ↔ ∀ i,  Continuous TZ (T i) (fun z ↦ f z i) := by
+-- sorry
 calc
   Continuous TZ (ProductTopology T) f
   _ ↔ f ⁎ TZ ∈ lowerBounds (Set.range (fun i ↦ (fun x ↦ x i) ^* (T i))) := by
@@ -405,6 +437,7 @@ calc
   unfold pull
   rw [← adjunction_of_Sup (fun s ↦ push_Sup _), push_push]
   rfl -/
+-- sorry
 
 end Topology
 end Tuto
