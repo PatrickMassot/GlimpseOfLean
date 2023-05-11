@@ -144,6 +144,20 @@ def infᵢ_delab : Delab := whenPPOption Lean.getPPNotation do
 
 end SupInfNotation
 
+namespace ProdProjNotation
+open Lean Lean.PrettyPrinter.Delaborator
+
+@[delab app.Prod.fst, delab app.Prod.snd]
+def delabProdProjs : Delab := do
+  let #[_, _, _] := (← SubExpr.getExpr).getAppArgs | failure
+  let stx ← delabProjectionApp
+  match stx with
+  | `($(x).fst) => `($(x).1)
+  | `($(x).snd) => `($(x).2)
+  | _ => failure
+
+end ProdProjNotation
+
 -- The mathlib version is unusable because it is stated in terms of ≤
 lemma ge_max_iff {α : Type _} [LinearOrder α] {p q r : α} : r ≥ max p q  ↔ r ≥ p ∧ r ≥ q :=
 max_le_iff
