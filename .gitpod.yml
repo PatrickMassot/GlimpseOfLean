@@ -7,4 +7,4 @@ vscode:
 
 tasks:
   - init: lake exe cache get
-  - command: sudo apt-get --assume-yes install gcc
+  - command: sudo apt-get --assume-yes install gcc && lake exe cache get
