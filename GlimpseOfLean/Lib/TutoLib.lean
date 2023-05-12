@@ -168,6 +168,22 @@ def delabProdProjs : Delab := do
   | `($(x).snd) => `($(x).2)
   | _ => failure
 
+/-! That works when the projection is a simple term, but we need
+another approach when the projections are functions with applied arguments. -/
+
+@[app_unexpander Prod.fst]
+def unexpandProdFst : Lean.PrettyPrinter.Unexpander
+  | `($(_) $p $xs*) => `($p.1 $xs*)
+  | _ => throw ()
+
+@[app_unexpander Prod.snd]
+def unexpandProdSnd : Lean.PrettyPrinter.Unexpander
+  | `($(_) $p $xs*) => `($p.2 $xs*)
+  | _ => throw ()
+
+example (p : Nat × Nat) : p.1 = p.2 → True := by simp
+example (p : (Nat → Nat) × (Nat → Nat)) : p.1 22 = p.2 37 → True := by simp
+
 end ProdProjNotation
 
 -- The mathlib version is unusable because it is stated in terms of ≤
