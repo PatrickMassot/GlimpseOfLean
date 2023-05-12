@@ -1,4 +1,5 @@
-import Mathlib.Data.Real.Basic
+import GlimpseOfLean.Lib.TutoLib
+
 namespace Introduction
 
 /-

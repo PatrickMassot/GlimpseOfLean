@@ -34,7 +34,7 @@ open Lean.PrettyPrinter.Delaborator
 /-- Dependent function type (a "pi type"). The notation `Π x : α, β x` can
 also be written as `(x : α) → β x`. -/
 -- A direct copy of forall notation but with `Π`/`Pi` instead of `∀`/`Forall`.
-@[scoped term_parser]
+@[term_parser]
 def piNotation := leading_parser:leadPrec
   unicodeSymbol "Π" "Pi" >>
   many1 (ppSpace >> (binderIdent <|> bracketedBinder)) >>
@@ -53,14 +53,14 @@ macro_rules
 
 /-- Since pi notation and forall notation are interchangable, we can
 parse it by simply using the forall parser. -/
-@[scoped macro PiNotation.piNotation] def replacePiNotation : Lean.Macro
+@[macro PiNotation.piNotation] def replacePiNotation : Lean.Macro
   | .node info _ args => return .node info ``Lean.Parser.Term.forall args
   | _ => Lean.Macro.throwUnsupported
 
 /-- Override the Lean 4 pi notation delaborator with one that uses `Π`.
 Note that this takes advantage of the fact that `(x : α) → p x` notation is
 never used for propositions, so we can match on this result and rewrite it. -/
-@[scoped delab forallE]
+@[delab forallE]
 def delabPi : Delab := whenPPOption Lean.getPPNotation do
   let stx ← delabForall
   -- Replacements
@@ -90,8 +90,6 @@ def delabPi : Delab := whenPPOption Lean.getPPNotation do
   | _ => pure stx
 
 end PiNotation
-
-open PiNotation
 
 section SupInfNotation
 open Lean Lean.PrettyPrinter.Delaborator
