@@ -48,7 +48,7 @@ export default function(props) {
     })
   }
   return e('div', {className: 'ml1'}, e('pre', {className: 'font-code pre-wrap'},
-    ['Try this: ', e('a', { onClick, style: { cursor: 'pointer' } }, props.replacement)]))
+    ['Try this: ', e('a', { onClick, style: { cursor: 'pointer' } }, props.replacement), props.info]))
 }"
 
 def tryThisAt (ref stx : Syntax) (msg : Format := "") : CoreM Unit := do
