@@ -199,6 +199,72 @@ def exists_delab : Delab := whenPPOption Lean.getPPNotation do
 
 end SupInfNotation
 
+section UnionInterNotation
+open Lean Lean.PrettyPrinter.Delaborator
+
+/-!
+Improvements to the unexpanders in `Mathlib.Data.Set.Lattice`.
+
+These are implemented as delaborators directly.
+-/
+
+@[delab app.Set.unionᵢ]
+def unionᵢ_delab : Delab := whenPPOption Lean.getPPNotation do
+  let #[_, ι, f] := (← SubExpr.getExpr).getAppArgs | failure
+  unless f.isLambda do failure
+  let prop ← Meta.isProp ι
+  let dep := f.bindingBody!.hasLooseBVar 0
+  let ppTypes ← getPPOption getPPFunBinderTypes
+  let stx ← SubExpr.withAppArg do
+    let dom ← SubExpr.withBindingDomain delab
+    withBindingBodyUnusedName $ fun x => do
+      let x : TSyntax `ident := .mk x
+      let body ← delab
+      if prop && !dep then
+        `(⋃ (_ : $dom), $body)
+      else if prop || ppTypes then
+        `(⋃ ($x:ident : $dom), $body)
+      else
+        `(⋃ $x:ident, $body)
+  -- Cute binders
+  let stx : Term ←
+    match stx with
+    | `(⋃ $x:ident, ⋃ (_ : $y:ident ∈ $s), $body)
+    | `(⋃ ($x:ident : $_), ⋃ (_ : $y:ident ∈ $s), $body) =>
+      if x == y then `(⋃ $x:ident ∈ $s, $body) else pure stx
+    | _ => pure stx
+  return stx
+
+@[delab app.Set.interᵢ]
+def interᵢ_delab : Delab := whenPPOption Lean.getPPNotation do
+  let #[_, ι, f] := (← SubExpr.getExpr).getAppArgs | failure
+  unless f.isLambda do failure
+  let prop ← Meta.isProp ι
+  let dep := f.bindingBody!.hasLooseBVar 0
+  let ppTypes ← getPPOption getPPFunBinderTypes
+  let stx ← SubExpr.withAppArg do
+    let dom ← SubExpr.withBindingDomain delab
+    withBindingBodyUnusedName $ fun x => do
+      let x : TSyntax `ident := .mk x
+      let body ← delab
+      if prop && !dep then
+        `(⋂ (_ : $dom), $body)
+      else if prop || ppTypes then
+        `(⋂ ($x:ident : $dom), $body)
+      else
+        `(⋂ $x:ident, $body)
+  -- Cute binders
+  let stx : Term ←
+    match stx with
+    | `(⋂ $x:ident, ⋂ (_ : $y:ident ∈ $s), $body)
+    | `(⋂ ($x:ident : $_), ⋂ (_ : $y:ident ∈ $s), $body) =>
+      if x == y then `(⋂ $x:ident ∈ $s, $body) else pure stx
+    | _ => pure stx
+  return stx
+
+end UnionInterNotation
+
+
 namespace ProdProjNotation
 open Lean Lean.PrettyPrinter.Delaborator
 
