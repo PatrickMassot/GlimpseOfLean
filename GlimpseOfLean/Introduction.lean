@@ -8,8 +8,8 @@ namespace Introduction
 Welcome to this tutorial designed to give you a glimpse of Lean in a couple of hours.
 
 First let us see what a Lean proof looks like, without trying to understand any syntactical
-detail yet. You won't have anything to tuype in this file.
-You should be reading it in VSCode with it Lean 4 extension.
+detail yet. You won't have anything to type in this file.
+You should be reading it in VSCode with its Lean 4 extension.
 
 If everything works, you currently see a panel to the right of this text with title
 "Lean Infoview", without much content yet, something like "No info found."
