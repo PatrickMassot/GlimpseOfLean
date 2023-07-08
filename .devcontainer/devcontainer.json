@@ -1,11 +1,11 @@
 {
-  "name": "Mathlib4 dev container",
+  "name": "Glimpse of Lean dev container",
 
   "build": {
     "dockerfile": "Dockerfile"
   },
 
-  "onCreateCommand": "lake exe cache get!",
+  "onCreateCommand": "echo \"Downloading the Lean 4 mathematical library...\" && lake exe cache get! && lake build +GlimpseOfLean.Library.Basic && echo \"Finished setup! Open a file using the Explorer in the top-left of your screen.\"",
 
   "customizations": {
     "vscode" : {
