@@ -1,4 +1,4 @@
-{
+    {
         "files.exclude": {
             "**/.git": true,
             "**/.svn": true,
@@ -12,15 +12,27 @@
             "**/.vscode": true,
             "**/*.olean": true
         },
-        "lean.input.leader": ",",
-        "editor.fontFamily": "'DejaVu sans mono'",
         "editor.minimap.enabled": false,
-        "window.titleBarStyle": "custom",
-	"lean4.input.customTranslations": {
-		"^*": " ⃰",
-		"_*": "⁎",
-		"pull": " ⃰",
-		"push": "⁎"
-    	}
-    }
-    
+        "editor.acceptSuggestionOnEnter": "off",
+        "editor.quickSuggestions.comments": true,
+        "scm.diffDecorationsGutterVisibility": "hover",
+        "editor.semanticHighlighting.enabled": true,
+        "editor.semanticTokenColorCustomizations": {
+            "[Default Light+]": {"rules": {"variable": "#1a31da"}}
+        },
+        "editor.unicodeHighlight.nonBasicASCII": false,
+        "editor.unicodeHighlight.ambiguousCharacters": false,
+        "editor.fontLigatures": true,
+        "files.trimTrailingWhitespace": true,
+        "files.trimFinalNewlines": true,
+        "extensions.ignoreRecommendations": true,
+        "lean4.infoview.emphasizeFirstGoal": true,
+        "lean4.infoview.showExpectedType": false,
+        "lean4.infoview.showGoalNames": false,
+        "lean4.input.customTranslations": {
+            "^*": " ⃰",
+            "_*": "⁎",
+            "pull": " ⃰",
+            "push": "⁎"
+            },
+        }
