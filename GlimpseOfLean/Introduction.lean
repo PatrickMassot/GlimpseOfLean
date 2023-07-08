@@ -1,23 +1,26 @@
-import GlimpseOfLean.Lib.TutoLib
+import GlimpseOfLean.Library.Basic
 
 namespace Introduction
 
 /-
 # Introduction to this tutorial
 
+If you have a small screen, you can press
+`alt-Z` (or `option-Z`) to enable word wrap.
+
 Welcome to this tutorial designed to give you a glimpse of Lean in a couple of hours.
 
 First let us see what a Lean proof looks like, without trying to understand any syntactical
-detail yet. You won't have anything to type in this file.
-You should be reading it in VSCode with its Lean 4 extension.
+detail yet. You won't have to type anything in this file.
 
 If everything works, you currently see a panel to the right of this text with title
-"Lean Infoview", without much content yet, something like "No info found."
+"Lean Infoview", with a message like "No info found."
 This panel will start displaying interesting things inside the proof.
+
 First let us review two calculus definitions.
 -/
 
-/-- A sequence `u` of real numbers converges to `l` if `∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| ≤ ε`.
+/-- A sequence `u` of real numbers converges to `l` if `∀ ε > 0, ∃ N, ∀ n ≥ N, |u_n - l| ≤ ε`.
 This condition will be spelled `seq_limit u l`. -/
 def seq_limit (u : ℕ → ℝ) (l : ℝ) : Prop :=
 ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| ≤ ε
@@ -38,7 +41,7 @@ def continuous_at (f : ℝ → ℝ) (x₀ : ℝ) : Prop :=
 at `x₀`: for any sequence `u` converging to `x₀`, the sequence `f ∘ u` converges
 to `f x₀`.  -/
 example (f : ℝ → ℝ) (u : ℕ → ℝ) (x₀ : ℝ) (hu : seq_limit u x₀) (hf : continuous_at f x₀) :
-  seq_limit (f ∘ u) (f x₀) := by -- This `by` keyword marks the beginning of the proof
+  seq_limit (f ∘ u) (f x₀) := by { -- This `by` keyword marks the beginning of the proof
   -- Put your text cursor here and watch the Lean InfoView panel to the right.
   -- Then move your cursor from line to line in the proof while monitoring the Infoview.
 
@@ -62,10 +65,10 @@ example (f : ℝ → ℝ) (u : ℕ → ℝ) (x₀ : ℝ) (hu : seq_limit u x₀)
   apply Hf
   -- This follows from property (2) and our assumption on `n`.
   exact Hu n hn
-
+  -- This finishes the proof!
+  }
 
 /-
-Now that this proof is over, you can use the file explorer to the left of this panel to
-open the first file of the `Exercises/Basics` folder. If the file explorer isn't shown, you
-can reveal by clicking the topmost icon from the icon column on the left.
+Now that this proof is over, you can use the file explorer to the
+left of this panel to open the file `Exercises > 01Rewriting.lean`.
 -/

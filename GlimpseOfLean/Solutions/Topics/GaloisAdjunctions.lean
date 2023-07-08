@@ -1,4 +1,4 @@
-import GlimpseOfLean.Lib.TutoLib
+import GlimpseOfLean.Library.Basic
 
 open PiNotation
 
@@ -10,10 +10,10 @@ roll our own version for practice. This file builds the fundamental theory of th
 and each lemma you prove there is named and can be reused to prove the next lemmas.
 -/
 
-namespace Tuto
+namespace Tutorial
 
 section InfSup
-
+variable [PartialOrder X]
 
 /-
 In this section, `X` is a type equiped with a partial order relation. So you have access
@@ -24,69 +24,32 @@ to lemmas:
 
 Curly braces around arguments mean these arguments are implicits, Lean will infer
 those arguments from context.
-
-If you need to see a definition, say for `lowerBounds` below, you can open the contextual
-menu by right-clicking on a word and then select "Go to definition", or you can simply
-Ctrl-click on the word.
 -/
 
 /-- An element `x₀` is an infimum of a set `s` in `X` if every element
 of `X` is a lower bound of `s` if and only if it below `x₀`.  -/
-def isInf [PartialOrder X] (s : Set X) (x₀ : X) :=
+def isInf (s : Set X) (x₀ : X) :=
   ∀ x, x ∈ lowerBounds s ↔ x ≤ x₀
 
-lemma isInfInter {Y : Type} (S : Set (Set Y)) : isInf S (⋂₀ S) := by
-  intro t
-  constructor
-  · intro ht x hx u hu
-    exact ht hu hx
-  · intro ht u hu x hx
-    exact ht hx _ hu
-
-variable [PartialOrder X]
-
-lemma isInf.lowerBound {s : Set X} {x₀ : X} (h : isInf s x₀) : x₀ ∈ lowerBounds s := by
+lemma isInf.lowerBound {s : Set X} {x₀ : X} (h : isInf s x₀) : x₀ ∈ lowerBounds s := by {
   -- sorry
   rw [h]
   -- sorry
-
+}
 
 /-- A set has at most one infimum. -/
-def isInf.eq {s : Set X} {x₀ x₁ : X} (hx₀ : isInf s x₀) (hx₁ : isInf s x₁) : x₀ = x₁ := by
+def isInf.eq {s : Set X} {x₀ x₁ : X} (hx₀ : isInf s x₀) (hx₁ : isInf s x₁) : x₀ = x₁ := by {
   -- sorry
   apply le_antisymm
   · exact (hx₁ _).1 ((hx₀ _).2 le_rfl)
   · exact (hx₀ _).1 ((hx₁ _).2 le_rfl)
   -- sorry
-
-lemma isInf.lift {f : Y → X} (hf : Function.Injective f) {s : Set Y} {y : Y} (hy : isInf (f '' s) (f y)) :
-    @isInf Y (PartialOrder.lift f hf) s y := by
-  intro y'
-  erw [← hy (f y')]
-  constructor
-  · intro hy' x hx
-    rcases hx with ⟨y'', hy'', H⟩
-    rw [← H]
-    exact hy' hy''
-  · intro hy' y'' hy''
-    apply hy'
-    exact Set.mem_image_of_mem f hy''
+}
 
 /-- An element `x₀` is an supremum of a set `s` in `X` if every element
 of `X` is a lower bound of `s` if and only if it below `x₀`.  -/
 def isSup (s : Set X) (x₀ : X) :=
   ∀ x, x ∈ upperBounds s ↔ x₀ ≤ x
-
-lemma isSupUnion {Y : Type} (S : Set (Set Y)) : isSup S (⋃₀ S) := by
-  intro t
-  constructor
-  · intro ht x hx
-    rcases hx with ⟨s, hs, hx⟩
-    exact ht hs hx
-  · intro ht u hu x hx
-    apply ht
-    use u
-    tauto
 
 /-
 The next lemma is proven by applying `isInf.lowerBound` to `X` equipped with
@@ -98,12 +61,8 @@ lemma isSup.upperBound {s : Set X} {x₀ : X} (h : isSup s x₀) : x₀ ∈ uppe
   isInf.lowerBound (X := OrderDual X) h
 
 /-- A set has at most one supremum. -/
-def isSup.eq {s : Set X} {x₀ x₁ : X} (hx₀ : isSup s x₀) (hx₁ : isSup s x₁) : x₀ = x₁ :=
+lemma isSup.eq {s : Set X} {x₀ x₁ : X} (hx₀ : isSup s x₀) (hx₁ : isSup s x₁) : x₀ = x₁ :=
   isInf.eq (X := OrderDual X) hx₀ hx₁
-
-lemma isSup.lift {f : Y → X} (hf : Function.Injective f) {s : Set Y} {y : Y} (hy : isSup (f '' s) (f y)) :
-    @isSup Y (PartialOrder.lift f hf) s y :=
-isInf.lift (X := OrderDual X) hf hy
 
 /-- A function from `Set X` to `X` is an infimum function if it sends every set
 to an infimum of this set. -/
@@ -118,7 +77,7 @@ def isSupFun (S : Set X → X) :=
 /- The next lemma is the first crucial result if this file. If `X` admits an
 infimum function then it automatically admits a supremum function. -/
 
-lemma isSup_of_isInf {I : Set X → X} (h : isInfFun I) : isSupFun (fun s ↦ I (upperBounds s)) := by
+lemma isSup_of_isInf {I : Set X → X} (h : isInfFun I) : isSupFun (fun s ↦ I (upperBounds s)) := by {
   -- sorry
   intro s x
   constructor
@@ -129,6 +88,7 @@ lemma isSup_of_isInf {I : Set X → X} (h : isInfFun I) : isSupFun (fun s ↦ I 
       y ≤ I (upperBounds s) := (h _ y).mp (fun z hz ↦ hz hy)
       _ ≤ x                 := hx
   -- sorry
+}
 
 /- Of course we also have the dual result constructing an infimum function from
 a supremum one. -/
@@ -155,13 +115,7 @@ instance (X : Type) [PartialOrder X] [CompleteLattice X] : CompleteLattice (Orde
   S := CompleteLattice.I (X := X)
   S_isSup := CompleteLattice.I_isInf (X := X)
 
-instance {Y : Type} : CompleteLattice (Set Y) where
-  I := Set.interₛ
-  I_isInf := fun S ↦ isInfInter S
-  S := Set.unionₛ
-  S_isSup := fun S ↦ isSupUnion S
-
-/- We can now use the first main result above  to build a complete lattice from
+/- We can now use the first main result above to build a complete lattice from
 either an infimum or a supremum function on a partialy ordered type. -/
 
 /-- Building a complete lattice structure from an infimum function on a partialy ordered type. -/
@@ -205,17 +159,18 @@ In the first lemma below, you will probably want to use
 or reprove it as part of your proof.
 -/
 
-lemma Inf_subset {s t : Set X} (h : s ⊆ t): Inf t ≤ Inf s := by
+lemma Inf_subset {s t : Set X} (h : s ⊆ t): Inf t ≤ Inf s := by {
   -- sorry
   apply (CompleteLattice.I_isInf s _).1
   apply lowerBounds_mono_set h
   exact lowerBound_Inf t
   -- sorry
+}
 
 lemma Sup_subset {s t : Set X} (h : s ⊆ t): Sup s ≤ Sup t :=
   Inf_subset (X := OrderDual X) h
 
-lemma Inf_pair {x x' : X} : x ≤ x' ↔ Inf {x, x'} = x := by
+lemma Inf_pair {x x' : X} : x ≤ x' ↔ Inf {x, x'} = x := by {
   -- sorry
   constructor
   · intro h
@@ -232,12 +187,14 @@ lemma Inf_pair {x x' : X} : x ≤ x' ↔ Inf {x, x'} = x := by
     apply lowerBound_Inf
     simp
   -- sorry
+}
 
-lemma Sup_pair {x x' : X} : x ≤ x' ↔ Sup {x, x'} = x' := by
+lemma Sup_pair {x x' : X} : x ≤ x' ↔ Sup {x, x'} = x' := by {
   rw [Set.pair_comm x x']
   exact Inf_pair (X := OrderDual X)
+}
 
-lemma Inf_self_le (x : X) : Inf {x' | x ≤ x'} = x := by
+lemma Inf_self_le (x : X) : Inf {x' | x ≤ x'} = x := by {
   -- sorry
   apply (CompleteLattice.I_isInf _).eq
   intro x'
@@ -247,9 +204,43 @@ lemma Inf_self_le (x : X) : Inf {x' | x ≤ x'} = x := by
   · intro h x'' hx''
     exact h.trans hx''
   -- sorry
+}
 
 lemma Sup_le_self (x : X) : Sup {x' | x' ≤ x} = x :=
   Inf_self_le (X := OrderDual X) x
+
+/- Let us prove that `Set` forms a complete lattice. -/
+
+lemma isInfInter {Y : Type} (S : Set (Set Y)) : isInf S (⋂₀ S) := by {
+  -- sorry
+  intro t
+  constructor
+  · intro ht x hx u hu
+    exact ht hu hx
+  · intro ht u hu x hx
+    exact ht hx _ hu
+  -- sorry
+}
+
+lemma isSupUnion {Y : Type} (S : Set (Set Y)) : isSup S (⋃₀ S) := by {
+  -- sorry
+  intro t
+  constructor
+  · intro ht x hx
+    rcases hx with ⟨s, hs, hx⟩
+    exact ht hs hx
+  · intro ht u hu x hx
+    apply ht
+    use u
+    tauto
+  -- sorry
+}
+
+instance {Y : Type} : CompleteLattice (Set Y) where
+  I := Set.sInter
+  I_isInf := fun S ↦ isInfInter S
+  S := Set.sUnion
+  S_isSup := fun S ↦ isSupUnion S
 
 end InfSup
 
@@ -269,14 +260,20 @@ and inverse image. Given `f : α → β`, we have:
 * `Set.preimage f : Set β → Set α` with notation `f ⁻¹'`
  -/
 
-lemma image_preimage_adjunction {α β : Type} (f : α → β) : adjunction (Set.image f) (Set.preimage f) := by
+lemma image_preimage_adjunction {α β : Type} (f : α → β) :
+    adjunction (Set.image f) (Set.preimage f) := by {
   intros s t
   exact Set.image_subset_iff
+}
 
-lemma adjunction.dual [PartialOrder X] [PartialOrder Y] {l : X → Y} {r : Y → X} (h : adjunction l r) :
-    adjunction (X := OrderDual Y) (Y := OrderDual X) r l := by
+lemma adjunction.dual [PartialOrder X] [PartialOrder Y] {l : X → Y} {r : Y → X}
+    (h : adjunction l r) :
+    adjunction (X := OrderDual Y) (Y := OrderDual X) r l := by {
+  -- sorry
   intros y x
   exact (h x y).symm
+  -- sorry
+}
 
 /- In this remaining of the section, `X` and `Y` are complete lattices. -/
 variable [PartialOrder X] [CompleteLattice X] [PartialOrder Y] [CompleteLattice Y]
@@ -309,24 +306,26 @@ the other direction, you should probably first prove that `Monotone l`, ie
 -/
 
 theorem adjunction_of_Sup {l : X → Y} (h : ∀ s : Set X, l (Sup s) = Sup (l '' s)) :
-    adjunction l (mk_right l) := by
+    adjunction l (mk_right l) := by {
   -- sorry
   intro x y
   constructor
   · intro h'
     exact (CompleteLattice.S_isSup {x | l x ≤ y}).upperBound h'
   · intro h'
-    have l_mono : Monotone l := by
+    have l_mono : Monotone l := by {
       intro a b hab
       have := h {a, b}
       rw [Sup_pair.1 hab, Set.image_pair] at this
       exact Sup_pair.2 this.symm
+    }
     calc
       l x ≤ l (mk_right l y) := l_mono h'
       _   = Sup (l '' { x | l x ≤ y }) := h {x | l x ≤ y}
       _   ≤ Sup { y' | y' ≤ y } := Sup_subset (Set.image_preimage_subset l { y' | y' ≤ y })
       _   = y := Sup_le_self y
   -- sorry
+}
 
 /- Of course we can play the same game to construct left adjoints. -/
 
@@ -336,43 +335,8 @@ def mk_left (r : Y → X) : X → Y := fun x ↦ Inf {y | x ≤ r y}
 
 theorem adjunction_of_Inf {r : Y → X} (h : ∀ s : Set Y, r (Inf s) = Inf (r '' s)) :
     adjunction (mk_left r) r :=
-  (adjunction_of_Sup (X := OrderDual Y) (Y := OrderDual X) h).dual
+  fun x y ↦ (adjunction_of_Sup (X := OrderDual Y) (Y := OrderDual X) h y x).symm
 
-lemma adjunction.unique_left {l l' : X → Y} {r : Y → X} (h : adjunction l r) (h' : adjunction l' r) :
-    l = l' := by
-  -- sorry
-  ext x
-  apply le_antisymm
-  · rw [h, ← h']
-  · rw [h', ← h]
-  -- sorry
-
-lemma adjunction.unique_right {l : X → Y} {r r' : Y → X} (h : adjunction l r) (h' : adjunction l r') :
-    r = r' :=
- (h'.dual.unique_left h.dual).symm
-
-variable {Z : Type} [PartialOrder Z] [CompleteLattice Z]
-
-lemma adjunction.compose {l : X → Y} {r : Y → X} (h : adjunction l r)
-    {l' : Y → Z} {r' : Z → Y} (h' : adjunction l' r') : adjunction (l' ∘ l) (r ∘ r') := by
-  -- sorry
-  intro x z
-  rw [Function.comp_apply, h', h]
-  rfl
-  -- sorry
-
-lemma left_comm_of_right_comm {W : Type} [PartialOrder W] {Z : Type} [PartialOrder Z]
-    {lYX : X → Y} {uXY : Y → X} (hXY : adjunction lYX uXY)
-    {lWZ : Z → W} {uZW : W → Z} (hZW : adjunction lWZ uZW)
-    {lWY : Y → W} {uYW : W → Y} (hWY : adjunction lWY uYW)
-    {lZX : X → Z} {uXZ : Z → X} (hXZ : adjunction lZX uXZ)
-    (h : uXZ ∘ uZW = uXY ∘ uYW) : lWZ ∘ lZX = lWY ∘ lYX := by
-  -- sorry
-  have A₁
-  · exact hXZ.compose hZW
-  rw [h] at A₁
-  exact A₁.unique_left (hXY.compose hWY)
-  -- sorry
 end Adjunction
 
 section Topology
@@ -384,27 +348,28 @@ to build the product topology. Of course mathlib knows all this, but we'll
 continue to build our own theory.
 -/
 
-
 @[ext]
 structure Topology (X : Type) where
   isOpen : Set X → Prop
-  isOpen_unionᵢ : ∀ {ι : Type}, ∀ {s : ι → Set X}, (∀ i, isOpen (s i)) → isOpen (⋃ i, s i)
-  isOpen_interᵢ : ∀ {ι : Type}, ∀ {s : ι → Set X}, (∀ i, isOpen (s i)) → Finite ι → isOpen (⋂ i, s i)
+  isOpen_iUnion : ∀ {ι : Type}, ∀ {s : ι → Set X}, (∀ i, isOpen (s i)) → isOpen (⋃ i, s i)
+  isOpen_iInter : ∀ {ι : Type}, ∀ {s : ι → Set X}, (∀ i, isOpen (s i)) → Finite ι → isOpen (⋂ i, s i)
 
 /- Let's run two quick sanity checks on our definition since so many textbooks include redundant
 conditions it the definition of topological spaces. -/
 
-lemma isOpen_empty (T : Topology X) : T.isOpen ∅ := by
+lemma isOpen_empty (T : Topology X) : T.isOpen ∅ := by {
   have : (∅ : Set X) = ⋃ i : Empty, i.rec
-  · rw [Set.unionᵢ_of_empty]
+  · rw [Set.iUnion_of_empty]
   rw [this]
-  exact T.isOpen_unionᵢ Empty.rec
+  exact T.isOpen_iUnion Empty.rec
+}
 
-lemma isOpen_univ (T : Topology X) : T.isOpen Set.univ := by
+lemma isOpen_univ (T : Topology X) : T.isOpen Set.univ := by {
   have : (Set.univ : Set X) = ⋂ i : Empty, i.rec
-  · rw [Set.interᵢ_of_empty]
+  · rw [Set.iInter_of_empty]
   rw [this]
-  exact T.isOpen_interᵢ  Empty.rec (Finite.of_fintype Empty)
+  exact T.isOpen_iInter  Empty.rec (Finite.of_fintype Empty)
+}
 
 /- The `ext` attribute on the definition of `Topology` tells Lean to automatically build the following
 extensionality lemma:
@@ -421,28 +386,24 @@ PartialOrder.lift (β := OrderDual $ Set (Set X)) Topology.isOpen (fun T T' ↦ 
 /-- The supremum function on `Topology X`. -/
 def SupTop (s : Set (Topology X)) : Topology X where
   isOpen := fun V ↦ ∀ T ∈ s, T.isOpen V
-  isOpen_unionᵢ := by
+  isOpen_iUnion := by {
     intros ι t ht a ha
-    exact a.isOpen_unionᵢ fun i ↦ ht i a ha
-  isOpen_interᵢ := by
+    exact a.isOpen_iUnion fun i ↦ ht i a ha
+  }
+  isOpen_iInter := by {
     intros ι t ht hι a ha
-    exact a.isOpen_interᵢ (fun i ↦ ht i a ha) hι
+    exact a.isOpen_iInter (fun i ↦ ht i a ha) hι
+}
 
-lemma SupTop_isOpen (s : Set (Topology X)) : (SupTop s).isOpen = ⋂₀ (Topology.isOpen '' s) := by
-  ext u
-  simp [SupTop]
-  exact Set.mem_interᵢ₂.symm
+/-
+Because the supremum function above comes from the supremum function of `OrderDual (Set (Set X))`,
+it is indeed a supremum function. We could state an abstract lemma saying that, but here a direct
+proof is just as easy and a lot of fun.
+-/
+lemma isSup_SupTop : isSupFun (SupTop : Set (Topology X) → Topology X) :=
+fun _ _ ↦ ⟨fun hT _ hV _ hs ↦ hT hs hV, fun hT T' hT' _ hV ↦ hT hV T' hT'⟩
 
-lemma isSup_SupTop : isSupFun (SupTop : Set (Topology X) → Topology X) := by
-  -- sorry
-  intro S
-  apply isSup.lift
-  · exact (fun T T' ↦ (Topology.ext_iff T T').2)
-  · rw [SupTop_isOpen]
-    apply isInfInter
-  -- sorry
-
-/- We can use our abtract theory to get an infimum function for free, hence a complete lattice
+/- We can use our abstract theory to get an infimum function for free, hence a complete lattice
 structure on `Topology X`.
 Note that our abstract theory is indeed doing non-trivial work: the infimum function does *not*
 come from `OrderDual (Set (Set X))`.
@@ -463,20 +424,22 @@ theorem.
 
 def push (f : X → Y) (T : Topology X) : Topology Y where
   isOpen := fun V ↦ T.isOpen (f ⁻¹' V)
-  isOpen_unionᵢ := by
+  isOpen_iUnion := by {
     -- sorry
     intros ι s hs
-    rw [Set.preimage_unionᵢ]
-    exact T.isOpen_unionᵢ hs
+    rw [Set.preimage_iUnion]
+    exact T.isOpen_iUnion hs
     -- sorry
-  isOpen_interᵢ := by
+  }
+  isOpen_iInter := by {
     -- sorry
     intros ι s hs hι
-    rw [Set.preimage_interᵢ]
-    exact T.isOpen_interᵢ hs hι
+    rw [Set.preimage_iInter]
+    exact T.isOpen_iInter hs hι
     -- sorry
+}
 
-postfix:1024 "⁎" => push
+postfix:1024 "⁎" => push -- type using `\_*`
 
 /-- A map `f : X → Y` is continuous with respect to topologies `T` and `T'` if the preimage of
 every open set is open.-/
@@ -492,9 +455,10 @@ equal iff they have the same open sets thanks to the `ext` attribute on the defi
 of `Topology`. -/
 
 lemma push_push (f : X → Y) (g : Y →Z) (T : Topology X) :
-    g ⁎ (f ⁎ T) = (g ∘ f) ⁎ T := by
+    g ⁎ (f ⁎ T) = (g ∘ f) ⁎ T := by {
   ext V
   exact Iff.rfl
+}
 
 /- We want a right adjoint for `f ⁎` so we need to check it commutes with `Sup`.
 You may want to use
@@ -502,12 +466,13 @@ You may want to use
 where "ball" stands for "bounded for all", ie `∀ x ∈ ...`.
 -/
 
-lemma push_Sup (f : X → Y) {t : Set (Topology X)} : f ⁎ (Sup t) = Sup (f ⁎ '' t) := by
+lemma push_Sup (f : X → Y) {t : Set (Topology X)} : f ⁎ (Sup t) = Sup (f ⁎ '' t) := by {
   -- sorry
   ext V
   rw [isOpen_Sup, Set.ball_image_iff]
   exact Iff.rfl
   -- sorry
+}
 
 def pull (f : X → Y) (T : Topology Y) : Topology X := mk_right (push f) T
 
@@ -518,19 +483,21 @@ Inf (Set.range (fun i ↦ (fun x ↦ x i) ^* (T i)))
 
 lemma ContinuousProductTopIff {ι : Type} {X : ι → Type} (T : Π i, Topology (X i))
   {Z : Type} (TZ : Topology Z) {f : Z → Π i, X i}:
-    Continuous TZ (ProductTopology T) f ↔ ∀ i,  Continuous TZ (T i) (fun z ↦ f z i) := by
--- sorry
-calc
-  Continuous TZ (ProductTopology T) f
-  _ ↔ f ⁎ TZ ∈ lowerBounds (Set.range (fun i ↦ (fun x ↦ x i) ^* (T i))) := by
-        rw [CompleteLattice.I_isInf]
-        exact Iff.rfl
-  _ ↔ ∀ i, f ⁎ TZ ≤ (fun x ↦ x i) ^* (T i)        := by rw [lowerBounds_range]
-  _ ↔ ∀ i, (fun x ↦ x i) ⁎ (f ⁎ TZ) ≤ T i        := by
-        apply forall_congr'
-        intro i
-        rw [pull, ← adjunction_of_Sup (fun s ↦ push_Sup _), push_push]
-  _ ↔ ∀ i,  Continuous TZ (T i) (fun z ↦ f z i)  := Iff.rfl
+    Continuous TZ (ProductTopology T) f ↔ ∀ i,  Continuous TZ (T i) (fun z ↦ f z i) := by {
+  -- sorry
+  calc
+    Continuous TZ (ProductTopology T) f
+    _ ↔ f ⁎ TZ ∈ lowerBounds (Set.range (fun i ↦ (fun x ↦ x i) ^* (T i))) := by {
+          rw [CompleteLattice.I_isInf]
+          exact Iff.rfl
+          }
+    _ ↔ ∀ i, f ⁎ TZ ≤ (fun x ↦ x i) ^* (T i)        := by rw [lowerBounds_range]
+    _ ↔ ∀ i, (fun x ↦ x i) ⁎ (f ⁎ TZ) ≤ T i        := by {
+          apply forall_congr'
+          intro i
+          rw [pull, ← adjunction_of_Sup (fun s ↦ push_Sup _), push_push]
+          }
+    _ ↔ ∀ i,  Continuous TZ (T i) (fun z ↦ f z i)  := Iff.rfl
   /- unfold Continuous ProductTopology
   rw [← CompleteLattice.I_isInf, lowerBounds_range]
   apply forall_congr'
@@ -538,12 +505,12 @@ calc
   unfold pull
   rw [← adjunction_of_Sup (fun s ↦ push_Sup _), push_push]
   rfl -/
--- sorry
+  -- sorry
+}
 
 end Topology
 
-
-namespace SubGroups
+namespace Subgroups
 
 @[ext]
 structure Subgroup (G : Type) [Group G] where
@@ -556,84 +523,188 @@ instance [Group G] : Membership G (Subgroup G) := ⟨fun x H ↦ x ∈ H.carrier
 
 variable {G : Type} [Group G]
 
-instance : PartialOrder (Subgroup G) := PartialOrder.lift Subgroup.carrier (fun H H' ↦ (Subgroup.ext_iff H H').2)
+instance : PartialOrder (Subgroup G) :=
+  PartialOrder.lift Subgroup.carrier (fun H H' ↦ (Subgroup.ext_iff H H').2)
 
-/-- An intersection of subgroups is a subgroup. -/
+/- An intersection of subgroups is a subgroup. -/
+
 def SubgroupInf (s : Set (Subgroup G)) : Subgroup G where
   carrier := ⋂ H ∈ s, H.carrier
-  one_mem := by
-    rw [Set.mem_interᵢ₂]
+  one_mem := by {
+    -- sorry
+    rw [Set.mem_iInter₂]
     intro H _
     exact H.one_mem
-  mul_mem := by
+    -- sorry
+  }
+  mul_mem := by {
+    -- sorry
     intro x y hx hy
-    rw [Set.mem_interᵢ₂] at hx hy ⊢
+    rw [Set.mem_iInter₂] at hx hy ⊢
     intro H hH
     exact H.mul_mem (hx H hH) (hy H hH)
-  inv_mem := by
+    -- sorry
+  }
+  inv_mem := by {
+    -- sorry
     intro x hx
-    rw [Set.mem_interᵢ₂] at hx ⊢
+    rw [Set.mem_iInter₂] at hx ⊢
     intro H hH
     exact H.inv_mem (hx H hH)
+    -- sorry
+  }
 
-lemma SubgroupInf_carrier (s : Set (Subgroup G)): (SubgroupInf s).carrier = ⋂₀ (Subgroup.carrier '' s) :=
+lemma SubgroupInf_carrier (s : Set (Subgroup G)) :
+  (SubgroupInf s).carrier = ⋂₀ (Subgroup.carrier '' s) :=
 by simp [SubgroupInf]
+-- omit
 
-lemma SubgroupInf_is_Inf : isInfFun (SubgroupInf : Set (Subgroup G) → Subgroup G) := by
+lemma isInf.lift [PartialOrder X] {f : Y → X} (hf : Function.Injective f) {s : Set Y} {y : Y}
+  (hy : isInf (f '' s) (f y)) : @isInf Y (PartialOrder.lift f hf) s y := by {
+  intro y'
+  erw [← hy (f y')]
+  constructor
+  · intro hy' x hx
+    rcases hx with ⟨y'', hy'', H⟩
+    rw [← H]
+    exact hy' hy''
+  · intro hy' y'' hy''
+    apply hy'
+    exact Set.mem_image_of_mem f hy''
+}
+
+-- omit
+lemma SubgroupInf_is_Inf : isInfFun (SubgroupInf : Set (Subgroup G) → Subgroup G) := by {
+  -- sorry
   intro s H
   apply isInf.lift (fun H H' ↦ (Subgroup.ext_iff H H').2)
   rw [SubgroupInf_carrier]
   apply isInfInter
+  -- sorry
+}
 
 instance : CompleteLattice (Subgroup G) := CompleteLattice.mk_of_Inf SubgroupInf_is_Inf
 
 lemma Inf_carrier (s : Set (Subgroup G)) : (Inf s).carrier = ⋂₀ (Subgroup.carrier '' s) :=
-SubgroupInf_carrier s
+  SubgroupInf_carrier s
 
 def forget (H : Subgroup G) : Set G := H.carrier
 
 def generate : Set G → Subgroup G := mk_left forget
 
-lemma generate_forget_adjunction : adjunction (generate : Set G → Subgroup G) forget :=
-  adjunction_of_Inf SubgroupInf_carrier
+lemma generate_forget_adjunction : adjunction (generate : Set G → Subgroup G) forget := by {
+  -- sorry
+  exact adjunction_of_Inf SubgroupInf_carrier
+  -- sorry
+}
 
 variable {G' : Type} [Group G']
 
 def pull (f : G →* G') (H' : Subgroup G') : Subgroup G where
   carrier := f ⁻¹' H'.carrier
-  one_mem := by
+  one_mem := by {
+    -- sorry
     show f 1 ∈ H'
     rw [f.map_one]
     exact H'.one_mem
-  mul_mem := by
+    -- sorry
+  }
+  mul_mem := by {
+    -- sorry
     intro x y hx hy
     show f (x*y) ∈ H'
     rw [f.map_mul]
     exact H'.mul_mem hx hy
-  inv_mem := by
+    -- sorry
+  }
+  inv_mem := by {
+    -- sorry
     intro x hx
     show f x⁻¹ ∈ H'
     rw [f.map_inv]
     exact H'.inv_mem hx
+    -- sorry
+  }
 
 lemma pull_carrier (f : G →* G') (H' : Subgroup G') : (pull f H').carrier = f ⁻¹' H'.carrier :=
-rfl
+  rfl
 
 /- Let's be really lazy and define subgroup push-forward by adjunction. -/
 
 def push (f : G →* G') : Subgroup G → Subgroup G' := mk_left (pull f)
 
-lemma push_pull_adjunction (f : G →* G') : adjunction (push f) (pull f) := by
+lemma push_pull_adjunction (f : G →* G') : adjunction (push f) (pull f) := by {
+  -- sorry
   apply adjunction_of_Inf
   intro S
   ext x
-  simp [Inf_carrier, Set.image_image, pull_carrier, Set.preimage_interᵢ]
+  simp [Inf_carrier, Set.image_image, pull, Set.preimage_iInter]
+  -- sorry
+}
+
+end Subgroups
+
+section
+/- Our next concrete target is
+`push_generate (f : G →* G') (S : Set G) : push f (generate S) = generate (f '' S)`
+
+which will require a couple more abstract lemmas. -/
+
+variable {X : Type} [PartialOrder X] [CompleteLattice X]
+         {Y : Type} [PartialOrder Y] [CompleteLattice Y]
+
+lemma unique_left {l l' : X → Y} {r : Y → X} (h : adjunction l r) (h' : adjunction l' r) :
+    l = l' := by {
+  -- sorry
+  ext x
+  apply le_antisymm
+  · rw [h, ← h']
+  · rw [h', ← h]
+  -- sorry
+}
+
+lemma unique_right {l : X → Y} {r r' : Y → X} (h : adjunction l r) (h' : adjunction l r') :
+    r = r' := by {
+  -- sorry
+  exact (unique_left h'.dual h.dual).symm
+  -- sorry
+}
+
+variable {Z : Type} [PartialOrder Z] [CompleteLattice Z]
+
+lemma adjunction.compose {l : X → Y} {r : Y → X} (h : adjunction l r)
+  {l' : Y → Z} {r' : Z → Y} (h' : adjunction l' r') : adjunction (l' ∘ l) (r ∘ r') := by {
+  -- sorry
+  intro x z
+  rw [Function.comp_apply, h', h]
+  rfl
+  -- sorry
+}
+
+-- omit
+lemma left_comm_of_right_comm {W : Type} [PartialOrder W] {Z : Type} [PartialOrder Z]
+    {lYX : X → Y} {uXY : Y → X} (hXY : adjunction lYX uXY)
+    {lWZ : Z → W} {uZW : W → Z} (hZW : adjunction lWZ uZW)
+    {lWY : Y → W} {uYW : W → Y} (hWY : adjunction lWY uYW)
+    {lZX : X → Z} {uXZ : Z → X} (hXZ : adjunction lZX uXZ)
+    (h : uXZ ∘ uZW = uXY ∘ uYW) : lWZ ∘ lZX = lWY ∘ lYX := by {
+  have A₁
+  · exact hXZ.compose hZW
+  rw [h] at A₁
+  exact unique_left A₁ (hXY.compose hWY)
+}
+-- omit
+
+end
+
+namespace Subgroups
+variable {G : Type} [Group G] {G' : Type} [Group G']
 
 /- As a last challenge, we propose the following lemma. -/
 
 /-- The image under a group morphism of the subgroup generated by some set `S`
 is generated by the image of `S`. -/
-lemma push_generate (f : G →* G') : push f ∘ generate = generate ∘ (Set.image f) := by
+lemma push_generate (f : G →* G') : push f ∘ generate = generate ∘ (Set.image f) := by {
   -- sorry
   apply left_comm_of_right_comm
   apply image_preimage_adjunction
@@ -643,6 +714,7 @@ lemma push_generate (f : G →* G') : push f ∘ generate = generate ∘ (Set.im
   ext H
   exact Iff.rfl
   -- sorry
+}
 
-end SubGroups
-end Tuto
+end Subgroups
+end Tutorial
