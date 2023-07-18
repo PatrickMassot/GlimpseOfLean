@@ -97,7 +97,7 @@ example (f g : ℝ → ℝ) (hf : even_fun f) : even_fun (g ∘ f) := by {
 /-
 Let's have more quantifiers, and play with forward and backward reasoning.
 
-In the next definitions, note how `∀ x₁, ∀ x₂, ...` is abreviated to `∀ x₁ x₂, ...`.
+In the next definitions, note how `∀ x₁, ∀ x₂, ...` is abbreviated to `∀ x₁ x₂, ...`.
 -/
 
 def non_decreasing (f : ℝ → ℝ) := ∀ x₁ x₂, x₁ ≤ x₂ → f x₁ ≤ f x₂
