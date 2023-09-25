@@ -232,7 +232,6 @@ lemma isSupUnion {Y : Type} (S : Set (Set Y)) : isSup S (⋃₀ S) := by {
   · intro ht u hu x hx
     apply ht
     use u
-    tauto
   -- sorry
 }
 
