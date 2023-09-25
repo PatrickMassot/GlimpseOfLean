@@ -59,7 +59,7 @@ example (f g : ℝ → ℝ) (hf : even_fun f) (hg : even_fun g) : even_fun (f + 
 Tactics like `unfold`, `apply`, `exact`, `rfl` and `calc` will automatically unfold definitions.
 You can test this by deleting the `unfold` lines in the above example.
 
-Tactics like `rw`, `ring` an `linarith` will generally
+Tactics like `rw`, `ring` and `linarith` will generally
 not unfold definitions that appear in the goal.
 This is why the first computation line is necessary, although its proof is simply `rfl`.
 Before that line, `rw hf x` won't find anything like `f (-x)` hence will give up.
