@@ -59,7 +59,7 @@ example (p q r : Prop) : (p → (q → r)) ↔ p ∧ q → r := by {
   tauto
 }
 
-/- # Extential quantifiers
+/- # Existential quantifiers
 
 In order to prove `∃ x, P x`, we give some `x₀` using tactic `use x₀` and
 then prove `P x₀`. This `x₀` can be an object from the local context
