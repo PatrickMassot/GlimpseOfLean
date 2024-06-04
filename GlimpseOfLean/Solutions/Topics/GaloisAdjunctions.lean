@@ -357,15 +357,15 @@ structure Topology (X : Type) where
 conditions it the definition of topological spaces. -/
 
 lemma isOpen_empty (T : Topology X) : T.isOpen ∅ := by {
-  have : (∅ : Set X) = ⋃ i : Empty, i.rec
-  · rw [Set.iUnion_of_empty]
+  have : (∅ : Set X) = ⋃ i : Empty, i.rec := by
+    rw [Set.iUnion_of_empty]
   rw [this]
   exact T.isOpen_iUnion Empty.rec
 }
 
 lemma isOpen_univ (T : Topology X) : T.isOpen Set.univ := by {
-  have : (Set.univ : Set X) = ⋂ i : Empty, i.rec
-  · rw [Set.iInter_of_empty]
+  have : (Set.univ : Set X) = ⋂ i : Empty, i.rec := by
+    rw [Set.iInter_of_empty]
   rw [this]
   exact T.isOpen_iInter  Empty.rec (Finite.of_fintype Empty)
 }
@@ -468,7 +468,7 @@ where "ball" stands for "bounded for all", ie `∀ x ∈ ...`.
 lemma push_Sup (f : X → Y) {t : Set (Topology X)} : f ⁎ (Sup t) = Sup (f ⁎ '' t) := by {
   -- sorry
   ext V
-  rw [isOpen_Sup, Set.ball_image_iff]
+  rw [isOpen_Sup, Set.forall_mem_image]
   exact Iff.rfl
   -- sorry
 }
@@ -687,8 +687,7 @@ lemma left_comm_of_right_comm {W : Type} [PartialOrder W] {Z : Type} [PartialOrd
     {lWY : Y → W} {uYW : W → Y} (hWY : adjunction lWY uYW)
     {lZX : X → Z} {uXZ : Z → X} (hXZ : adjunction lZX uXZ)
     (h : uXZ ∘ uZW = uXY ∘ uYW) : lWZ ∘ lZX = lWY ∘ lYX := by {
-  have A₁
-  · exact hXZ.compose hZW
+  have A₁ := hXZ.compose hZW
   rw [h] at A₁
   exact unique_left A₁ (hXY.compose hWY)
 }

@@ -60,7 +60,6 @@ lemma chineseMap_surjective [Fintype ι] {I : ι → Ideal R} (hI : ∀ i j, i �
     rcases Ideal.add_eq_one_iff.mp (coprime_iInf_of_coprime hI') with ⟨u, hu, e, he, hue⟩
     refine ⟨e, ?_, ?_⟩
     · simp [eq_sub_of_add_eq' hue, map_sub, Ideal.Quotient.eq_zero_iff_mem.mpr hu]
-      rfl
     · intros j hj
       apply Ideal.Quotient.eq_zero_iff_mem.mpr
       simp at he

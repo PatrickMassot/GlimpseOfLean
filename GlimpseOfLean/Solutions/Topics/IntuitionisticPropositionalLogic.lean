@@ -246,10 +246,10 @@ theorem soundness_theorem (h : Γ ⊢ A) : Γ ⊨ A := by {
     exact le_trans (ih hv) le_sup_right
   case orE Γ A B C _h1 _h2 _h3 ih₁ ih₂ ih₃ =>
     specialize ih₁ hv
-    have h2v : ∀ D ∈ insert A Γ, c ⊓ eval v A ≤ eval v D
-    · simp; intros D hD; exact inf_le_of_left_le (hv D hD) -- apply? found this
-    have h3v : ∀ D ∈ insert B Γ, c ⊓ eval v B ≤ eval v D
-    · simp; intros D hD; exact inf_le_of_left_le (hv D hD) -- apply? found this
+    have h2v : ∀ D ∈ insert A Γ, c ⊓ eval v A ≤ eval v D := by
+      simp; intros D hD; exact inf_le_of_left_le (hv D hD) -- apply? found this
+    have h3v : ∀ D ∈ insert B Γ, c ⊓ eval v B ≤ eval v D := by
+      simp; intros D hD; exact inf_le_of_left_le (hv D hD) -- apply? found this
     simp at ih₁
     rw [← inf_eq_left.mpr ih₁, inf_sup_left]
     rw [← sup_idem (a := eval v C)]

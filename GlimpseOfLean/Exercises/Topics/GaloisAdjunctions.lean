@@ -279,15 +279,15 @@ structure Topology (X : Type) where
 conditions it the definition of topological spaces. -/
 
 lemma isOpen_empty (T : Topology X) : T.isOpen ∅ := by {
-  have : (∅ : Set X) = ⋃ i : Empty, i.rec
-  · rw [Set.iUnion_of_empty]
+  have : (∅ : Set X) = ⋃ i : Empty, i.rec := by
+    rw [Set.iUnion_of_empty]
   rw [this]
   exact T.isOpen_iUnion Empty.rec
 }
 
 lemma isOpen_univ (T : Topology X) : T.isOpen Set.univ := by {
-  have : (Set.univ : Set X) = ⋂ i : Empty, i.rec
-  · rw [Set.iInter_of_empty]
+  have : (Set.univ : Set X) = ⋂ i : Empty, i.rec := by
+    rw [Set.iInter_of_empty]
   rw [this]
   exact T.isOpen_iInter  Empty.rec (Finite.of_fintype Empty)
 }
@@ -519,3 +519,4 @@ lemma push_generate (f : G →* G') : push f ∘ generate = generate ∘ (Set.im
 
 end Subgroups
 end Tutorial
+

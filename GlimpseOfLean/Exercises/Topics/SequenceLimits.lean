@@ -109,12 +109,10 @@ example (hu : seq_limit u l) (hv : seq_limit v l') :
   intros n hn
   have : n ≥ N₁ := by exact le_of_max_le_left hn
   rw [ge_max_iff] at hn
-  rcases hn with ⟨hn₁, hn₂⟩
-  have fact₁ : |u n - l| ≤ ε/2
-  · exact hN₁ n (by linarith)
-  have fact₂ : |v n - l'| ≤ ε/2
-  · exact hN₂ n (by linarith)
-
+  rcases hn with ⟨_hn₁, hn₂⟩
+  have fact₁ : |u n - l| ≤ ε/2 := hN₁ n (by linarith)
+  have fact₂ : |v n - l'| ≤ ε/2 := hN₂ n (by linarith)
+  
   calc
     |(u + v) n - (l + l')| = |u n + v n - (l + l')|   := rfl
     _ = |(u n - l) + (v n - l')|                      := by ring
@@ -234,3 +232,4 @@ In the next exercise, you can reuse
 
 example (hu : CauchySequence u) (hl : cluster_point u l) : seq_limit u l := by
   sorry
+

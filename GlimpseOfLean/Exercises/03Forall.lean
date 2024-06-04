@@ -1,5 +1,5 @@
 import GlimpseOfLean.Library.Basic
-import Mathlib.Topology.Algebra.Order.IntermediateValue
+import Mathlib.Topology.Order.IntermediateValue
 import Mathlib.Topology.Instances.Real
 
 open Function
@@ -110,8 +110,7 @@ example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_decreasing g) :
   -- Let x₁ and x₂ be real numbers such that x₁ ≤ x₂
   intro x₁ x₂ h
   -- Since f is non-decreasing, f x₁ ≤ f x₂.
-  have step₁ : f x₁ ≤ f x₂
-  · exact hf x₁ x₂ h
+  have step₁ : f x₁ ≤ f x₂ := hf x₁ x₂ h
   -- Since g is non-decreasing, we then get g (f x₁) ≤ g (f x₂).
   exact hg (f x₁) (f x₂) step₁
 }
@@ -215,3 +214,4 @@ You can start with specialized files in the `Topics` folder. You have choice bet
   It ends with a constructor of the product topology and its universal property
   manipulating as few open sets as possible.
 -/
+

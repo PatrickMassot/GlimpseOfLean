@@ -42,16 +42,17 @@ example (a b : ℝ) (ha : 0 < a) (hb : 0 < b) : 0 < a^2 + b^2 := by {
 You can also give a prove with forward reasoning, using the `have` tactic.
 In order to announce an intermediate statement we use:
 
-  `have my_name : my_statement`
+  `have my_name : my_statement := by`
 
-This triggers the apparition of a new goal: proving the statement. The proof need to
-start with a central dot `·` (typed using `\.`). and it should be indented.
+This triggers the apparition of a new goal: proving the statement.
 After the proof is done, the statement becomes available under the name `my_name`.
+If the proof is a single `exact` then you tactic then you can get rid
+of `by` and `exact` and directly put the argument of `exact` after the `:=`.
 -/
 
 example (a : ℝ) (ha : 0 < a) : 0 < (a^2)^2 := by {
-  have h2 : 0 < a^2      -- we declare `0 < a^2` as a subgoal
-  · apply sq_pos_of_pos  -- we start proving the subgoal
+  have h2 : 0 < a^2 := by     -- we declare `0 < a^2` as a subgoal
+    apply sq_pos_of_pos  -- we start proving the subgoal
     exact ha             -- this line is indented, so part of the proof of the subgoal
   exact sq_pos_of_pos h2 -- we finished the subgoal, and now we prove the main goal using it.
 }
@@ -98,8 +99,8 @@ In the following exercises we will use the lemma:
 
 example {a b c : ℝ} : c + a ≤ c + b ↔ a ≤ b := by {
   rw [← sub_nonneg]
-  have key : (c + b) - (c + a) = b - a -- Here we introduce an intermediate statement named key
-  · ring   -- and prove it after a `·`
+  have key : (c + b) - (c + a) = b - a := by-- Here we introduce an intermediate statement named key
+    ring   -- and prove it in an indented block (here this block is only one line long)
   rw [key] -- we can now use `key`. This `rw` uses an equality result, not an equivalence
   rw [sub_nonneg] -- and switch back to reach the tautology a ≤ b ↔ a ≤ b
 }
@@ -189,3 +190,4 @@ equivalences. You learned about tactics:
 * `have`
 * `constructor`
 -/
+

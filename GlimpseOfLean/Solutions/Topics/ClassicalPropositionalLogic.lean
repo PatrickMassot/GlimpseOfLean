@@ -77,7 +77,6 @@ example : Valid (~~A ⇔ A) := by {
   -- sorry
   intros v _
   simp
-  tauto
   -- sorry
 }
 

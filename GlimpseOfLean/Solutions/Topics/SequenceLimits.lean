@@ -127,11 +127,9 @@ example (hu : seq_limit u l) (hv : seq_limit v l') :
   intros n hn
   have : n ≥ N₁ := by exact le_of_max_le_left hn
   rw [ge_max_iff] at hn
-  rcases hn with ⟨hn₁, hn₂⟩
-  have fact₁ : |u n - l| ≤ ε/2
-  · exact hN₁ n (by linarith)
-  have fact₂ : |v n - l'| ≤ ε/2
-  · exact hN₂ n (by linarith)
+  rcases hn with ⟨_hn₁, hn₂⟩
+  have fact₁ : |u n - l| ≤ ε/2 := hN₁ n (by linarith)
+  have fact₂ : |v n - l'| ≤ ε/2 := hN₂ n (by linarith)
   -- omit
   /-
   -- altenative proof without using `calc`
@@ -343,8 +341,8 @@ example (hu : CauchySequence u) (hl : cluster_point u l) : seq_limit u l := by
   intro ε ε_pos
   cases' hu (ε / 2) (by positivity) with N hN
   use N
-  have clef : ∃ N' ≥ N, |u N' - l| ≤ ε / 2
-  apply near_cluster hl (ε / 2) (by positivity)
+  have clef : ∃ N' ≥ N, |u N' - l| ≤ ε / 2 := by
+    apply near_cluster hl (ε / 2) (by positivity)
   cases' clef with N' h
   cases' h with hNN' hN'
   intro n hn
