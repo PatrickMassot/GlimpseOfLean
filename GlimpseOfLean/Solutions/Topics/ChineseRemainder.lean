@@ -7,7 +7,7 @@ open PiNotation BigOperators Function
 section chinese
 open RingHom
 namespace Ideal
-variable [CommRing R] {ι : Type} [DecidableEq ι]
+variable [CommRing R] {ι : Type}
 
 lemma ker_Pi_Quotient_mk (I : ι → Ideal R) : ker (Pi.ringHom fun i : ι ↦ Quotient.mk (I i)) = ⨅ i, I i := by {
   simp [Pi.ker_ringHom, Ideal.ker_mk]
@@ -29,7 +29,7 @@ lemma chineseMap_injective (I : ι → Ideal R) : Injective (chineseMap I) := by
   rw [chineseMap, injective_lift_iff, ker_Pi_Quotient_mk]
 }
 
-lemma coprime_iInf_of_coprime {I : Ideal R} {J : ι → Ideal R} {s : Finset ι} (hf : ∀ j ∈ s, I + J j = 1) :
+lemma coprime_iInf_of_coprime [DecidableEq ι] {I : Ideal R} {J : ι → Ideal R} {s : Finset ι} (hf : ∀ j ∈ s, I + J j = 1) :
     I + (⨅ j ∈ s, J j) = 1 := by {
   revert hf
   induction s using Finset.induction with
@@ -46,7 +46,7 @@ lemma coprime_iInf_of_coprime {I : Ideal R} {J : ι → Ideal R} {s : Finset ι}
         _ ≤ I + K ⊓ J i      := add_le_add mul_le_left mul_le_inf
 }
 
-lemma chineseMap_surjective [Fintype ι] {I : ι → Ideal R} (hI : ∀ i j, i ≠ j → I i + I j = 1) :
+lemma chineseMap_surjective [DecidableEq ι] [Fintype ι] {I : ι → Ideal R} (hI : ∀ i j, i ≠ j → I i + I j = 1) :
     Function.Surjective (chineseMap I) := by {
   intro g
   choose f hf using fun i ↦ Quotient.mk_surjective (g i)
@@ -74,7 +74,7 @@ lemma chineseMap_surjective [Fintype ι] {I : ι → Ideal R} (hI : ∀ i j, i �
     simp [(he j).2 i hj.symm]
 }
 
-noncomputable def chineseIso [Fintype ι] (I : ι → Ideal R) (hI : ∀ i j, i ≠ j → I i + I j = 1) :
+noncomputable def chineseIso [DecidableEq ι] [Fintype ι] (I : ι → Ideal R) (hI : ∀ i j, i ≠ j → I i + I j = 1) :
    (R ⧸ ⨅ i, I i) ≃+* Π i, R ⧸ I i :=
 { Equiv.ofBijective _ ⟨chineseMap_injective I, chineseMap_surjective hI⟩, chineseMap I with }
 
