@@ -197,7 +197,6 @@ lemma ProvableFrom.insert (h : Γ ⊢ A) : insert B Γ ⊢ A := by {
 /- Proving the deduction theorem is now easy. -/
 lemma deduction_theorem (h : Γ ⊢ A) : insert (A ⇒ B) Γ ⊢ B := by {
   -- sorry
-  intros
   apply impE (ax $ mem_insert _ _)
   exact h.insert
   -- sorry
