@@ -45,7 +45,7 @@ example (a b : ℝ) (ha : 0 < a) (hb : 0 < b) : 0 < a^2 + b^2 := by {
 }
 
 /-
-You can also give a prove with forward reasoning, using the `have` tactic.
+You can also give a proof with forward reasoning, using the `have` tactic.
 In order to announce an intermediate statement we use:
 
   `have my_name : my_statement := by`
