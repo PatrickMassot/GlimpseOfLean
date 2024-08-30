@@ -59,7 +59,7 @@ example (f g : ℝ → ℝ) (hf : even_fun f) (hg : even_fun g) : even_fun (f + 
 Tactics like `unfold`, `apply`, `exact`, `rfl` and `calc` will automatically unfold definitions.
 You can test this by deleting the `unfold` lines in the above example.
 
-Tactics like `rw`, `ring` an `linarith` will generally
+Tactics like `rw`, `ring` and `linarith` will generally
 not unfold definitions that appear in the goal.
 This is why the first computation line is necessary, although its proof is simply `rfl`.
 Before that line, `rw hf x` won't find anything like `f (-x)` hence will give up.
@@ -97,7 +97,7 @@ example (f g : ℝ → ℝ) (hf : even_fun f) : even_fun (g ∘ f) := by {
 /-
 Let's have more quantifiers, and play with forward and backward reasoning.
 
-In the next definitions, note how `∀ x₁, ∀ x₂, ...` is abreviated to `∀ x₁ x₂, ...`.
+In the next definitions, note how `∀ x₁, ∀ x₂, ...` is abbreviated to `∀ x₁ x₂, ...`.
 -/
 
 def non_decreasing (f : ℝ → ℝ) := ∀ x₁ x₂, x₁ ≤ x₂ → f x₁ ≤ f x₂
@@ -209,9 +209,8 @@ You can start with specialized files in the `Topics` folder. You have choice bet
   and do intuitionistic propositional logic.
 * `SequenceLimit` (easier, math) if you want to do some elementary calculus.
   For this file it is recommended to do `04Exists` first.
-* `GaloisAjunctions` (harder, math) if you want some more abstraction
+* `GaloisAdjunctions` (harder, math) if you want some more abstraction
   and learn how to prove things about adjunctions between complete lattices.
   It ends with a constructor of the product topology and its universal property
   manipulating as few open sets as possible.
 -/
-

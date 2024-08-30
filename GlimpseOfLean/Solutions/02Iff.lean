@@ -45,7 +45,7 @@ example (a b : ℝ) (ha : 0 < a) (hb : 0 < b) : 0 < a^2 + b^2 := by {
 }
 
 /-
-You can also give a prove with forward reasoning, using the `have` tactic.
+You can also give a proof with forward reasoning, using the `have` tactic.
 In order to announce an intermediate statement we use:
 
   `have my_name : my_statement := by`
@@ -78,7 +78,7 @@ example (a b : ℝ) (ha : 0 < a) (hb : 0 < b) : 0 < a^2 + b^2 := by {
 /- ## Proving implications
 
 In order to prove an implication, we need to assume to premise and prove the conclusion.
-This is done using the `intro` tactic. Secretely the exercice above was proving the
+This is done using the `intro` tactic. Secretly the exercise above was proving the
 implication `a > 0 → (a^2)^2 > 0` but the premise was already introduced for us.
 -/
 
