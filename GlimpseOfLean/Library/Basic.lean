@@ -16,9 +16,6 @@ open Lean Parser Tactic
 macro (name := ring) "ring" : tactic =>
   `(tactic| first | ring1 | ring_nf)
 
-macro (name := ring_at) "ring" cfg:config ? loc:location : tactic =>
-  `(tactic| first | ring_nf $cfg ? $loc)
-
 end
 
 -- The mathlib version is unusable because it is stated in terms of ≤

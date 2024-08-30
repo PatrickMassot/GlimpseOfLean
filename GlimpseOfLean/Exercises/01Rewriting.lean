@@ -150,9 +150,8 @@ in order to replace `exp(x + y)` by `exp(x) * exp(y)` in assumption `h`.
 The `exact` tactic allows you to give an explicit proof term to prove the current goal.
 -/
 
-example (a b c d : ℝ) (h : c = d*a - b) (h' : b = a*d) : c = 0 := by {
+example (a b c d : ℝ) (h : c = d*a + b) (h' : b = d) : c = d*a + d := by {
   rw [h'] at h
-  ring at h
   -- Our assumption `h` is now exactly what we have to prove
   exact h
 }
@@ -211,3 +210,4 @@ a Lean proof looks like and have learned about the following tactics:
 * `exact`
 * `calc`
 -/
+
