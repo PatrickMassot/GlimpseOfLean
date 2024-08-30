@@ -16,13 +16,13 @@ section InfSup
 variable [PartialOrder X]
 
 /-
-In this section, `X` is a type equiped with a partial order relation. So you have access
+In this section, `X` is a type equipped with a partial order relation. So you have access
 to lemmas:
 * `le_rfl {a : X} : a ≤ a`
 * `le_trans {a b c : X} (h : a ≤ b) (h' : b ≤ c) : a ≤ c`
 * `le_antisymm {a b : X} (h : a ≤ b) (h' : b ≤ a) : a = b`
 
-Curly braces around arguments mean these arguments are implicits, Lean will infer
+Curly braces around arguments mean these arguments are implicit, Lean will infer
 those arguments from context.
 -/
 
@@ -101,16 +101,16 @@ instance (X : Type) [PartialOrder X] [CompleteLattice X] : CompleteLattice (Orde
   S_isSup := CompleteLattice.I_isInf (X := X)
 
 /- We can now use the first main result above to build a complete lattice from
-either an infimum or a supremum function on a partialy ordered type. -/
+either an infimum or a supremum function on a partially ordered type. -/
 
-/-- Building a complete lattice structure from an infimum function on a partialy ordered type. -/
+/-- Building a complete lattice structure from an infimum function on a partially ordered type. -/
 def CompleteLattice.mk_of_Inf {I : Set X → X} (h : isInfFun I) : CompleteLattice X where
  I := I
  I_isInf := h
  S := fun s ↦ I (upperBounds s)
  S_isSup := isSup_of_isInf h
 
-/-- Building a complete lattice structure from an supremum function on a partialy ordered type. -/
+/-- Building a complete lattice structure from an supremum function on a partially ordered type. -/
 def CompleteLattice.mk_of_Sup {S : Set X → X} (h : isSupFun S) : CompleteLattice X where
  I := fun s ↦ S (lowerBounds s)
  I_isInf := isInf_of_isSup h
@@ -231,7 +231,7 @@ def mk_right (l : X → Y) : Y → X := fun y ↦ Sup {x | l x ≤ y}
 /- The proof of the theorem below isn't long but it isn't completely obvious either.
 First you need to understand the notations in the statement. `l '' s` is the direct image
 of `s` under `l`. This `''` is notation for `Set.image`. Putting your cursor on this
-notation and using the contextual menu to "jump to definiion" will bring you to the file
+notation and using the contextual menu to "jump to definition" will bring you to the file
 defining `Set.image` and containing lots of lemmas about it. The ones that are used in
 the reference solutions are
 
@@ -261,7 +261,7 @@ theorem adjunction_of_Inf {r : Y → X} (h : ∀ s : Set Y, r (Inf s) = Inf (r '
 end Adjunction
 
 section Topology
-/- In this section we apply the theory developped above to point-set topology.
+/- In this section we apply the theory developed above to point-set topology.
 Our first goal is to endow the type `Topology X` of topologies on a given type
 with a complete lattice structure. We then turn any map `f : X → Y` into an
 adjunction `(f⁎, f ^*)` between `Topology X` and `Topology Y` and use it
@@ -338,7 +338,7 @@ is simply saying "this is true by definition". -/
 lemma isOpen_Sup {s : Set (Topology X)} {V : Set X} : (Sup s).isOpen V ↔ ∀ T ∈ s, T.isOpen V :=
   Iff.rfl
 
-/- We now start bulding our adjunction between `Topology X` and `Topology Y` induced by any
+/- We now start building our adjunction between `Topology X` and `Topology Y` induced by any
 map `f : X → Y`. We will build the left adjoint by hand and then invoke our adjoint functor
 theorem.
 -/
@@ -519,4 +519,3 @@ lemma push_generate (f : G →* G') : push f ∘ generate = generate ∘ (Set.im
 
 end Subgroups
 end Tutorial
-
