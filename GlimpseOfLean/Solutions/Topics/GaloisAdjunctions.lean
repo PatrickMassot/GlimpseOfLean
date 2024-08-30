@@ -380,7 +380,7 @@ and it also registers this lemma for use by the `ext` tactic (we will come back 
 `Set (Set X)`. There are good reasons for this choice but they are beyond the scope of this
 tutorial. -/
 instance : PartialOrder (Topology X) :=
-PartialOrder.lift (β := OrderDual $ Set (Set X)) Topology.isOpen (fun T T' ↦ (Topology.ext_iff T T').2)
+PartialOrder.lift (β := OrderDual $ Set (Set X)) Topology.isOpen (fun _ _ ↦ (Topology.ext_iff).2)
 
 /-- The supremum function on `Topology X`. -/
 def SupTop (s : Set (Topology X)) : Topology X where
@@ -523,7 +523,7 @@ instance [Group G] : Membership G (Subgroup G) := ⟨fun x H ↦ x ∈ H.carrier
 variable {G : Type} [Group G]
 
 instance : PartialOrder (Subgroup G) :=
-  PartialOrder.lift Subgroup.carrier (fun H H' ↦ (Subgroup.ext_iff H H').2)
+  PartialOrder.lift Subgroup.carrier (fun _ _ ↦ (Subgroup.ext_iff).2)
 
 /- An intersection of subgroups is a subgroup. -/
 
@@ -576,7 +576,7 @@ lemma isInf.lift [PartialOrder X] {f : Y → X} (hf : Function.Injective f) {s :
 lemma SubgroupInf_is_Inf : isInfFun (SubgroupInf : Set (Subgroup G) → Subgroup G) := by {
   -- sorry
   intro s H
-  apply isInf.lift (fun H H' ↦ (Subgroup.ext_iff H H').2)
+  apply isInf.lift (fun _ _ ↦ (Subgroup.ext_iff).2)
   rw [SubgroupInf_carrier]
   apply isInfInter
   -- sorry
@@ -649,8 +649,8 @@ section
 
 which will require a couple more abstract lemmas. -/
 
-variable {X : Type} [PartialOrder X] [CompleteLattice X]
-         {Y : Type} [PartialOrder Y] [CompleteLattice Y]
+variable {X : Type} [PartialOrder X]
+         {Y : Type} [PartialOrder Y]
 
 lemma unique_left {l l' : X → Y} {r : Y → X} (h : adjunction l r) (h' : adjunction l' r) :
     l = l' := by {
@@ -669,7 +669,7 @@ lemma unique_right {l : X → Y} {r r' : Y → X} (h : adjunction l r) (h' : adj
   -- sorry
 }
 
-variable {Z : Type} [PartialOrder Z] [CompleteLattice Z]
+variable {Z : Type} [PartialOrder Z]
 
 lemma adjunction.compose {l : X → Y} {r : Y → X} (h : adjunction l r)
   {l' : Y → Z} {r' : Z → Y} (h' : adjunction l' r') : adjunction (l' ∘ l) (r ∘ r') := by {
@@ -681,7 +681,7 @@ lemma adjunction.compose {l : X → Y} {r : Y → X} (h : adjunction l r)
 }
 
 -- omit
-lemma left_comm_of_right_comm {W : Type} [PartialOrder W] {Z : Type} [PartialOrder Z]
+lemma left_comm_of_right_comm {W : Type} [PartialOrder W] [CompleteLattice W]
     {lYX : X → Y} {uXY : Y → X} (hXY : adjunction lYX uXY)
     {lWZ : Z → W} {uZW : W → Z} (hZW : adjunction lWZ uZW)
     {lWY : Y → W} {uYW : W → Y} (hWY : adjunction lWY uYW)
