@@ -132,7 +132,7 @@ example (hu : seq_limit u l) (hv : seq_limit v l') :
   have fact₂ : |v n - l'| ≤ ε/2 := hN₂ n (by linarith)
   -- omit
   /-
-  -- altenative proof without using `calc`
+  -- alternative proof without using `calc`
   simp
   have : |u n + v n - (l + l')| = |(u n - l) + (v n - l')|
   · ring
