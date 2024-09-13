@@ -35,48 +35,21 @@ def IndepSet (A B : Set Ω) : Prop :=
   ℙ (A ∩ B) = ℙ A * ℙ B
 
 lemma indepSet_symm : IndepSet A B → IndepSet B A := by
-  intro h
-  rw [IndepSet]
-  rw [IndepSet] at h
-  rw [mul_comm, inter_comm]
-  exact h
+  sorry
 
 
 -- hints: `compl_eq_univ_diff`, `measure_diff`, `inter_univ`, `measure_compl`, `ENNReal.mul_sub`
 lemma indepSet_compl_right (hA : MeasurableSet A) (hB : MeasurableSet B) :
     IndepSet A B → IndepSet A Bᶜ := by
-  intro h
-  rw [IndepSet]
-  rw [IndepSet] at h
-  rw [measure_compl hB (measure_ne_top _ _)]
-  rw [compl_eq_univ_diff]
-  rw [inter_diff_distrib_left]
-  rw [inter_univ]
-  rw [measure_diff]
-  · rw [h, measure_univ]
-    rw [ENNReal.mul_sub ?_, mul_one]
-    simp
-  · measurability
-  · measurability
-  · -- apply?
-    exact measure_ne_top ℙ (A ∩ B)
+  sorry
 
 -- use what you have proved so far
 lemma indepSet_compl_left (hA : MeasurableSet A) (hB : MeasurableSet B) :
     IndepSet A B → IndepSet Aᶜ B := by
-  intro h
-  apply indepSet_symm
-  apply indepSet_compl_right hB hA
-  apply indepSet_symm
-  exact h
+  sorry
 
 lemma indep_self : IndepSet A A → ℙ A = 0 ∨ ℙ A = 1 := by
-  intro h
-  rw [IndepSet] at h
-  rw [inter_self] at h
-  symm at h --maybe not introduced
-  rw [ENNReal.mul_self_eq_self_iff] at h
-  simpa using h
+  sorry
 
 def condProb (A B : Set Ω) : ENNReal :=
   ℙ (A ∩ B) / ℙ B
@@ -85,22 +58,14 @@ def condProb (A B : Set Ω) : ENNReal :=
 -- hints : `measure_inter_null_of_null_left`
 @[simp] -- this makes the lemma usable by simp
 lemma condProb_zero_left (hA : ℙ A = 0) : condProb A B = 0 := by
-  simp [condProb, hA]
-  exact measure_inter_null_of_null_left _ hA
+  sorry
 
 @[simp]
 lemma condProb_zero_right (hB : ℙ B = 0) : condProb A B = 0 := by
-  simp [condProb, hB]
-  exact measure_inter_null_of_null_right _ hB
+  sorry
 
 theorem bayesTheorem (hA : MeasurableSet A) (hB : MeasurableSet B) (hB₀ : ℙ B ≠ 0) :
     condProb A B = ℙ A * condProb B A / ℙ B := by
-  by_cases h : ℙ A = 0
-  · simp [h]
-  rw [condProb, condProb]
-  rw [ENNReal.mul_div_cancel']
-  · rw [inter_comm]
-  · assumption
-  · simp
+  sorry
 
 --do you really need all those hypotheses?
