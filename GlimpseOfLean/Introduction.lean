@@ -1,4 +1,5 @@
 import GlimpseOfLean.Library.Basic
+set_option linter.unusedTactic false
 
 namespace Introduction
 
