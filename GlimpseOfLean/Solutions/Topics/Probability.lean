@@ -36,8 +36,8 @@ def IndepSet (A B : Set Ω) : Prop :=
 
 lemma indepSet_symm : IndepSet A B → IndepSet B A := by
   intro h
-  rw [IndepSet]
-  rw [IndepSet] at h
+  unfold IndepSet
+  unfold IndepSet at h
   rw [inter_comm, mul_comm]
   exact h
 
@@ -45,8 +45,8 @@ lemma indepSet_symm : IndepSet A B → IndepSet B A := by
 lemma indepSet_compl_right (hA : MeasurableSet A) (hB : MeasurableSet B) :
     IndepSet A B → IndepSet A Bᶜ := by
   intro h
-  rw [IndepSet]
-  rw [IndepSet] at h
+  unfold IndepSet
+  unfold IndepSet at h
   rw [measure_compl hB (measure_ne_top _ _)]
   rw [measure_univ]
   rw [compl_eq_univ_diff]
@@ -74,7 +74,7 @@ lemma indepSet_compl_left (hA : MeasurableSet A) (hB : MeasurableSet B) :
 -- hints: `ENNReal.mul_self_eq_self_iff`
 lemma indep_self : IndepSet A A → ℙ A = 0 ∨ ℙ A = 1 := by
   intro h
-  rw [IndepSet] at h
+  unfold IndepSet at h
   rw [inter_self] at h
   symm at h -- maybe it's not been introduced
   rw [ENNReal.mul_self_eq_self_iff] at h
@@ -88,19 +88,19 @@ def condProb (A B : Set Ω) : ENNReal :=
 -- hints : `measure_inter_null_of_null_left`
 @[simp] -- this makes the lemma usable by simp
 lemma condProb_zero_left (hA : ℙ A = 0) : condProb A B = 0 := by
-  rw [condProb]
+  unfold condProb
   simp [measure_inter_null_of_null_left _ hA]
 
 @[simp]
 lemma condProb_zero_right (hB : ℙ B = 0) : condProb A B = 0 := by
-  rw [condProb]
+  unfold condProb
   simp [measure_inter_null_of_null_right _ hB]
 
 theorem bayesTheorem (hA : MeasurableSet A) (hB : MeasurableSet B) (hB₀ : ℙ B ≠ 0) :
     condProb A B = ℙ A * condProb B A / ℙ B := by
   by_cases h : ℙ A = 0
   · simp [h]
-  rw [condProb, condProb]
+  unfold condProb
   rw [ENNReal.mul_div_cancel' h]
   · rw [inter_comm]
   · simp
