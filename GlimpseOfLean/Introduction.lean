@@ -66,7 +66,7 @@ example (f : ℝ → ℝ) (u : ℕ → ℝ) (x₀ : ℝ) (hu : seq_limit u x₀)
   -- This follows from property (2) and our assumption on `n`.
   exact Hu n hn
   -- This finishes the proof!
-  }
+  done
 
 /-
 Now that this proof is over, you can use the file explorer to the
