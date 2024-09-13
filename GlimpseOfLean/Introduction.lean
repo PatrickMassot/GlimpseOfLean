@@ -23,7 +23,7 @@ First let us review two calculus definitions.
 /-- A sequence `u` of real numbers converges to `l` if `∀ ε > 0, ∃ N, ∀ n ≥ N, |u_n - l| ≤ ε`.
 This condition will be spelled `seq_limit u l`. -/
 def seq_limit (u : ℕ → ℝ) (l : ℝ) : Prop :=
-∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| ≤ ε
+  ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| ≤ ε
 
 /- In the above definition, note that the `n`-th term of the sequence `u` is denoted
 simply by `u n`.
@@ -34,14 +34,14 @@ Also note that implication is denoted by a single arrow (we'll explain why later
 /-- A function`f : ℝ → ℝ` is continuous at `x₀` if
 `∀ ε > 0, ∃ δ > 0, ∀ x, |x - x₀| ≤ δ ⇒ |f(x) - f(x₀)| ≤ ε`.
 This condition will be spelled `continuous_at f x₀`.-/
-def continuous_at (f : ℝ → ℝ) (x₀ : ℝ) : Prop :=
-∀ ε > 0, ∃ δ > 0, ∀ x, |x - x₀| ≤ δ → |f x - f x₀| ≤ ε
+def continuousAt (f : ℝ → ℝ) (x₀ : ℝ) : Prop :=
+  ∀ ε > 0, ∃ δ > 0, ∀ x, |x - x₀| ≤ δ → |f x - f x₀| ≤ ε
 
 /-- Now we claim that if `f` is continuous at `x₀` then it is sequentially continuous
 at `x₀`: for any sequence `u` converging to `x₀`, the sequence `f ∘ u` converges
 to `f x₀`.  -/
-example (f : ℝ → ℝ) (u : ℕ → ℝ) (x₀ : ℝ) (hu : seq_limit u x₀) (hf : continuous_at f x₀) :
-  seq_limit (f ∘ u) (f x₀) := by { -- This `by` keyword marks the beginning of the proof
+example (f : ℝ → ℝ) (u : ℕ → ℝ) (x₀ : ℝ) (hu : seq_limit u x₀) (hf : continuousAt f x₀) :
+    seq_limit (f ∘ u) (f x₀) := by -- This `by` keyword marks the beginning of the proof
   -- Put your text cursor here and watch the Lean InfoView panel to the right.
   -- Then move your cursor from line to line in the proof while monitoring the Infoview.
 
