@@ -1,71 +1,102 @@
--- import Mathlib.Probability.Independence.Basic
 import Mathlib.Probability.Notation
 import GlimpseOfLean.Library.Probability
 set_option linter.unusedSectionVars false
+set_option autoImplicit false
 noncomputable section
--- def measurable sets:NO import it, explain in docstring what it is
--- def independence of sets -- define it
---indep A B -> indep B A
---indep A B -> indep A B^c
--- indep A A -> μ A = 0, 1, +∞
--- def conditional probability for a  general set
+
+open scoped ENNReal
 
 -- introduce measure_ne_top
 
--- Bayes theorem
+-- measure take values in ENNReal, which has some strange features, explain ⊤, it's not a ring,
+-- there is ENNReal.mul_sub that asks for particular assumptions, sometimes we need measure_ne_top,
+-- but simp should solve it
 
--- explain that `open Set` allows us to write inter_comm instead of Set.inter_comm
-
--- #check inter_comm --
--- #check Set.inter_comm
-
--- explain the measurability tactic
-
---measure take values in ENNReal, which has some strange features, explain ⊤, it's not a ring, there is ENNReal.mul_sub that asks for particular assumptions, sometimes we need measure_ne_top, but simp should solve it
-
--- remove the linter that complains for unused hypotheses
-
+/- We open namespaces. The effect is that after that command, we can call lemmas in those namespaces
+without their namespace prefix: for example, we can write `inter_comm` instead of `Set.inter_comm`.
+Hover over `open` if you want to learn more. -/
 open MeasureTheory ProbabilityTheory Set
 
-attribute [simp] measure_ne_top measure_lt_top
+/- We define a measure space `Ω`: the `MeasureSpace Ω` variable states that `Ω` is a measurable
+space on which there is a canonical measure `volume`, with notation `ℙ`.
+We then state that `ℙ` is a probability measure. That is, `ℙ univ = 1`, where `univ : Set Ω` is the
+universal set in `Ω` (the set that contains all `x : Ω`). -/
+variable {Ω : Type} [MeasureSpace Ω] [IsProbabilityMeasure (ℙ : Measure Ω)]
 
-variable {Ω : Type} {A B C : Set Ω} [MeasureSpace Ω] [IsProbabilityMeasure (ℙ : Measure Ω)]
+-- `A, B` will denote sets in `Ω`.
+variable {A B : Set Ω}
 
-def IndepSet (A B : Set Ω) : Prop :=
-  ℙ (A ∩ B) = ℙ A * ℙ B
+/- One can take the measure of a set: `ℙ A : ℝ≥0∞`. `ℝ≥0∞` is the type of extended non-negative real
+numbers, which contain `∞`. Measures can in general take infinite values, but since our `ℙ` is a
+probabilty measure, it actually takes only values up to 1.
+TODO: ENNReal
+TODO: we can use `measure_ne_top`. -/
 
+/- We teach `simp` that it can use `measure_ne_top` -/
+attribute [simp] measure_ne_top measure_lt_top -- TODO: do that in Mathlib?
+
+/-- Two sets `A, B` are independent for the ambiant probability measure `ℙ` if
+`ℙ (A ∩ B) = ℙ A * ℙ B`. -/
+def IndepSet (A B : Set Ω) : Prop := ℙ (A ∩ B) = ℙ A * ℙ B
+
+/-- If `A` is independent of `B`, then `B` is independent of `A`. -/
 lemma indepSet_symm : IndepSet A B → IndepSet B A := by
   sorry
+  done
 
+/- Many lemmas in measure theory require sets to be measurable (`MeasurableSet A`).
+If you are presented with a goal like `⊢ MeasurableSet (A ∩ B)`, try the `measurability` tactic.
+That tactic produces measurability proofs. -/
 
--- hints: `compl_eq_univ_diff`, `measure_diff`, `inter_univ`, `measure_compl`, `ENNReal.mul_sub`
+-- Hints: `compl_eq_univ_diff`, `measure_diff`, `inter_univ`, `measure_compl`, `ENNReal.mul_sub`
 lemma indepSet_compl_right (hA : MeasurableSet A) (hB : MeasurableSet B) :
     IndepSet A B → IndepSet A Bᶜ := by
   sorry
+  done
 
--- use what you have proved so far
-lemma indepSet_compl_left (hA : MeasurableSet A) (hB : MeasurableSet B) :
-    IndepSet A B → IndepSet Aᶜ B := by
+-- Use what you have proved so far
+lemma indepSet_compl_left (hA : MeasurableSet A) (hB : MeasurableSet B) (h : IndepSet A B) :
+    IndepSet Aᶜ B := by
   sorry
+  done
 
-lemma indep_self : IndepSet A A → ℙ A = 0 ∨ ℙ A = 1 := by
+-- Hint: `ENNReal.mul_self_eq_self_iff`
+lemma indep_self (h : IndepSet A A) : ℙ A = 0 ∨ ℙ A = 1 := by
   sorry
+  done
 
-def condProb (A B : Set Ω) : ENNReal :=
-  ℙ (A ∩ B) / ℙ B
+/-- The probability of set `A` conditioned on `B`. -/
+def condProb (A B : Set Ω) : ENNReal := ℙ (A ∩ B) / ℙ B
 
---remark, we could just start every proof with rw [condProb], but we want an API to make the object more usable
--- hints : `measure_inter_null_of_null_left`
-@[simp] -- this makes the lemma usable by simp
-lemma condProb_zero_left (hA : ℙ A = 0) : condProb A B = 0 := by
+/- We define a notation for `condProb A B` that makes it look more like paper math. -/
+notation3 "ℙ("A"|"B")" => condProb A B
+
+/- Now that we have defined `condProb`, we want to use it, but Lean knows nothing about it.
+We could start every proof with `rw [condProb]`, but it is more convenient to write lemmas about the
+properties of `condProb` first and then use those. -/
+
+-- Hint : `measure_inter_null_of_null_left`
+@[simp] -- this makes the lemma usable by `simp`
+lemma condProb_zero_left (A B : Set Ω) (hA : ℙ A = 0) : ℙ(A|B) = 0 := by
   sorry
+  done
 
 @[simp]
-lemma condProb_zero_right (hB : ℙ B = 0) : condProb A B = 0 := by
+lemma condProb_zero_right (A B : Set Ω) (hB : ℙ B = 0) : ℙ(A|B) = 0 := by
   sorry
+  done
 
-theorem bayesTheorem (hA : MeasurableSet A) (hB : MeasurableSet B) (hB₀ : ℙ B ≠ 0) :
-    condProb A B = ℙ A * condProb B A / ℙ B := by
+/- What other basic lemmas could be useful? Are there other "special" sets for which `condProb`
+takes known values? -/
+
+-- Your lemma(s) here
+
+/- The next statement is a `theorem` and not a `lemma`, because we think it is important.
+There is no functional difference between those two keywords. -/
+
+/-- **Bayes Theorem** -/
+theorem bayesTheorem (A B : Set Ω) : ℙ(A|B) = ℙ A * ℙ(B|A) / ℙ B := by
   sorry
+  done
 
---do you really need all those hypotheses?
+-- Did you really need all those hypotheses?

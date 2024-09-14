@@ -8,3 +8,4 @@ import GlimpseOfLean.Solutions.Topics.ChineseRemainder
 import GlimpseOfLean.Solutions.Topics.GaloisAdjunctions
 import GlimpseOfLean.Solutions.Topics.ClassicalPropositionalLogic
 import GlimpseOfLean.Solutions.Topics.IntuitionisticPropositionalLogic
+import GlimpseOfLean.Solutions.Topics.Probability
