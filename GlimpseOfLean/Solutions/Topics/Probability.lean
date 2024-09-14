@@ -32,9 +32,6 @@ probabilty measure, it actually takes only values up to 1.
 TODO: ENNReal
 TODO: we can use `measure_ne_top`. -/
 
-/- We teach `simp` that it can use `measure_ne_top` -/
-attribute [simp] measure_ne_top measure_lt_top -- TODO: do that in Mathlib?
-
 /-- Two sets `A, B` are independent for the ambiant probability measure `ℙ` if
 `ℙ (A ∩ B) = ℙ A * ℙ B`. -/
 def IndepSet (A B : Set Ω) : Prop := ℙ (A ∩ B) = ℙ A * ℙ B
