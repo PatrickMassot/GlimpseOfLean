@@ -37,6 +37,7 @@ prove one-by-one.
 
 example (a b : ℝ) (ha : 0 < a) (hb : 0 < b) : 0 < a^2 + b^2 := by
   sorry
+  done
 
 /-
 You can also give a proof with forward reasoning, using the `have` tactic.
@@ -61,6 +62,7 @@ example (a : ℝ) (ha : 0 < a) : 0 < (a^2)^2 := by
 
 example (a b : ℝ) (ha : 0 < a) (hb : 0 < b) : 0 < a^2 + b^2 := by
   sorry
+  done
 
 
 /- ## Proving implications
@@ -79,6 +81,7 @@ example (a : ℝ) : a > 0 → b > 0 → a + b > 0 := by
 Note that `p → q → r` means `p → (q → r)`. -/
 example (p q r : Prop) : (p → q) → (p → q → r) → p → r := by
   sorry
+  done
 
 /- # Equivalences
 
@@ -109,6 +112,7 @@ Let's prove a variation
 
 example {a b : ℝ} (c : ℝ) : a + c ≤ b + c ↔ a ≤ b := by
   sorry
+  done
 
 /-
 The above lemma is already in the mathematical library, under the name `add_le_add_iff_right`:
@@ -146,6 +150,7 @@ example {a b : ℝ}  (ha : 0 ≤ a) : b ≤ a + b := by
 
 example (a b : ℝ) (hb : 0 ≤ b) : a ≤ a + b := by
   sorry
+  done
 
 /-
 ## Proving equivalences
@@ -176,6 +181,7 @@ example (a b : ℝ) : (a-b)*(a+b) = 0 ↔ a^2 = b^2 := by
 
 example (a b : ℝ) : a = b ↔ b - a = 0 := by
   sorry
+  done
 
 /-
 This is the end of this file where you learned how to handle implications and

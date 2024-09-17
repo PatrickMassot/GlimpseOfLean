@@ -2,15 +2,20 @@ import Mathlib.Probability.Notation
 import GlimpseOfLean.Library.Probability
 set_option linter.unusedSectionVars false
 set_option autoImplicit false
+set_option linter.unusedTactic false
 noncomputable section
-
 open scoped ENNReal
+/-
 
--- introduce measure_ne_top
+# Probability measures, independent sets
 
--- measure take values in ENNReal, which has some strange features, explain ⊤, it's not a ring,
--- there is ENNReal.mul_sub that asks for particular assumptions, sometimes we need measure_ne_top,
--- but simp should solve it
+We introduce a probability space and events (measurable sets) on that space. We then define
+independence of events and conditional probability, and prove results relating those two notions.
+
+Mathlib has a (different) definition for independence of sets and also has a conditional measure
+given a set. Here we practice instead on simple new definitions to apply the tactics introduced in
+the previous files.
+-/
 
 /- We open namespaces. The effect is that after that command, we can call lemmas in those namespaces
 without their namespace prefix: for example, we can write `inter_comm` instead of `Set.inter_comm`.
@@ -26,11 +31,19 @@ variable {Ω : Type} [MeasureSpace Ω] [IsProbabilityMeasure (ℙ : Measure Ω)]
 -- `A, B` will denote sets in `Ω`.
 variable {A B : Set Ω}
 
-/- One can take the measure of a set: `ℙ A : ℝ≥0∞`. `ℝ≥0∞` is the type of extended non-negative real
-numbers, which contain `∞`. Measures can in general take infinite values, but since our `ℙ` is a
-probabilty measure, it actually takes only values up to 1.
-TODO: ENNReal
-TODO: we can use `measure_ne_top`. -/
+/- One can take the measure of a set `A`: `ℙ A : ℝ≥0∞`.
+`ℝ≥0∞`, or `ENNReal`, is the type of extended non-negative real numbers, which contain `∞`.
+Measures can in general take infinite values, but since our `ℙ` is a probabilty measure,
+it actually takes only values up to 1.
+`simp` knows that a probability measure is finite and will use the lemmas `measure_ne_top`
+or `measure_lt_top` to prove that `ℙ A ≠ ∞` or `ℙ A < ∞`.
+
+Hint: use `#check measure_ne_top` to see what that lemma does.
+
+The operations on `ENNReal` are not as nicely behaved as on `ℝ`: `ENNReal` is not a ring and
+subtraction truncates to zero for example. If you find that lemma `lemma_name` used to transform
+an equation does not apply to `ENNReal`, try to find a lemma named something like
+`ENNReal.lemma_name_of_something` and use that instead. -/
 
 /-- Two sets `A, B` are independent for the ambiant probability measure `ℙ` if
 `ℙ (A ∩ B) = ℙ A * ℙ B`. -/
@@ -85,6 +98,12 @@ lemma indep_self (h : IndepSet A A) : ℙ A = 0 ∨ ℙ A = 1 := by
   simp at h
   exact h
 
+/-
+
+### Conditional probability
+
+-/
+
 /-- The probability of set `A` conditioned on `B`. -/
 def condProb (A B : Set Ω) : ENNReal := ℙ (A ∩ B) / ℙ B
 
@@ -124,3 +143,9 @@ theorem bayesTheorem (A B : Set Ω) : ℙ(A|B) = ℙ A * ℙ(B|A) / ℙ B := by
   · simp
 
 -- Did you really need all those hypotheses?
+
+lemma condProb_of_indepSet (h : IndepSet A B) (hB : ℙ B ≠ 0) : ℙ(A|B) = ℙ A := by
+  unfold condProb
+  rw [h, mul_div_assoc, ENNReal.div_self, mul_one]
+  · exact hB
+  · simp

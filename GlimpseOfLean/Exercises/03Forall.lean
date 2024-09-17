@@ -93,6 +93,7 @@ symbol you can put your mouse cursor above the symbol and wait for one second.
 
 example (f g : ℝ → ℝ) (hf : even_fun f) : even_fun (g ∘ f) := by
   sorry
+  done
 
 /-
 Let's have more quantifiers, and play with forward and backward reasoning.
@@ -165,6 +166,7 @@ example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_decreasing g) :
 example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_increasing g) :
     non_increasing (g ∘ f) := by
   sorry
+  done
 
 /- # Finding lemmas
 
@@ -179,12 +181,14 @@ The following exercises teach you two such techniques.
 means that `X` is a set containing (only) real numbers. -/
 example (x : ℝ) (X Y : Set ℝ) (hx : x ∈ X) : x ∈ (X ∩ Y) ∪ (X \ Y) := by
   sorry
+  done
 
 /- Use `apply?` to find the lemma that every continuous function with compact support
 has a global minimum. -/
 
 example (f : ℝ → ℝ) (hf : Continuous f) (h2f : HasCompactSupport f) : ∃ x, ∀ y, f x ≤ f y := by
   sorry
+  done
 
 /-
 This is the end of this file where you learned how to handle universal quantifiers.

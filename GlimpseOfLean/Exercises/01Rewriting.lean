@@ -28,6 +28,7 @@ your proof is finished.
 
 example (a b : ℝ) : (a+b)^2 = a^2 + 2*a*b + b^2 := by
   sorry
+  done
 
 /- In the first example above, take a closer look at where Lean displays parentheses.
 The `ring` tactic certainly knows about associativity of multiplication, but sometimes
@@ -77,6 +78,7 @@ but it doesn't use the assumptions `h` and `h'`
 
 example (a b c d : ℝ) (h : b = d + d) (h' : a = b + c) : a + b = c + 4 * d := by
   sorry
+  done
 
 /- ## Rewriting with a lemma
 
@@ -115,6 +117,7 @@ right-hand side.
 
 example (a b c : ℝ) : exp (a + b - c) = (exp a * exp b) / (exp c * exp 0) := by
   sorry
+  done
 
 /-
 ## Rewriting from right to left
@@ -138,6 +141,7 @@ by the left-hand side, so it will look for `b + c` in the current goal and repla
 
 example (a b c d : ℝ) (h : a = b + b) (h' : b = c) (h'' : a = d) : b + c = d := by
   sorry
+  done
 
 /- ## Rewriting in a local assumption
 
@@ -198,6 +202,7 @@ Aligning the equal signs and `:=` signs is not necessary but looks tidy.
 
 example (a b c d : ℝ) (h : c = d*a + b) (h' : b = a*d) : c = 2*a*d := by
   sorry
+  done
 
 /-
 Congratulations, this is the end of your first exercise file! You've seen what typing
