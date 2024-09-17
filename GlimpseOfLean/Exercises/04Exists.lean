@@ -42,6 +42,7 @@ example (p q r s : Prop) (h : p → r) (h' : q → s) : p ∧ q → r ∧ s := b
 
 example (p q r : Prop) : (p → (q → r)) ↔ p ∧ q → r := by
   sorry
+  done
 
 /- Of course Lean doesn't need any help to prove this kind of logical tautologies.
 This is the job of the `tauto` tactic, which can prove true statements in propositional logic. -/
@@ -86,6 +87,7 @@ By definition, `a ∣ b ↔ ∃ k, b = a*k`, so you can prove `a ∣ b` using th
 
 example (a b c : ℤ) (h₁ : a ∣ b) (h₂ : b ∣ c) : a ∣ c := by
   sorry
+  done
 
 
 /-
@@ -96,6 +98,7 @@ We can now start combining quantifiers, using the definition
 
 example (f g : ℝ → ℝ) (h : Surjective (g ∘ f)) : Surjective g := by
   sorry
+  done
 
 /- This is the end of this file about `∃` and `∧`. You've learned about tactics
 * `rcases`
