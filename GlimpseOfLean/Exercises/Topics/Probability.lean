@@ -50,7 +50,7 @@ an equation does not apply to `ENNReal`, try to find a lemma named something lik
 def IndepSet (A B : Set Ω) : Prop := ℙ (A ∩ B) = ℙ A * ℙ B
 
 /-- If `A` is independent of `B`, then `B` is independent of `A`. -/
-lemma indepSet_symm : IndepSet A B → IndepSet B A := by
+lemma IndepSet.symm : IndepSet A B → IndepSet B A := by
   sorry
   done
 
@@ -59,18 +59,16 @@ If you are presented with a goal like `⊢ MeasurableSet (A ∩ B)`, try the `me
 That tactic produces measurability proofs. -/
 
 -- Hints: `compl_eq_univ_diff`, `measure_diff`, `inter_univ`, `measure_compl`, `ENNReal.mul_sub`
-lemma indepSet_compl_right (hA : MeasurableSet A) (hB : MeasurableSet B) :
+lemma IndepSet.compl_right (hA : MeasurableSet A) (hB : MeasurableSet B) :
     IndepSet A B → IndepSet A Bᶜ := by
   sorry
   done
 
 -- Use what you have proved so far
-lemma indepSet_compl_left (hA : MeasurableSet A) (hB : MeasurableSet B) (h : IndepSet A B) :
+lemma IndepSet.compl_left (hA : MeasurableSet A) (hB : MeasurableSet B) (h : IndepSet A B) :
     IndepSet Aᶜ B := by
-  apply indepSet_symm
-  apply indepSet_compl_right hB hA
-  apply indepSet_symm
-  exact h
+  sorry
+  done
 
 -- Hint: `ENNReal.mul_self_eq_self_iff`
 lemma indep_self (h : IndepSet A A) : ℙ A = 0 ∨ ℙ A = 1 := by
@@ -119,6 +117,6 @@ theorem bayesTheorem (hA : ℙ A ≠ 0) (hB : ℙ B ≠ 0) : ℙ(A|B) = ℙ A * 
 
 -- Did you really need all those hypotheses?
 
-lemma condProb_of_indepSet (h : IndepSet A B) (hB : ℙ B ≠ 0) : ℙ(A|B) = ℙ A := by
+lemma condProb_of_indepSet (h : IndepSet B A) (hB : ℙ B ≠ 0) : ℙ(A|B) = ℙ A := by
   sorry
   done
