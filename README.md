@@ -17,4 +17,4 @@ To work using Lean, you either have to install Lean locally, use Codespaces or u
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/RemyDegenne/GlimpseOfLean)
 * To install Lean locally, follow the instructions [here](https://leanprover-community.github.io/get_started.html).
 
-If you have a lot more time, you should read the book [Mathematics in Lean](https://leanprover-community.github.io/mathematics_in_lean/)
+If you have a lot more time, you should read the book [Mathematics in Lean](https://leanprover-community.github.io/mathematics_in_lean/).

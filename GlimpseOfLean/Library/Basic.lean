@@ -1,8 +1,6 @@
-import Mathlib.Tactic.Propose
 import Mathlib.Data.Real.Basic
-import Mathlib.RingTheory.Ideal.Quotient
 import Mathlib.RingTheory.Ideal.Maps
-import Mathlib.Tactic.GCongr
+import Mathlib.RingTheory.Ideal.Quotient
 
 set_option warningAsError false
 -- it would be nice to do this persistently
@@ -11,6 +9,7 @@ set_option warningAsError false
 -- set_option linter.unusedVariables false
 
 section
+
 open Lean Parser Tactic
 
 macro (name := ring) "ring" : tactic =>
@@ -20,40 +19,34 @@ end
 
 -- The mathlib version is unusable because it is stated in terms of ≤
 lemma ge_max_iff {α : Type _} [LinearOrder α] {p q r : α} : r ≥ max p q  ↔ r ≥ p ∧ r ≥ q :=
-max_le_iff
+  max_le_iff
 
 /- No idea why this is not in mathlib-/
 lemma eq_of_abs_sub_le_all (x y : ℝ) : (∀ ε > 0, |x - y| ≤ ε) → x = y := by
-  intro h
-  apply eq_of_abs_sub_nonpos
+  refine fun h ↦ eq_of_abs_sub_nonpos ?_
   by_contra H
   push_neg at H
   specialize h (|x-y|/2) (by linarith)
   rw [← sub_nonpos, sub_half] at h
   linarith
 
-
 lemma abs_sub_le' {α : Type _} [LinearOrderedAddCommGroup α] (a b c : α) :
-  |a - c| ≤ |a - b| + |c - b| := by
-  rw [abs_sub_comm c b]
-  apply abs_sub_le
+    |a - c| ≤ |a - b| + |c - b| :=
+  abs_sub_comm c b ▸ abs_sub_le _ _ _
 
-def seq_limit (u : ℕ → ℝ) (l : ℝ) : Prop :=
-∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| ≤ ε
+def seq_limit (u : ℕ → ℝ) (l : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| ≤ ε
 
 lemma unique_limit {u l l'} : seq_limit u l → seq_limit u l' → l = l' := by
-  intros hl hl'
-  apply eq_of_abs_sub_le_all
-  intros ε ε_pos
+  refine fun hl hl' ↦ eq_of_abs_sub_le_all _ _ fun ε ε_pos ↦ ?_
   rcases hl (ε/2) (by linarith) with ⟨N, hN⟩
   rcases hl' (ε/2) (by linarith) with ⟨N', hN'⟩
   specialize hN (max N N') (le_max_left _ _)
   specialize hN' (max N N') (le_max_right _ _)
   calc |l - l'| = |(l-u (max N N')) + (u (max N N') -l')| := by ring_nf
-  _ ≤ |l - u (max N N')| + |u (max N N') - l'| := by apply abs_add
+  _ ≤ |l - u (max N N')| + |u (max N N') - l'| := abs_add_le _ _
   _ = |u (max N N') - l| + |u (max N N') - l'| := by rw [abs_sub_comm]
-  _ ≤ ε/2 + ε/2 := by linarith
-  _ = ε := by ring
+  _ ≤ ε/2 + ε/2 := add_le_add hN hN'
+  _ = ε := add_halves _
 
 def extraction (φ : ℕ → ℕ) := ∀ n m, n < m → φ n < φ m
 
@@ -61,11 +54,11 @@ def cluster_point (u : ℕ → ℝ) (a : ℝ) := ∃ φ, extraction φ ∧ seq_l
 
 open BigOperators
 
-lemma Finset.sum_univ_eq_single {β : Type u} {α : Type v} [Fintype α] [AddCommMonoid β] {f : α → β} (a : α)
-    (h : ∀ b,  b ≠ a → f b = 0) : ∑ x, f x = f a := by
+lemma Finset.sum_univ_eq_single {β : Type u} {α : Type v} [Fintype α] [AddCommMonoid β]
+    {f : α → β} (a : α) (h : ∀ b,  b ≠ a → f b = 0) : ∑ x, f x = f a := by
   rw [Finset.sum_eq_single]
-  · tauto
-  · exact λ ha ↦ (ha <| Finset.mem_univ a).elim
+  · exact fun b _ a ↦ h b a
+  · exact fun ha ↦ (ha <| Finset.mem_univ a).elim
 
 section prelim
 open RingHom Function PiNotation
@@ -73,7 +66,6 @@ open RingHom Function PiNotation
 namespace Ideal
 variable [CommRing R] {ι : Type _} [CommRing S] (I : Ideal R)
   (f : R →+* S) (H : ∀ (a : R), a ∈ I → f a = 0)
-
 
 lemma ker_mk : RingHom.ker (Quotient.mk I) = I := by
   ext x
@@ -89,14 +81,11 @@ end Ideal
 end prelim
 
 @[simp]
-lemma lowerBounds_range {α ι : Type _} [Preorder α] {s : ι → α} {x : α} : x ∈ lowerBounds (Set.range s) ↔ ∀ i, x ≤ s i  := by
-  constructor
-  · intros hx i
-    apply hx
-    exact Set.mem_range_self i
-  · rintro hx y ⟨i, rfl⟩
-    exact hx i
+lemma lowerBounds_range {α ι : Type _} [Preorder α] {s : ι → α} {x : α} :
+    x ∈ lowerBounds (Set.range s) ↔ ∀ i, x ≤ s i :=
+  ⟨fun hx i => hx (Set.mem_range_self i), by rintro hx y ⟨i, rfl⟩; exact hx i⟩
 
 @[simp]
-lemma upperBounds_range {α ι : Type _} [Preorder α] {s : ι → α} {x : α} : x ∈ upperBounds (Set.range s) ↔ ∀ i, s i ≤ x :=
+lemma upperBounds_range {α ι : Type _} [Preorder α] {s : ι → α} {x : α} :
+    x ∈ upperBounds (Set.range s) ↔ ∀ i, s i ≤ x :=
   lowerBounds_range (α := OrderDual α)
