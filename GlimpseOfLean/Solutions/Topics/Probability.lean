@@ -33,7 +33,7 @@ variable {A B : Set Ω}
 
 /- One can take the measure of a set `A`: `ℙ A : ℝ≥0∞`.
 `ℝ≥0∞`, or `ENNReal`, is the type of extended non-negative real numbers, which contain `∞`.
-Measures can in general take infinite values, but since our `ℙ` is a probabilty measure,
+Measures can in general take infinite values, but since our `ℙ` is a probability measure,
 it actually takes only values up to 1.
 `simp` knows that a probability measure is finite and will use the lemmas `measure_ne_top`
 or `measure_lt_top` to prove that `ℙ A ≠ ∞` or `ℙ A < ∞`.
@@ -45,7 +45,7 @@ subtraction truncates to zero for example. If you find that lemma `lemma_name` u
 an equation does not apply to `ENNReal`, try to find a lemma named something like
 `ENNReal.lemma_name_of_something` and use that instead. -/
 
-/-- Two sets `A, B` are independent for the ambiant probability measure `ℙ` if
+/-- Two sets `A, B` are independent for the ambient probability measure `ℙ` if
 `ℙ (A ∩ B) = ℙ A * ℙ B`. -/
 def IndepSet (A B : Set Ω) : Prop := ℙ (A ∩ B) = ℙ A * ℙ B
 
