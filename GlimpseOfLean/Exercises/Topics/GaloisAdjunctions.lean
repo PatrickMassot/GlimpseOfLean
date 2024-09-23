@@ -407,7 +407,7 @@ structure Subgroup (G : Type) [Group G] where
   mul_mem : ∀ ⦃x y : G⦄, x ∈ carrier → y ∈ carrier → x*y ∈ carrier
   inv_mem : ∀ ⦃x : G⦄, x ∈ carrier → x⁻¹ ∈ carrier
 
-instance [Group G] : Membership G (Subgroup G) := ⟨fun x H ↦ x ∈ H.carrier⟩
+instance [Group G] : Membership G (Subgroup G) := ⟨fun H x ↦ x ∈ H.carrier⟩
 
 variable {G : Type} [Group G]
 
@@ -519,4 +519,3 @@ lemma push_generate (f : G →* G') : push f ∘ generate = generate ∘ (Set.im
 
 end Subgroups
 end Tutorial
-
