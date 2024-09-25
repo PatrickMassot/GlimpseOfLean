@@ -217,3 +217,4 @@ You can start with specialized files in the `Topics` folder. You have choice bet
   It ends with a constructor of the product topology and its universal property
   manipulating as few open sets as possible.
 -/
+
