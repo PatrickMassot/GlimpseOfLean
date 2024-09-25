@@ -50,12 +50,15 @@ an equation does not apply to `ENNReal`, try to find a lemma named something lik
 def IndepSet (A B : Set Ω) : Prop := ℙ (A ∩ B) = ℙ A * ℙ B
 
 /-- If `A` is independent of `B`, then `B` is independent of `A`. -/
-lemma IndepSet.symm : IndepSet A B → IndepSet B A := by
+lemma IndepSet.symm : IndepSet A B → IndepSet B A := by {
+  -- sorry
   intro h
   unfold IndepSet
   unfold IndepSet at h
   rw [inter_comm, mul_comm]
   exact h
+  -- sorry
+}
 
 /- Many lemmas in measure theory require sets to be measurable (`MeasurableSet A`).
 If you are presented with a goal like `⊢ MeasurableSet (A ∩ B)`, try the `measurability` tactic.
@@ -63,7 +66,8 @@ That tactic produces measurability proofs. -/
 
 -- Hints: `compl_eq_univ_diff`, `measure_diff`, `inter_univ`, `measure_compl`, `ENNReal.mul_sub`
 lemma IndepSet.compl_right (hA : MeasurableSet A) (hB : MeasurableSet B) :
-    IndepSet A B → IndepSet A Bᶜ := by
+    IndepSet A B → IndepSet A Bᶜ := by {
+  -- sorry
   intro h
   unfold IndepSet
   unfold IndepSet at h
@@ -80,23 +84,31 @@ lemma IndepSet.compl_right (hA : MeasurableSet A) (hB : MeasurableSet B) :
   · simp
   · measurability
   · simp
+  -- sorry
+}
 
 -- Use what you have proved so far
 lemma IndepSet.compl_left (hA : MeasurableSet A) (hB : MeasurableSet B) (h : IndepSet A B) :
-    IndepSet Aᶜ B := by
+    IndepSet Aᶜ B := by{
+  -- sorry
   apply IndepSet.symm
   apply IndepSet.compl_right hB hA
   apply IndepSet.symm
   exact h
+  -- sorry
+}
 
 -- Hint: `ENNReal.mul_self_eq_self_iff`
-lemma indep_self (h : IndepSet A A) : ℙ A = 0 ∨ ℙ A = 1 := by
+lemma indep_self (h : IndepSet A A) : ℙ A = 0 ∨ ℙ A = 1 := by {
+  -- sorry
   unfold IndepSet at h
   rw [inter_self] at h
   symm at h -- TODO maybe it's not been introduced
   rw [ENNReal.mul_self_eq_self_iff] at h
   simp at h
   exact h
+  -- sorry
+}
 
 /-
 
@@ -116,14 +128,20 @@ properties of `condProb` first and then use those. -/
 
 -- Hint : `measure_inter_null_of_null_left`
 @[simp] -- this makes the lemma usable by `simp`
-lemma condProb_zero_left (A B : Set Ω) (hA : ℙ A = 0) : ℙ(A|B) = 0 := by
+lemma condProb_zero_left (A B : Set Ω) (hA : ℙ A = 0) : ℙ(A|B) = 0 := by {
+  -- sorry
   unfold condProb
   simp [measure_inter_null_of_null_left _ hA]
+  -- sorry
+}
 
 @[simp]
-lemma condProb_zero_right (A B : Set Ω) (hB : ℙ B = 0) : ℙ(A|B) = 0 := by
+lemma condProb_zero_right (A B : Set Ω) (hB : ℙ B = 0) : ℙ(A|B) = 0 := by {
+  -- sorry
   unfold condProb
   simp [measure_inter_null_of_null_right _ hB]
+  -- sorry
+}
 
 /- What other basic lemmas could be useful? Are there other "special" sets for which `condProb`
 takes known values? -/
@@ -134,18 +152,35 @@ takes known values? -/
 There is no functional difference between those two keywords. -/
 
 /-- **Bayes Theorem** -/
-theorem bayesTheorem (A B : Set Ω) : ℙ(A|B) = ℙ A * ℙ(B|A) / ℙ B := by
+theorem bayesTheorem (hA : ℙ A ≠ 0) (hB : ℙ B ≠ 0) : ℙ(A|B) = ℙ A * ℙ(B|A) / ℙ B := by {
+  -- sorry
   by_cases h : ℙ A = 0
   · simp [h]
   unfold condProb
   rw [ENNReal.mul_div_cancel' h]
   · rw [inter_comm]
   · simp
+  -- sorry
+}
 
 -- Did you really need all those hypotheses?
 
-lemma condProb_of_indepSet (h : IndepSet B A) (hB : ℙ B ≠ 0) : ℙ(A|B) = ℙ A := by
+theorem bayesTheorem' (A B : Set Ω) : ℙ(A|B) = ℙ A * ℙ(B|A) / ℙ B := by {
+  -- sorry
+  by_cases h : ℙ A = 0
+  · simp [h]
+  unfold condProb
+  rw [ENNReal.mul_div_cancel' h]
+  · rw [inter_comm]
+  · simp
+  -- sorry
+}
+
+lemma condProb_of_indepSet (h : IndepSet B A) (hB : ℙ B ≠ 0) : ℙ(A|B) = ℙ A := by {
+  -- sorry
   unfold condProb
   rw [h.symm, mul_div_assoc, ENNReal.div_self, mul_one]
   · exact hB
   · simp
+  -- sorry
+}
