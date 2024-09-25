@@ -224,6 +224,8 @@ You can start with specialized files in the `Topics` folder. You have choice bet
   and do intuitionistic propositional logic.
 * `SequenceLimit` (easier, math) if you want to do some elementary calculus.
   For this file it is recommended to do `04Exists` first.
+* `Probability` (easier, math) if you want to work with probability measures,
+  independent sets, and conditional probability, including Bayes' Theorem.
 * `GaloisAdjunctions` (harder, math) if you want some more abstraction
   and learn how to prove things about adjunctions between complete lattices.
   It ends with a constructor of the product topology and its universal property
