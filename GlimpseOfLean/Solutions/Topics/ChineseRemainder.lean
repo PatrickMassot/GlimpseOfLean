@@ -1,5 +1,5 @@
 import GlimpseOfLean.Library.Basic
-import Mathlib.RingTheory.Ideal.Quotient
+import Mathlib.RingTheory.Ideal.Quotient.Defs
 import Mathlib.RingTheory.Ideal.Operations
 
 open PiNotation BigOperators Function

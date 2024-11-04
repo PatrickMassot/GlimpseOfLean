@@ -1,6 +1,6 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.RingTheory.Ideal.Maps
-import Mathlib.RingTheory.Ideal.Quotient
+import Mathlib.RingTheory.Ideal.Quotient.Defs
 
 set_option warningAsError false
 -- it would be nice to do this persistently
