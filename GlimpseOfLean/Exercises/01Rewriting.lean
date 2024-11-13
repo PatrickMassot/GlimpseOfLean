@@ -31,8 +31,8 @@ example (a b : ℝ) : (a+b)^2 = a^2 + 2*a*b + b^2 := by {
 /- In the first example above, take a closer look at where Lean displays parentheses.
 The `ring` tactic certainly knows about associativity of multiplication, but sometimes
 it is useful to understand that binary operation really are binary and an expression like
-`a*b*c` is read as `(a*b)*c` by Lean and the fact that is equal `a*(b*c)` is a lemma
-that is used by the `ring` tactic when needed.
+`a*b*c` is read as `(a*b)*c` by Lean and the fact that this is equal to `a*(b*c)` is a
+lemma that is used by the `ring` tactic when needed.
 -/
 
 
@@ -84,8 +84,8 @@ In the previous examples, we rewrote the goal using a local assumption. But we c
 also use lemmas. For instance let us prove a lemma about exponentiation.
 Since `ring` only knows how to prove things from the axioms of rings,
 it doesn't know how to work with exponentiation.
-For the following lemma, we will rewrite with the lemma
-`exp_add x y` twice, which is a proof that `exp(x+y) = exp(x) * exp(y)`.
+For the following lemma, we will rewrite twice with the lemma
+`exp_add x y`, which is a proof that `exp(x+y) = exp(x) * exp(y)`.
 -/
 example (a b c : ℝ) : exp (a + b + c) = exp a * exp b * exp c := by {
   rw [exp_add (a + b) c]

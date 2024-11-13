@@ -96,3 +96,13 @@ lemma lowerBounds_range {α ι : Type _} [Preorder α] {s : ι → α} {x : α} 
 lemma upperBounds_range {α ι : Type _} [Preorder α] {s : ι → α} {x : α} :
     x ∈ upperBounds (Set.range s) ↔ ∀ i, s i ≤ x :=
   lowerBounds_range (α := OrderDual α)
+
+open Lean PrettyPrinter Delaborator
+
+@[delab app.Real.exp]
+def my : Delab := do
+  let args := (← SubExpr.getExpr).getAppArgs
+  let stx ← delab args[0]!
+  let e := mkIdent `exp
+  `(term|$e $stx)
+
