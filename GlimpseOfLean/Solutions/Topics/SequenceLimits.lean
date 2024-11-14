@@ -63,7 +63,7 @@ where `by linarith` will provide the proof of `δ/2 > 0` expected by Lean.
 -/
 
 /- If u is constant with value l then u tends to l.
-Hint: `simp` can rewrite `|1 - 1|` to `0` -/
+Hint: `simp` can rewrite `|l - l|` to `0` -/
 example (h : ∀ n, u n = l) : seq_limit u l := by {
   -- sorry
   intros ε ε_pos

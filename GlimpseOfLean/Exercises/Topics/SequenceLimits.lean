@@ -59,7 +59,7 @@ where `by linarith` will provide the proof of `δ/2 > 0` expected by Lean.
 -/
 
 /- If u is constant with value l then u tends to l.
-Hint: `simp` can rewrite `|1 - 1|` to `0` -/
+Hint: `simp` can rewrite `|l - l|` to `0` -/
 example (h : ∀ n, u n = l) : seq_limit u l := by {
   sorry
 }
@@ -112,7 +112,7 @@ example (hu : seq_limit u l) (hv : seq_limit v l') :
   rcases hn with ⟨_hn₁, hn₂⟩
   have fact₁ : |u n - l| ≤ ε/2 := hN₁ n (by linarith)
   have fact₂ : |v n - l'| ≤ ε/2 := hN₂ n (by linarith)
-  
+
   calc
     |(u + v) n - (l + l')| = |u n + v n - (l + l')|   := rfl
     _ = |(u n - l) + (v n - l')|                      := by ring
