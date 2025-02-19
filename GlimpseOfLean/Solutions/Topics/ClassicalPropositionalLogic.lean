@@ -55,17 +55,17 @@ def Valid (A : Formula) : Prop := ∅ ⊨ A
   using theorems tagged with `@[simp]`. -/
 
 variable {v : Variable → Prop} {A B : Formula}
-@[simp] lemma isTrue_neg : IsTrue v ~A ↔ ¬ IsTrue v A := by simp
+@[simp] lemma isTrue_neg : IsTrue v ~A ↔ ¬ IsTrue v A := by simp [neg]
 
 @[simp] lemma isTrue_top : IsTrue v ⊤ := by {
   -- sorry
-  simp
+  simp [top]
   -- sorry
 }
 
 @[simp] lemma isTrue_equiv : IsTrue v (A ⇔ B) ↔ (IsTrue v A ↔ IsTrue v B) := by {
   -- sorry
-  simp
+  simp [equiv]
   tauto
   -- sorry
 }
