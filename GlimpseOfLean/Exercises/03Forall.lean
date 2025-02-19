@@ -1,6 +1,6 @@
 import GlimpseOfLean.Library.Basic
 import Mathlib.Topology.Order.IntermediateValue
-import Mathlib.Topology.Instances.Real
+import Mathlib.Topology.Instances.Real.Defs
 
 open Function
 
