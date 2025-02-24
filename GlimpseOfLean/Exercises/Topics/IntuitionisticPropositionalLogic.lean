@@ -62,7 +62,7 @@ def Valid (A : Formula) : Prop := ∅ ⊨ A
   using theorems tagged with `@[simp]`. -/
 
 variable {v : Variable → H} {A B : Formula}
-@[simp] lemma eval_neg : eval v ~A = (eval v A)ᶜ := by simp
+@[simp] lemma eval_neg : eval v ~A = (eval v A)ᶜ := by simp [neg]
 
 @[simp] lemma eval_top : eval v top = ⊤ := by {
   sorry
