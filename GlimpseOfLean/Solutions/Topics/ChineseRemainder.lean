@@ -1,6 +1,6 @@
 import GlimpseOfLean.Library.Basic
 import Mathlib.RingTheory.Ideal.Quotient.Defs
-import Mathlib.RingTheory.Ideal.Operations
+import Mathlib.RingTheory.Ideal.Quotient.Operations
 
 open PiNotation BigOperators Function
 
@@ -8,10 +8,6 @@ section chinese
 open RingHom
 namespace Ideal
 variable [CommRing R] {ι : Type}
-
-lemma ker_Pi_Quotient_mk (I : ι → Ideal R) : ker (Pi.ringHom fun i : ι ↦ Quotient.mk (I i)) = ⨅ i, I i := by {
-  simp [Pi.ker_ringHom, Ideal.ker_mk]
-}
 
 def chineseMap (I : ι → Ideal R) : (R ⧸ ⨅ i, I i) →+* Π i, R ⧸ I i :=
   Quotient.lift (⨅ i, I i) (Pi.ringHom fun i : ι ↦ Quotient.mk (I i))

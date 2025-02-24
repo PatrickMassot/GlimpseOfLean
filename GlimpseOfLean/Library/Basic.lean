@@ -54,28 +54,6 @@ lemma Finset.sum_univ_eq_single {β : Type u} {α : Type v} [Fintype α] [AddCom
 section prelim
 open RingHom Function PiNotation
 
-namespace Ideal
-variable [CommRing R] {ι : Type _} [CommRing S] (I : Ideal R)
-  (f : R →+* S) (H : ∀ (a : R), a ∈ I → f a = 0)
-
-lemma ker_mk : RingHom.ker (Quotient.mk I) = I := by
-  ext x
-  rw [mem_ker, Quotient.eq_zero_iff_mem]
-
-lemma ker_lift : ker (Quotient.lift I f H) = map (Quotient.mk I) (ker f) := by
-  have : comap ((Quotient.lift I f H).comp (Quotient.mk I)) ⊥ = ker f := rfl
-  rw [← comap_comap] at this
-  apply_fun map (Quotient.mk I) at this
-  rwa [map_comap_of_surjective _ Quotient.mk_surjective] at this
-
-variable {I f H}
-
-lemma injective_lift_iff : Injective (Quotient.lift I f H) ↔ ker f = I := by
-  have : I ≤ ker f := H
-  rw [injective_iff_ker_eq_bot, ker_lift, map_eq_bot_iff_le_ker, ker_mk]
-  exact ⟨fun h ↦ le_antisymm h this, fun a ↦ le_of_eq_of_le a fun _ a ↦ a⟩
-
-end Ideal
 end prelim
 
 @[simp]
