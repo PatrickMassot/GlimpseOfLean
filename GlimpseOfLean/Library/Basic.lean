@@ -21,15 +21,6 @@ end
 lemma ge_max_iff {α : Type _} [LinearOrder α] {p q r : α} : r ≥ max p q  ↔ r ≥ p ∧ r ≥ q :=
   max_le_iff
 
-/- No idea why this is not in mathlib-/
-lemma eq_of_abs_sub_le_all (x y : ℝ) : (∀ ε > 0, |x - y| ≤ ε) → x = y := by
-  refine fun h ↦ eq_of_abs_sub_nonpos ?_
-  by_contra H
-  push_neg at H
-  specialize h (|x-y|/2) (by linarith)
-  rw [← sub_nonpos, sub_half] at h
-  linarith
-
 lemma abs_sub_le' {α : Type _} [LinearOrderedAddCommGroup α] (a b c : α) :
     |a - c| ≤ |a - b| + |c - b| :=
   abs_sub_comm c b ▸ abs_sub_le _ _ _
@@ -37,7 +28,7 @@ lemma abs_sub_le' {α : Type _} [LinearOrderedAddCommGroup α] (a b c : α) :
 def seq_limit (u : ℕ → ℝ) (l : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| ≤ ε
 
 lemma unique_limit {u l l'} : seq_limit u l → seq_limit u l' → l = l' := by
-  refine fun hl hl' ↦ eq_of_abs_sub_le_all _ _ fun ε ε_pos ↦ ?_
+  refine fun hl hl' ↦ eq_of_abs_sub_le_all fun ε ε_pos ↦ ?_
   rcases hl (ε/2) (by linarith) with ⟨N, hN⟩
   rcases hl' (ε/2) (by linarith) with ⟨N', hN'⟩
   specialize hN (max N N') (le_max_left _ _)
