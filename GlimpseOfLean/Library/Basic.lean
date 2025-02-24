@@ -25,24 +25,6 @@ lemma abs_sub_le' {α : Type _} [LinearOrderedAddCommGroup α] (a b c : α) :
     |a - c| ≤ |a - b| + |c - b| :=
   abs_sub_comm c b ▸ abs_sub_le _ _ _
 
-def seq_limit (u : ℕ → ℝ) (l : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| ≤ ε
-
-lemma unique_limit {u l l'} : seq_limit u l → seq_limit u l' → l = l' := by
-  refine fun hl hl' ↦ eq_of_abs_sub_le_all fun ε ε_pos ↦ ?_
-  rcases hl (ε/2) (by linarith) with ⟨N, hN⟩
-  rcases hl' (ε/2) (by linarith) with ⟨N', hN'⟩
-  specialize hN (max N N') (le_max_left _ _)
-  specialize hN' (max N N') (le_max_right _ _)
-  calc |l - l'| = |(l-u (max N N')) + (u (max N N') -l')| := by ring_nf
-  _ ≤ |l - u (max N N')| + |u (max N N') - l'| := abs_add_le _ _
-  _ = |u (max N N') - l| + |u (max N N') - l'| := by rw [abs_sub_comm]
-  _ ≤ ε/2 + ε/2 := add_le_add hN hN'
-  _ = ε := add_halves _
-
-def extraction (φ : ℕ → ℕ) := ∀ n m, n < m → φ n < φ m
-
-def cluster_point (u : ℕ → ℝ) (a : ℝ) := ∃ φ, extraction φ ∧ seq_limit (u ∘ φ) a
-
 open BigOperators
 
 lemma Finset.sum_univ_eq_single {β : Type u} {α : Type v} [Fintype α] [AddCommMonoid β]

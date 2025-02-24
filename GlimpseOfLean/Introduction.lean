@@ -69,6 +69,11 @@ example (f : ℝ → ℝ) (u : ℕ → ℝ) (x₀ : ℝ) (hu : seq_limit u x₀)
   }
 
 /-
-Now that this proof is over, you can use the file explorer to the
-left of this panel to open the file `Exercises > 01Rewriting.lean`.
+Now that this proof is over, you can choose between the short track or the longer one.
+If you want to do the short track then you should follow the link from the README page
+to the file `Shorter.lean` on the lean4web server.
+
+If you follow the longer track using a local installation or GitPod or Codespaces,
+you should use the file explorer to the left of this panel to open the file
+`Exercises > 01Rewriting.lean`.
 -/

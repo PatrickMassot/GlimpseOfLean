@@ -1,12 +1,22 @@
 # A glimpse of Lean
 
 This repository is an introduction to theorem proving in Lean for the impatient.
-The goal is to get a feel for what proving in Lean looks like in 2 or 3 hours.
-After reading the `Introduction.lean` file, you should read explanations and do exercises in the
-`Basics` folder, and then choose to work on one file from the `Topics` folder.
-Of course you can play with all files from that folder if you have more time.
+The goal is to get a feel for what proving in Lean looks like in 2 or 3 hours,
+or maybe devote half a day or a full day.
 
-To work using Lean, you either have to install Lean locally, use Codespaces or use Gitpod.
+There are two tracks. Both start with reading the `Introduction.lean` file.
+
+Then the short track continues in the `Shorter.lean` file which is meant to give
+you access to not completely empty mathematical proofs in two hours if you are
+ready to move really fast.
+
+If you have a bit more time, you should instead read explanations and do
+exercises in the `Basics` folder, and then choose to work on one file from the
+`Topics` folder. Of course you can play with all files from that folder if you
+have even more time.
+
+To work using Lean, you either have to install Lean locally, or use a lean4web
+server, or use Codespaces or use Gitpod.
 
 * To use codespaces, make sure you're logged in to Github, click the button below, select `4-core`, and then press `Create codespace`. After a few minutes an editor with Lean working will open in your browser.
 
