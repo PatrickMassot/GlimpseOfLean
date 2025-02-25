@@ -145,8 +145,8 @@ example (a b c : ℝ) (h : a = -b) (h' : b + c = 0) : b*(a - c) = 0 := by {
     _         = -b*(b + c) := by ring
     _         = -b*0       := by congr
     _         = 0          := by ring
-}
   -- sorry
+}
 
 /-
 We can also handle inequalities using `gcongr` (which stands for “generalized congruence”)

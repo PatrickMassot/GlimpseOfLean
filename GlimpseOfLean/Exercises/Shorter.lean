@@ -135,6 +135,7 @@ regular selection of text in your editor or browser.
 
 example (a b c : ℝ) (h : a = -b) (h' : b + c = 0) : b*(a - c) = 0 := by {
   sorry
+}
 
 /-
 We can also handle inequalities using `gcongr` (which stands for “generalized congruence”)
