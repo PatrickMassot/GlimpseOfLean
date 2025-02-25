@@ -11,20 +11,19 @@ Of course the proofs are not always the most idiomatic ones since we aim to keep
 the amount of things to explain very low, while still giving a glimpse of how Lean
 sees mathematical proofs.
 
-Every command that is typed to make progress in the proof is called a “tactic”. We will
-learn about ten of them. For each tactic, we will see a couple of examples and then you
-will have exercise. The goal of each exercise is to replace the word `sorry` by
-a sequence of tactics that bring Lean to report there are no remaining goal
-without reporting any error along the way.
+Every command that is typed to make progress in the proof is called a “tactic”.
+We will learn about a dozen of them. For each tactic, we will see a couple of
+examples and then you will have exercises to do. The goal of each exercise is
+to replace the word `sorry` by a sequence of tactics that bring Lean to report
+there are no remaining goal, without reporting any error along the way.
 
 The opening and closing curly braces for each proof are not mandatory, but they help
 making sure errors don’t escape your attention. In particular you should be careful
-to check that are not underlined in red since this would mean there is an error.
+to check they are not underlined in red since this would mean there is an error.
 -/
 
-/- ## Computing -/
+/- ## Computing
 
-/-
 We start with basic computations using real numbers. We could play the micro-management
 game invoking properties like commutatitivity and associativity of addition.
 But we can also ask Lean to take care of any proof that only uses those properties
@@ -134,8 +133,13 @@ seen on the video at
 
 https://www.imo.universite-paris-saclay.fr/~patrick.massot/calc_widget.webm
 
-Note that subterm selection is done using Shift-click. This is different from
-regular selection of text in your editor or browser.
+As you can see there, the `calc?` tactic propose to create a one-line compution,
+and then putting the cursor after `:= by` allows to select subterms to replace in
+a new calculation step.
+
+Note that subterm selection is done using Shift-click.
+There is no “click and move the cursor and then stop clicking”.
+This is different from regular selection of text in your editor or browser.
 -/
 
 example (a b c : ℝ) (h : a = -b) (h' : b + c = 0) : b*(a - c) = 0 := by {
@@ -188,13 +192,14 @@ object `x` with type `X`, we get a mathematical statement `P x`.
 Lean sees a proof `h` of `∀ x, P x` as a function sending any `x : X` to
 a proof `h x` of `P x`.
 This already explains the main way to use an assumption or lemma which
-starts with a `∀`: we can simply feed it an element of `X`.
+starts with a `∀`: we can simply feed it an element of the relevant `X`.
 
-Note we don't need to spell out the type of `x` in the expression `∀ x, P x`
+Note we don't need to spell out `X` in the expression `∀ x, P x`
 as long as the type of `P` is clear to Lean, which can then infer the type of `x`.
 
 Let's define a predicate to play with `∀`. In that example we have a function
-`f : ℝ → ℝ` at hand, and `X = ℝ`.
+`f : ℝ → ℝ` at hand, and `X = ℝ` (this value of `X` is inferred from the fact
+that we feed `x` to `f` which goes from `ℝ` to `ℝ`).
 -/
 
 def even_fun (f : ℝ → ℝ) := ∀ x, f (-x) = f x
@@ -240,12 +245,13 @@ with type `X`, and call it `x₀` (`intro` stands for “introduce”).
 Note we don’t have to use the letter `x₀`, any name will work.
 
 We will prove that the real cosine function is even. After introducing some `x₀`,
-the simplifier tactic can finish the proof.
+the simplifier tactic can finish the proof. Remember to carefully inspect the goal
+at the beginning of each line.
 -/
 
 open Real in -- this line insists that we mean real cos, not the complex numbers one.
 example : even_fun cos := by {
-  intros x₀
+  intro x₀
   simp
 }
 
@@ -309,12 +315,12 @@ example (f g : ℝ → ℝ) (hf : even_fun f) (hg : even_fun g) : even_fun (f + 
   -- (note how `congr` now finds assumptions finishing those steps)
   calc
     (f + g) (-x₀) = f (-x₀) + g (-x₀)  := by simp
-    _            = f x₀ + g (-x₀)     := by congr
-    _            = f x₀ + g x₀        := by congr
-    _            = (f + g) x₀        := by simp
+    _             = f x₀ + g (-x₀)     := by congr
+    _             = f x₀ + g x₀        := by congr
+    _             = (f + g) x₀         := by simp
 }
 /-
-Now let's practice. If you need to learn how to type a unicode symbol you can
+Now let's practice. If you need to learn how to type a unicode symbol, you can
 put your mouse cursor above the symbol and wait for one second.
 Recall you can set a depth limit in `congr` by giving it a number as in `congr 1`.
 
@@ -380,7 +386,7 @@ two proofs of the same statement.
 
 example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_decreasing g) :
     non_decreasing (g ∘ f) := by {
-  intro x₁ x₂ hx
+  intro x₁ x₂ hx -- Note how `intro` is also introducing the assumption `h : x₁ ≤ x₂`
   apply hg (f x₁) (f x₂) (hf x₁ x₂ hx)
 }
 
@@ -407,9 +413,9 @@ example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_increasing g) :
 }
 
 /-
-At this stage you should feel that such proof actually don’t require any thinking at all.
-And indeed Lean can easily handle the full proof in one tactic (but we won’t need this
-here).
+At this stage you should feel that such a proof actually doesn’t require any
+thinking at all. And indeed Lean can easily handle the full proof in one tactic
+(but we won’t need this here).
 
 We can also use the `specialize` tactic to feed arguments to an assumption
 before using it, as we saw with the example of even functions.
@@ -432,10 +438,10 @@ example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_decreasing g) :
 Lean’s mathematical library contains many useful facts, and remembering all of
 them by name is infeasible. We already saw the simplifier tactic `simp` which
 applies many lemmas without using their names.
--/
 
-/- Use `simp` to prove the following. Note that `X : Set ℝ`
-means that `X` is a set containing (only) real numbers. -/
+Use `simp` to prove the following. Note that `X : Set ℝ` means that `X` is a
+set containing (only) real numbers. -/
+
 example (x : ℝ) (X Y : Set ℝ) (hx : x ∈ X) : x ∈ (X ∩ Y) ∪ (X \ Y) := by {
   -- sorry
   simp
@@ -459,7 +465,7 @@ example (f : ℝ → ℝ) (hf : Continuous f) (h2f : HasCompactSupport f) : ∃ 
 
 /- ## Extential quantifiers
 
-In order to prove `∃ x, P x`, we give some `x₀` using tactic `use x₀` and
+In order to prove `∃ x, P x`, we give some `x₀` that works with `use x₀` and
 then prove `P x₀`. This `x₀` can be an object from the local context
 or a more complicated expression. In the example below, the property
 to check after `use` is true by definition so the proof is over.
@@ -475,7 +481,7 @@ one `x₀` that works.
 Again `h` can come straight from the local context or can be a more
 complicated expression.
 
-The examples will use divisibility in ℤ (beware the ∣ symbol which is
+The examples will use divisibility in `ℤ` (beware the `∣` symbol which is
 not ASCII but a unicode symbol). The angle brackets appearing after the
 word `with` are also unicode symbols.
 If your keyboard is not configured to directly type those symbols, you can
@@ -507,6 +513,31 @@ example (a b c : ℤ) (h₁ : a ∣ b) (h₂ : a ∣ c) : a ∣ b + c := by {
 }
 
 /-
+## Conjunctions
+
+We now explain how to handle one more logical gadget: conjunction.
+
+Given two statements `P` and `Q`, the conjunction `P ∧ Q` is the statement that
+`P` and `Q` are both true (`∧` is sometimes called the “logical and”).
+
+In order to prove `P ∧ Q` we use the `constructor` tactic that splits the goal
+into proving `P` and then proving `Q`.
+
+In order to use a proof `h` of `P ∧ Q`, we use `h.1` to get a proof of `P`
+and `h.2` to get a proof of `Q`. We can also use `rcases h with ⟨hP, hQ⟩` to
+get `hP : P` and `hQ : Q`.
+
+Let us see both in action in a very basic logic proof: let us deduce `Q ∧ P`
+from `P ∧ Q`.
+-/
+
+example (P Q : Prop) (h : P ∧ Q) : Q ∧ P := by {
+  constructor
+  apply h.2
+  apply h.1
+}
+
+/-
 ## Limits
 
 We learned enough tactics to manipulate a definition involving both kinds of quantifiers:
@@ -517,19 +548,19 @@ limits of sequences of real numbers.
 /-- A sequence `u` converges to a limit `l` if the following holds. -/
 def seq_limit (u : ℕ → ℝ) (l : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| ≤ ε
 
-/- If u is constant with value l then u tends to l.
-Hint: `simp` can rewrite `|l - l|` to `0`.
-Also remember `apply?` can find lemmas whose name you don’t want to remember, such as
+/-
+Let’s see an example manipulating this definition and using a lot of the tactics
+we’ve seen above: if u is constant with value l then u tends to l.
+
+Remember `apply?` can find lemmas whose name you don’t want to remember, such as
 the lemma saying that positive implies non-negative. -/
 example (h : ∀ n, u n = l) : seq_limit u l := by {
-  -- sorry
-  intros ε ε_pos
+  intro ε ε_pos
   use 0
-  intros n hn
+  intro n hn
   calc |u n - l| = |l - l| := by congr; apply h
     _            = 0       := by simp
     _            ≤ ε       := by apply?
-  -- sorry
 }
 
 /- When dealing with absolute values, we'll use the lemma:
@@ -544,16 +575,18 @@ The way we will use those lemmas is with the rewriting command
 `rw`. Let's see an example.
 In that example, we kept `apply?` instead of accepting its suggestions in order to emphasize
 there is no need to remember those lemma names.
+Note also how we can use `by` anywhere to start proving something using tactics. In the example
+below, we use it to prove `ε/2 > 0` from our assumption `ε > 0`.
 -/
 
 -- If `u` tends to `l` and `v` tends `l'` then `u+v` tends to `l+l'`
 example (hu : seq_limit u l) (hv : seq_limit v l') :
     seq_limit (u + v) (l + l') := by {
-  intros ε ε_pos
+  intro ε ε_pos
   rcases hu (ε/2) (by apply?) with ⟨N₁, hN₁⟩
   rcases hv (ε/2) (by apply?) with ⟨N₂, hN₂⟩
   use max N₁ N₂
-  intros n hn
+  intro n hn
   rw [ge_max_iff] at hn -- Note how hn changes from `n ≥ max N₁ N₂` to `n ≥ N₁ ∧ n ≥ N₂`
   specialize hN₁ n hn.1
   specialize hN₂ n hn.2
@@ -572,11 +605,11 @@ goal. You can use `rw [abs_le] at *` for this. -/
 example (hu : seq_limit u l) (hw : seq_limit w l) (h : ∀ n, u n ≤ v n) (h' : ∀ n, v n ≤ w n) :
     seq_limit v l := by {
   -- sorry
-  intros ε ε_pos
+  intro ε ε_pos
   rcases hu ε ε_pos with ⟨N, hN⟩
   rcases hw ε ε_pos with ⟨N', hN'⟩
   use max N N'
-  intros n hn
+  intro n hn
   rw [ge_max_iff] at hn
   specialize hN n hn.1
   specialize hN' n hn.2
@@ -606,7 +639,7 @@ as the first step.
 lemma uniq_limit (hl : seq_limit u l) (hl' : seq_limit u l') : l = l' := by {
   apply eq_of_abs_sub_le_all
   -- sorry
-  intros ε ε_pos
+  intro ε ε_pos
   rcases hl (ε/2) (by apply?) with ⟨N, hN⟩
   rcases hl' (ε/2) (by apply?) with ⟨N', hN'⟩
   calc
@@ -615,32 +648,6 @@ lemma uniq_limit (hl : seq_limit u l) (hl' : seq_limit u l') : l = l' := by {
            _ ≤ ε/2 + ε/2 := by gcongr; apply hN; apply?; apply hN'; apply?
            _ = ε := by simp
   -- sorry
-}
-
-/-
-## Conjunctions
-
-In order to prove more things about sequences of real number, we now explain how to
-handle one more logical gadget: conjunction.
-
-Given two statements `P` and `Q`, the conjunction `P ∧ Q` is the statement that
-`P` and `Q` are both true (`∧` is sometimes called the “logical and”).
-
-In order to prove `P ∧ Q` we use the `constructor` tactic that splits the goal
-into proving `P` and then proving `Q`.
-
-In order to use a proof `h` of `P ∧ Q`, we use `h.1` to get a proof of `P`
-and `h.2` to get a proof of `Q`. We can also use `rcases h with ⟨hP, hQ⟩` to
-get `hP : P` and `hQ : Q`.
-
-Let us see both in action in a very basic logic proof: let us deduce `Q ∧ P`
-from `P ∧ Q`.
--/
-
-example (P Q : Prop) (h : P ∧ Q) : Q ∧ P := by {
-  constructor
-  apply h.2
-  apply h.1
 }
 
 /-
@@ -665,7 +672,7 @@ at how proofs by induction look like (but we won’t need any other one here).
 -/
 /-- An extraction is greater than id -/
 lemma id_le_extraction' : extraction φ → ∀ n, n ≤ φ n := by {
-  intros hyp n
+  intro hyp n
   induction n with
   | zero =>  apply?
   | succ n ih => exact Nat.succ_le_of_lt (by
@@ -740,7 +747,8 @@ lemma cluster_limit (hl : seq_limit u l) (ha : cluster_point u a) : a = l := by 
   -- sorry
 }
 
-/-- `u` is a Cauchy sequence -/
+/-- `u` is a Cauchy sequence if its values get arbitrarily close for large
+enough inputs. -/
 def CauchySequence (u : ℕ → ℝ) :=
   ∀ ε > 0, ∃ N, ∀ p q, p ≥ N → q ≥ N → |u p - u q| ≤ ε
 
