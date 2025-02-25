@@ -5,7 +5,7 @@ namespace Introduction
 /-
 # Introduction to this tutorial
 
-If you have a small screen, you can press
+If you have a small screen and you are reading this in VSCode, you can press
 `alt-Z` (or `option-Z`) to enable word wrap.
 
 Welcome to this tutorial designed to give you a glimpse of Lean in a couple of hours.
