@@ -547,7 +547,7 @@ limits of sequences of real numbers.
 -/
 
 /-- A sequence `u` converges to a limit `l` if the following holds. -/
-def seq_limit (u : ℕ → ℝ) (l : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| ≤ ε
+def seq_limit (u : ℕ → ℝ) (l : ℝ) := ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| ≤ ε
 
 /-
 Let’s see an example manipulating this definition and using a lot of the tactics

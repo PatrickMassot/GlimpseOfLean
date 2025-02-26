@@ -25,7 +25,7 @@ First let us review two calculus definitions.
 
 /-- A sequence `u` of real numbers converges to `l` if `∀ ε > 0, ∃ N, ∀ n ≥ N, |u_n - l| ≤ ε`.
 This condition will be spelled `seq_limit u l`. -/
-def seq_limit (u : ℕ → ℝ) (l : ℝ) : Prop :=
+def seq_limit (u : ℕ → ℝ) (l : ℝ) :=
 ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| ≤ ε
 
 /- In the above definition, note that the `n`-th term of the sequence `u` is denoted
@@ -41,7 +41,7 @@ may write `l ∈ ℝ` on paper.
 /-- A function`f : ℝ → ℝ` is continuous at `x₀` if
 `∀ ε > 0, ∃ δ > 0, ∀ x, |x - x₀| ≤ δ ⇒ |f(x) - f(x₀)| ≤ ε`.
 This condition will be spelled `continuous_at f x₀`.-/
-def continuous_at (f : ℝ → ℝ) (x₀ : ℝ) : Prop :=
+def continuous_at (f : ℝ → ℝ) (x₀ : ℝ) :=
 ∀ ε > 0, ∃ δ > 0, ∀ x, |x - x₀| ≤ δ → |f x - f x₀| ≤ ε
 
 /-- Now we claim that if `f` is continuous at `x₀` then it is sequentially continuous
