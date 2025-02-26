@@ -50,7 +50,7 @@ example (a b : ℝ) : (a+b)*(a-b) = a^2 - b^2 := by {
 }
 
 /-
-Our next tactic in the `congr` tactic (`congr` stands for “congruence”).
+Our next tactic is the `congr` tactic (`congr` stands for “congruence”).
 It tries to prove equalities by comparing both sides and creating new goals each time it
 sees some mismatch.
 -/
@@ -113,7 +113,7 @@ example (a b c d : ℝ) (h : c = b*a - d) (h' : d = a*b) : c = 0 := by {
 }
 
 /-
-Note that each `_` stands for the righ-hand side of the previous line.
+Note that each `_` stands for the right-hand side of the previous line.
 So we are really proving a sequence of equalities, and then the `calc` tactic
 takes care of applying transitivity of equality (or equalities and inequalities
 when proving inequalities). Each proof in this sequence is introduced by `:= by`.
@@ -272,7 +272,7 @@ This is why the first computation line is necessary, although it only unfolds a 
 The last line is not necessary however, since it only proves
 something that is true by definition, and is not followed by any other tactic.
 
-Also that `congr` can generate several goals so we don’t have to call it twice.
+Also note that `congr` can generate several goals so we don’t have to call it twice.
 
 Hence we can compress the above proof to:
 -/
@@ -302,6 +302,7 @@ example (f g : ℝ → ℝ) (hf : even_fun f) (hg : even_fun g) : even_fun (f + 
     _             = f x₀ + g x₀        := by congr
     _             = (f + g) x₀         := by simp
 }
+
 /-
 Now let's practice. If you need to learn how to type a unicode symbol, you can
 put your mouse cursor above the symbol and wait for one second.
@@ -422,7 +423,7 @@ example (x : ℝ) (X Y : Set ℝ) (hx : x ∈ X) : x ∈ (X ∩ Y) ∪ (X \ Y) :
 }
 
 /-
-The `apply?` will find lemmas from the library and tell you their names.
+The `apply?` tactic will find lemmas from the library and tell you their names.
 It creates a suggestion below the goal display. You can click on this suggestion
 to edit your code.
 Use `apply?` to find the lemma that every continuous function with compact support
@@ -432,7 +433,7 @@ example (f : ℝ → ℝ) (hf : Continuous f) (h2f : HasCompactSupport f) : ∃ 
   sorry
 }
 
-/- ## Extential quantifiers
+/- ## Existential quantifiers
 
 In order to prove `∃ x, P x`, we give some `x₀` that works with `use x₀` and
 then prove `P x₀`. This `x₀` can be an object from the local context
@@ -512,7 +513,7 @@ def seq_limit (u : ℕ → ℝ) (l : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥
 
 /-
 Let’s see an example manipulating this definition and using a lot of the tactics
-we’ve seen above: if u is constant with value l then u tends to l.
+we’ve seen above: if `u` is constant with value `l` then `u` tends to `l`.
 
 Remember `apply?` can find lemmas whose name you don’t want to remember, such as
 the lemma saying that positive implies non-negative. -/
@@ -641,7 +642,7 @@ lemma near_cluster :
 
 /-- If `u` tends to `l` then its subsequences tend to `l`. -/
 lemma subseq_tendsto_of_tendsto' (h : seq_limit u l) (hφ : extraction φ) :
-seq_limit (u ∘ φ) l := by {
+  seq_limit (u ∘ φ) l := by {
   sorry
 }
 
