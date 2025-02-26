@@ -26,6 +26,10 @@ website, you can use the [lean4web server](https://live.lean-lang.org/) hosted b
 * read [the introduction file](https://live.lean-lang.org/#project=GlimpseOfLean&url=https%3A%2F%2Fraw.githubusercontent.com%2FPatrickMassot%2FGlimpseOfLean%2Frefs%2Fheads%2Fmaster%2FGlimpseOfLean%2FIntroduction.lean)
 * then read and edit the [explanations and exercises file](https://live.lean-lang.org/#project=GlimpseOfLean&url=https%3A%2F%2Fraw.githubusercontent.com%2FPatrickMassot%2FGlimpseOfLean%2Frefs%2Fheads%2Fmaster%2FGlimpseOfLean%2FExercises%2FShorter.lean)
 
+You can refer to the [tactics cheatsheet](tactics.pdf) while doing the
+exercises. Tactics are explained in the Lean file, but the pdf can be more
+convenient as a reference.
+
 ## Online version, with registration
 
 There are also websites that are a bit more confortable but require 

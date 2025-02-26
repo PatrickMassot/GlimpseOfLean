@@ -1,0 +1,96 @@
+\documentclass[a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+%\usepackage[urw-garamond,expert,uppercase=upright,greeklowercase=upright]{mathdesign}
+%\usepackage[osf,swashQ]{garamondx}
+%
+%\usepackage{microtype}
+
+\usepackage[textwidth=17cm, textheight=23cm]{geometry}
+\usepackage{booktabs, xspace}
+\usepackage{amsmath,amsfonts,amssymb,longtable, fontawesome, hyperref}
+
+\newcommand{\lean}[1]{{\tt #1}}
+% \newcommand{\nv}{\textit{new\_name}\xspace}
+% \newcommand{\nom}{\textit{name}\xspace}
+\newcommand{\expr}[1][]{\textit{expr#1}\xspace}
+\newcommand{\proposition}{\textit{prop}\xspace}
+\newcommand{\tactic}[1][]{\textit{tac#1}\xspace} % also used for tactic sequences
+\newcommand{\type}{\textit{type}\xspace}
+\newcommand{\hyp}{\textit{hyp}\xspace}
+\newcommand{\light}{\faLightbulbO\xspace}
+\newcommand{\nat}{\textit{n}\xspace}
+\newcommand{\internet}{\faGlobe\xspace}
+\newcommand{\warning}{\faWarning\xspace}
+\setlength\parindent{0pt}
+
+% Original authors (Lean 3 version): Patrick Massot and Johan Commelin
+% https://github.com/leanprover-community/lftcm2020/blob/master/lean-tactics.tex
+
+\usepackage{makecell}
+\usepackage{xcolor}
+
+\begin{document}
+\pagestyle{empty}
+\begin{center}
+ {\large\textsc{A glimpse of Lean \\ Tactic cheatsheet}}
+\end{center}
+
+\bigskip
+\begin{center}
+\setlength\tabcolsep{5mm}
+\def\arraystretch{1.5}
+\begin{tabular}{@{}lll@{}}
+  \toprule
+  Logical symbol & Appears in goal & Appears in hypothesis \lean{h} \\
+  \midrule
+  $\forall$ (for all) & \lean{intro x} & \lean{apply h} or \lean{specialize h x}  \\
+  $\exists$ (there exists) & \lean{use x} & \lean{rcases h with ⟨x, hx⟩} \\
+  $\to$ (implies) & \lean{intro h} & \lean{apply h} or \lean{specialize h1 h2} \\
+  $\leftrightarrow$ (if and only if)\qquad & \lean{constructor}  & \lean{rw [h]} \\
+  $\wedge$ (and) & \lean{constructor} & \lean{h.1} or \lean{h.2} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vfill
+\begin{center}
+\setlength\tabcolsep{5mm}
+\def\arraystretch{2}
+\begin{longtable}{@{}lp{113mm}@{}}
+  \toprule
+  Tactic & Effect \\
+  \midrule
+  &\textbf{Rewriting and simplifying}\\
+  \lean{ring} & prove the goal by using the axioms of a commutative ring. \\
+  \lean{rw [}\expr\lean{]} & in the goal, replace (all occurrences of) the left-hand side
+  of \expr by its right-hand side. \expr must be an equality, iff statement or definition.\\
+  \lean{rw [}\expr\lean{] at h} & $\ldots$ rewrite in hypothesis \lean{h}. \\
+  \lean{simp} & simplify the goal using all simplifications lemmas. \\
+  \lean{unfold} & unfold the definition of the given term. \\
+  \hline
+  % (stronger than \lean{simp [*] at *})
+  % \newpage
+  &\textbf{Reasoning with equalities, inequalities, and other relations}\\
+  % the technical difference is that the previous category can be applied to any subterm anywhere,
+  % while the tactics below require that the goal is an (in)equality
+  \lean{calc?} & generate a \lean{calc} block \\
+  \makecell[lt]{\lean{calc} $a = b$ \lean{:= by} \tactic\\ \mbox{}\ \ $\_ \le c$ \lean{:= by} \tactic\\ \mbox{}\ \ $\_ < d$ \lean{:= by} \tactic} &
+  \makecell[lt]{perform a calculation \\ generate a new step by putting the
+    cursor after \lean{:= by} and \\ shift-click
+ on subterms in the goal.}\\
+  \lean{congr} & prove an equality using congruence rules. \\
+  \lean{gcongr} & prove an inequality using congruence rules. \\
+  % mono obsoleted by gcongr?
+  \hline
+  &\textbf{Searching}\\
+  \lean{apply?} & gives a list of lemmas that can apply to the current goal. \\
+  \bottomrule
+\end{longtable}
+\mbox{}\\
+\end{center}
+
+
+\end{document}
