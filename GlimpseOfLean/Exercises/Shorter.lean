@@ -422,7 +422,7 @@ example (x : ℝ) (X Y : Set ℝ) (hx : x ∈ X) : x ∈ (X ∩ Y) ∪ (X \ Y) :
 }
 
 /-
-The `apply?` will find lemmas from the library and tell you their names.
+The `apply?` tactic will find lemmas from the library and tell you their names.
 It creates a suggestion below the goal display. You can click on this suggestion
 to edit your code.
 Use `apply?` to find the lemma that every continuous function with compact support
