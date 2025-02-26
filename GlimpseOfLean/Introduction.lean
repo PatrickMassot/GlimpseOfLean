@@ -73,7 +73,7 @@ example (f : ℝ → ℝ) (u : ℕ → ℝ) (x₀ : ℝ) (hu : seq_limit u x₀)
   -- Thanks to (1) applied to `u_n`, it suffices to prove that `|u_n - x₀| ≤ δ`.
   apply Hf
   -- This follows from property (2) and our assumption on `n`.
-  exact Hu n hn
+  apply Hu n hn
   -- This finishes the proof!
   }
 
