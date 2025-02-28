@@ -494,7 +494,7 @@ to type them in this editor.
 example (a b c : ℤ) (h₁ : a ∣ b) (h₂ : b ∣ c) : a ∣ c := by {
   rcases h₁ with ⟨k, hk⟩ -- we fix some `k` such that `b = a * k`
   rcases h₂ with ⟨l, hl⟩ -- we fix some `l` such that `c = b * l`
-  -- Since `a ∣ c` means `∃ k, b = a*k`, we need the `use` tactic.
+  -- Since `a ∣ c` means `∃ k, c = a*k`, we need the `use` tactic.
   use k*l
   calc
     c = b*l     := by congr
