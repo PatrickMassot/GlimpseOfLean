@@ -1,4 +1,5 @@
 import GlimpseOfLean.Introduction
+import GlimpseOfLean.Solutions.Shorter
 import GlimpseOfLean.Solutions.«01Rewriting»
 import GlimpseOfLean.Solutions.«02Iff»
 import GlimpseOfLean.Solutions.«03Forall»

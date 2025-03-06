@@ -22,7 +22,8 @@ RUN { echo && echo "PS1='\[\033[01;32m\]\u\[\033[00m\] \[\033[01;34m\]\w\[\033[0
 # install elan
 RUN curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
 
-RUN . ~/.profile && elan toolchain install gebner/lean4:reenableeta230506
+# install whichever toolchain mathlib is currently using
+RUN . ~/.profile && elan toolchain install $(curl https://raw.githubusercontent.com/PatrickMassot/GlimpseOfLean/refs/heads/master/lean-toolchain)
 
 ENV PATH="/home/gitpod/.local/bin:/home/gitpod/.elan/bin:${PATH}"
 

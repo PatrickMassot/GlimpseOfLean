@@ -1,7 +1,6 @@
 import GlimpseOfLean.Library.Basic
 import Mathlib.Topology.Order.IntermediateValue
-import Mathlib.Topology.Instances.Real
-set_option linter.unusedTactic false
+import Mathlib.Topology.Instances.Real.Defs
 
 open Function
 
@@ -60,10 +59,9 @@ example (f g : ℝ → ℝ) (hf : even_fun f) (hg : even_fun g) : even_fun (f + 
 Tactics like `unfold`, `apply`, `exact`, `rfl` and `calc` will automatically unfold definitions.
 You can test this by deleting the `unfold` lines in the above example.
 
-Tactics like `rw`, `ring` and `linarith` will generally
-not unfold definitions that appear in the goal.
+Tactics like `rw` and `ring` will generally not unfold definitions that appear in the goal.
 This is why the first computation line is necessary, although its proof is simply `rfl`.
-Before that line, `rw hf x` won't find anything like `f (-x)` hence will give up.
+Before that line, `rw [hf x]` won't find anything like `f (-x)` hence will give up.
 The last line is not necessary however, since it only proves
 something that is true by definition, and is not followed by a `rw`.
 
@@ -171,7 +169,7 @@ example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_increasing g) :
 /- # Finding lemmas
 
 Lean's mathematical library contains many useful facts,
-and remembering all of them my name is infeasible.
+and remembering all of them by name is infeasible.
 The following exercises teach you two such techniques.
 * `simp` will simplify complicated expressions.
 * `apply?` will find lemmas from the library.
@@ -201,7 +199,8 @@ You learned about tactics:
 You now have a choice what to do next. There is one more basic file `04Exists`
 about the existential quantifier and conjunctions. You can do that now,
 or dive directly in one of the specialized files.
-In the latter case, you should come back to `04Exists` if you get stuck on anything with `∃`/`∧`.
+In the latter case, you should come back to `04Exists` if you get stuck on anything with `∃`/`∧`
+(where `∧` is the symbol for conjunctions, aka the logical “and” operator).
 
 You can start with specialized files in the `Topics` folder. You have choice between
 * `ClassicalPropositionalLogic` (easier, logic) if you want to learn
@@ -217,4 +216,3 @@ You can start with specialized files in the `Topics` folder. You have choice bet
   It ends with a constructor of the product topology and its universal property
   manipulating as few open sets as possible.
 -/
-

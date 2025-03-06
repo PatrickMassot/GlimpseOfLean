@@ -1,5 +1,7 @@
 import GlimpseOfLean.Library.Basic
 
+namespace Topics
+
 /-
 In this file we manipulate the elementary definition of limits of
 sequences of real numbers.
@@ -37,10 +39,12 @@ example (a b c d : ℝ) (hab : a ≤ b) (hcd : c ≤ d) : a + c ≤ b + d := by 
 A sequence `u` is a function from `ℕ` to `ℝ`, hence Lean says
 `u : ℕ → ℝ`
 The definition we'll be using is:
+-/
 
--- Definition of « u tends to l »
-`def seq_limit (u : ℕ → ℝ) (l : ℝ) := ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| ≤ ε`
+/-- Definition of « u tends to l » -/
+def seq_limit (u : ℕ → ℝ) (l : ℝ) := ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| ≤ ε
 
+/-
 Note the use of `∀ ε > 0, _` which is an abbreviation of
 `∀ ε, ε > 0 → _ `
 
@@ -63,7 +67,7 @@ where `by linarith` will provide the proof of `δ/2 > 0` expected by Lean.
 -/
 
 /- If u is constant with value l then u tends to l.
-Hint: `simp` can rewrite `|1 - 1|` to `0` -/
+Hint: `simp` can rewrite `|l - l|` to `0` -/
 example (h : ∀ n, u n = l) : seq_limit u l := by {
   -- sorry
   intros ε ε_pos
@@ -187,7 +191,7 @@ Recall we listed three variations on the triangle inequality at the beginning of
 
 -- A sequence admits at most one limit. You will be able to use that lemma in the following
 -- exercises.
-lemma uniq_limit : seq_limit u l → seq_limit u l' → l = l' := by {
+lemma unique_limit : seq_limit u l → seq_limit u l' → l = l' := by {
   -- sorry
   intros hl hl'
   apply eq_of_abs_sub_le_all
@@ -229,9 +233,11 @@ We will now play with subsequences.
 
 The new definition we will use is that `φ : ℕ → ℕ` is an extraction
 if it is (strictly) increasing.
+-/
 
-`def extraction (φ : ℕ → ℕ) := ∀ n m, n < m → φ n < φ m`
+def extraction (φ : ℕ → ℕ) := ∀ n m, n < m → φ n < φ m
 
+/-
 In the following, `φ` will always denote a function from `ℕ` to `ℕ`.
 
 The next lemma is proved by an easy induction, but we haven't seen induction
@@ -268,10 +274,9 @@ lemma extraction_ge : extraction φ → ∀ N N', ∃ n ≥ N', φ n ≥ N := by
 
 /- A real number `a` is a cluster point of a sequence `u`
 if `u` has a subsequence converging to `a`.
-
-`def cluster_point (u : ℕ → ℝ) (a : ℝ) := ∃ φ, extraction φ ∧ seq_limit (u ∘ φ) a`
 -/
 
+def cluster_point (u : ℕ → ℝ) (a : ℝ) := ∃ φ, extraction φ ∧ seq_limit (u ∘ φ) a
 
 /-- If `a` is a cluster point of `u` then there are values of
 `u` arbitrarily close to `a` for arbitrarily large input. -/
