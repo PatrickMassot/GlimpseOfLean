@@ -32,7 +32,7 @@ convenient as a reference.
 
 ## Online version, with registration
 
-There are also websites that are a bit more confortable but require
+There are also websites that are a bit more comfortable but require
 creating a [GitHub](www.github.com) account.
 
 * To use codespaces, make sure you’re logged in to GitHub, click the button below, select `4-core`, and then press `Create codespace`. After a few minutes an editor with Lean working will open in your browser.
