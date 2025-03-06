@@ -1,5 +1,4 @@
 import GlimpseOfLean.Library.Basic
-set_option linter.unusedTactic false
 
 namespace Introduction
 
@@ -76,8 +75,8 @@ example (f : ℝ → ℝ) (u : ℕ → ℝ) (x₀ : ℝ) (hu : seq_limit u x₀)
   -- This follows from property (2) and our assumption on `n`.
   apply Hu n hn
   -- This finishes the proof!
-  done
-}
+  }
+
 /-
 Now that this proof is over, you can choose between the short track or the longer one.
 If you want to do the short track on the lean4web server you should go to
