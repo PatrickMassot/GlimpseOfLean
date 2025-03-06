@@ -64,11 +64,22 @@ lemma IndepSet.compl_right (hA : MeasurableSet A) (hB : MeasurableSet B) :
   sorry
 }
 
+/- Apply `IndepSet.compl_right` to prove this generalization. It is good practice to add the iff
+version of some frequently used lemmas, this allows us to use them inside `rw` tactics. -/
+lemma IndepSet.compl_right_iff (hA : MeasurableSet A) (hB : MeasurableSet B) :
+    IndepSet A Bᶜ ↔ IndepSet A B := by {
+  sorry
+}
+
 -- Use what you have proved so far
 lemma IndepSet.compl_left (hA : MeasurableSet A) (hB : MeasurableSet B) (h : IndepSet A B) :
     IndepSet Aᶜ B := by{
   sorry
 }
+
+/- Can you write and prove a lemma `IndepSet.compl_left_iff`, following the examples above?-/
+
+-- Your lemma here
 
 -- Hint: `ENNReal.mul_self_eq_self_iff`
 lemma indep_self (h : IndepSet A A) : ℙ A = 0 ∨ ℙ A = 1 := by {
@@ -115,7 +126,11 @@ theorem bayesTheorem (hA : ℙ A ≠ 0) (hB : ℙ B ≠ 0) : ℙ(A|B) = ℙ A * 
   sorry
 }
 
--- Did you really need all those hypotheses?
+/- Did you really need all those hypotheses?
+In Lean, division by zero follows the convention that `a/0 = 0` for all a. This means we can prove
+Bayes' Theorem without requiring `ℙ A ≠ 0` and `ℙ B ≠ 0`. However, this is a quirk of the
+formalization rather than the standard mathematical statement.
+If you want to know more about how division works in Lean, try to hover over `/` with your mouse. -/
 
 theorem bayesTheorem' (A B : Set Ω) : ℙ(A|B) = ℙ A * ℙ(B|A) / ℙ B := by {
   sorry
