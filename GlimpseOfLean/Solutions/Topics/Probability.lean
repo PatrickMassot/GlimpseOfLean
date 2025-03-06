@@ -176,7 +176,7 @@ theorem bayesTheorem (hA : ℙ A ≠ 0) (hB : ℙ B ≠ 0) : ℙ(A|B) = ℙ A * 
   by_cases h : ℙ A = 0
   · simp [h]
   unfold condProb
-  rw [ENNReal.mul_div_cancel' h]
+  rw [ENNReal.mul_div_cancel h]
   · rw [inter_comm]
   · simp
   -- sorry
@@ -193,7 +193,7 @@ theorem bayesTheorem' (A B : Set Ω) : ℙ(A|B) = ℙ A * ℙ(B|A) / ℙ B := by
   by_cases h : ℙ A = 0
   · simp [h]
   unfold condProb
-  rw [ENNReal.mul_div_cancel' h]
+  rw [ENNReal.mul_div_cancel h]
   · rw [inter_comm]
   · simp
   -- sorry

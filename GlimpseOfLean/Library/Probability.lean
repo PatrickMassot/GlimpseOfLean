@@ -9,6 +9,6 @@ lemma ENNReal.mul_self_eq_self_iff (a : ENNReal) : a * a = a ↔ a = 0 ∨ a = 1
   constructor
   · intro h''
     nth_rw 3 [← one_mul a] at h''
-    exact (ENNReal.mul_eq_mul_right h h').mp h''
+    exact (ENNReal.mul_left_inj h h').mp h''
   · intro h''
     simp [h'']
