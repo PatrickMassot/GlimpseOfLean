@@ -519,4 +519,3 @@ lemma push_generate (f : G →* G') : push f ∘ generate = generate ∘ (Set.im
 
 end Subgroups
 end Tutorial
-

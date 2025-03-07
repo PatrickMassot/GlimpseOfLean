@@ -56,4 +56,3 @@ def my : Delab := do
   let stx ← delab args[0]!
   let e := mkIdent `exp
   `(term|$e $stx)
-
