@@ -30,8 +30,8 @@ example (a b : ℝ) : (a+b)^2 = a^2 + 2*a*b + b^2 := by {
 
 /- In the first example above, take a closer look at where Lean displays parentheses.
 The `ring` tactic certainly knows about associativity of multiplication, but sometimes
-it is useful to understand that binary operation really are binary and an expression like
-`a*b*c` is read as `(a*b)*c` by Lean and the fact that this is equal to `a*(b*c)` is a
+it is useful to understand that binary operations really are binary and an expression like
+`a*b*c` is read as `(a*b)*c` by Lean. The fact that this is equal to `a*(b*c)` is a
 lemma that is used by the `ring` tactic when needed.
 -/
 
@@ -65,13 +65,13 @@ example (a b c d : ℝ) (h : a = b + c) (h' : b = d - e) : a + e = d + c := by {
 }
 
 /-
-Note that putting your cursor between `h` and`h'` shows you the intermediate proof state.
+Note that putting your cursor between `h` and `h'` shows you the intermediate proof state.
 
 Note also the subtle background color change in the tactic state that show you in green
 what is new and in red what is about to change.
 
-Now try it yourself. Note that ring can still do calculations,
-but it doesn't use the assumptions `h` and `h'`
+Now try it yourself. Note that `ring` can still do calculations,
+but it doesn't use the assumptions `h` and `h'`.
 -/
 
 example (a b c d : ℝ) (h : b = d + d) (h' : a = b + c) : a + b = c + 4 * d := by {

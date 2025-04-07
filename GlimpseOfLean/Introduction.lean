@@ -38,7 +38,7 @@ Something more subtle is that we write `l : ℝ` to say `l` is a real number, wh
 may write `l ∈ ℝ` on paper.
 -/
 
-/-- A function`f : ℝ → ℝ` is continuous at `x₀` if
+/-- A function `f : ℝ → ℝ` is continuous at `x₀` if
 `∀ ε > 0, ∃ δ > 0, ∀ x, |x - x₀| ≤ δ ⇒ |f(x) - f(x₀)| ≤ ε`.
 This condition will be spelled `continuous_at f x₀`.-/
 def continuous_at (f : ℝ → ℝ) (x₀ : ℝ) :=
@@ -61,7 +61,7 @@ example (f : ℝ → ℝ) (u : ℕ → ℝ) (x₀ : ℝ) (hu : seq_limit u x₀)
   -- Fix a positive number `ε`.
   intros ε hε
   -- By assumption on `f` applied to this positive `ε`, we get a positive `δ`
-  -- such that, for all real number `x`, if `|x - x₀| ≤ δ` then `|f(x) - f(x₀)| ≤ ε` (1).
+  -- such that, for all real numbers `x`, if `|x - x₀| ≤ δ` then `|f(x) - f(x₀)| ≤ ε` (1).
   obtain ⟨δ, δ_pos, Hf⟩ : ∃ δ > 0, ∀ x, |x - x₀| ≤ δ → |f x - f x₀| ≤ ε := hf ε hε
   -- The assumption on `u` applied to this `δ` gives a natural number `N` such that
   -- for every natural number `n`, if `n ≥ N` then `|u_n - x₀| ≤ δ`   (2).
