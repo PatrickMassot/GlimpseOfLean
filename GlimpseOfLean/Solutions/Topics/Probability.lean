@@ -171,7 +171,7 @@ takes known values? -/
 There is no functional difference between those two keywords. -/
 
 /-- **Bayes Theorem** -/
-theorem bayesTheorem (hA : ℙ A ≠ 0) (hB : ℙ B ≠ 0) : ℙ(A|B) = ℙ A * ℙ(B|A) / ℙ B := by {
+theorem bayesTheorem (hB : ℙ B ≠ 0) : ℙ(A|B) = ℙ A * ℙ(B|A) / ℙ B := by {
   -- sorry
   by_cases h : ℙ A = 0
   · simp [h]
