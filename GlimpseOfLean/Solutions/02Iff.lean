@@ -181,8 +181,10 @@ In order to prove an equivalence one can use `rw` until the
 goal is the tautology `P ↔ P`, just as one can do with equalities.
 
 One can also separately prove the two implications using the `constructor` tactic.
-
-Here is an example.
+Below is an example.
+If you put your cursor after `constructor`, you will see two goals, one for each direction.
+Lean will keep track of the goals for you, making sure you solve all of them.
+The "focussing dot" `·` keeps the proof for each goal separate.
 -/
 
 example (a b : ℝ) : (a-b)*(a+b) = 0 ↔ a^2 = b^2 := by {
