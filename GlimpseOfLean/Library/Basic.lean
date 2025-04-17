@@ -18,10 +18,10 @@ macro (name := ring) "ring" : tactic =>
 end
 
 -- The mathlib version is unusable because it is stated in terms of ≤
-lemma ge_max_iff {α : Type _} [LinearOrder α] {p q r : α} : r ≥ max p q  ↔ r ≥ p ∧ r ≥ q :=
+lemma ge_max_iff {α : Type*} [LinearOrder α] {p q r : α} : r ≥ max p q  ↔ r ≥ p ∧ r ≥ q :=
   max_le_iff
 
-lemma abs_sub_le' {α : Type _} [LinearOrderedAddCommGroup α] (a b c : α) :
+lemma abs_sub_le' {α : Type*} [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid α] (a b c : α) :
     |a - c| ≤ |a - b| + |c - b| :=
   abs_sub_comm c b ▸ abs_sub_le _ _ _
 
@@ -39,12 +39,12 @@ open RingHom Function PiNotation
 end prelim
 
 @[simp]
-lemma lowerBounds_range {α ι : Type _} [Preorder α] {s : ι → α} {x : α} :
+lemma lowerBounds_range {α ι : Type*} [Preorder α] {s : ι → α} {x : α} :
     x ∈ lowerBounds (Set.range s) ↔ ∀ i, x ≤ s i :=
   ⟨fun hx i => hx (Set.mem_range_self i), by rintro hx y ⟨i, rfl⟩; exact hx i⟩
 
 @[simp]
-lemma upperBounds_range {α ι : Type _} [Preorder α] {s : ι → α} {x : α} :
+lemma upperBounds_range {α ι : Type*} [Preorder α] {s : ι → α} {x : α} :
     x ∈ upperBounds (Set.range s) ↔ ∀ i, s i ≤ x :=
   lowerBounds_range (α := OrderDual α)
 
