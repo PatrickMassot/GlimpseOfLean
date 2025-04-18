@@ -285,7 +285,7 @@ lemma near_cluster :
   -- sorry
   intro hyp ε ε_pos N
   rcases hyp with ⟨φ, φ_extr, hφ⟩
-  cases' hφ ε ε_pos with N' hN'
+  rcases hφ ε ε_pos with ⟨N', hN'⟩
   rcases extraction_ge φ_extr N N' with ⟨q, hq, hq'⟩
   exact ⟨φ q, hq', hN' _ hq⟩
   -- sorry
@@ -297,7 +297,7 @@ lemma subseq_tendsto_of_tendsto' (h : seq_limit u l) (hφ : extraction φ) :
 seq_limit (u ∘ φ) l := by {
   -- sorry
   intro ε ε_pos
-  cases' h ε ε_pos with N hN
+  rcases h ε ε_pos with ⟨N, hN⟩
   use N
   intro n hn
   apply hN
@@ -323,9 +323,9 @@ def CauchySequence (u : ℕ → ℝ) :=
 example : (∃ l, seq_limit u l) → CauchySequence u := by {
   -- sorry
   intro hyp
-  cases' hyp with l hl
+  rcases hyp with ⟨l, hl⟩
   intro ε ε_pos
-  cases' hl (ε / 2) (by positivity) with N hN
+  rcases hl (ε / 2) (by positivity) with ⟨N, hN⟩
   use N
   intro p q hp hq
   calc
@@ -344,12 +344,12 @@ In the next exercise, you can reuse
 example (hu : CauchySequence u) (hl : cluster_point u l) : seq_limit u l := by
   -- sorry
   intro ε ε_pos
-  cases' hu (ε / 2) (by positivity) with N hN
+  rcases hu (ε / 2) (by positivity) with ⟨N, hN⟩
   use N
   have clef : ∃ N' ≥ N, |u N' - l| ≤ ε / 2 := by
     apply near_cluster hl (ε / 2) (by positivity)
-  cases' clef with N' h
-  cases' h with hNN' hN'
+  rcases clef with ⟨N', h⟩
+  rcases h with ⟨hNN', hN'⟩
   intro n hn
   calc
     |u n - l| = |u n - u N' + (u N' - l)| := by ring_nf
