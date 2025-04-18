@@ -57,32 +57,28 @@ def Valid (A : Formula) : Prop := ∅ ⊨ A
 variable {v : Variable → Prop} {A B : Formula}
 @[simp] lemma isTrue_neg : IsTrue v ~A ↔ ¬ IsTrue v A := by simp [neg]
 
-@[simp] lemma isTrue_top : IsTrue v ⊤ := by {
+@[simp] lemma isTrue_top : IsTrue v ⊤ := by
   -- sorry
   simp [top]
   -- sorry
-}
 
-@[simp] lemma isTrue_equiv : IsTrue v (A ⇔ B) ↔ (IsTrue v A ↔ IsTrue v B) := by {
+@[simp] lemma isTrue_equiv : IsTrue v (A ⇔ B) ↔ (IsTrue v A ↔ IsTrue v B) := by
   -- sorry
   simp [equiv]
   tauto
   -- sorry
-}
 
 /- As an exercise, let's prove (using classical logic) the double negation elimination principle.
   `by_contra h` might be useful to prove something by contradiction. -/
 
-example : Valid (~~A ⇔ A) := by {
+example : Valid (~~A ⇔ A) := by
   -- sorry
   intros v _
   simp
   -- sorry
-}
 
-@[simp] lemma satisfies_insert_iff : Satisfies v (insert A Γ) ↔ IsTrue v A ∧ Satisfies v Γ := by {
+@[simp] lemma satisfies_insert_iff : Satisfies v (insert A Γ) ↔ IsTrue v A ∧ Satisfies v Γ := by
   simp [Satisfies]
-}
 
 /- Let's define provability w.r.t. classical logic. -/
 section
@@ -138,7 +134,7 @@ example : insert A (insert B ∅) ⊢ A && B := by
 example : insert A (insert B ∅) ⊢ A && B := by
   exact andI (by apply_ax) (by apply_ax)
 
-example : Provable (~~A ⇔ A) := by {
+example : Provable (~~A ⇔ A) := by
   -- sorry
   apply andI
   · apply impI
@@ -150,10 +146,9 @@ example : Provable (~~A ⇔ A) := by {
     apply impE (by apply_ax)
     apply_ax
   -- sorry
-}
 
 /- Optional exercise: prove the law of excluded middle. -/
-example : Provable (A || ~A) := by {
+example : Provable (A || ~A) := by
   -- sorry
   apply botC
   apply impE (by apply_ax)
@@ -162,12 +157,11 @@ example : Provable (A || ~A) := by {
   apply impE (by apply_ax)
   apply orI1 (by apply_ax)
   -- sorry
-}
 
 /- Optional exercise: prove one of the de-Morgan laws.
   If you want to say that the argument called `A` of the axiom `impE` should be `X && Y`,
   you can do this using `impE (A := X && Y)` -/
-example : Provable (~(A && B) ⇔ ~A || ~B) := by {
+example : Provable (~(A && B) ⇔ ~A || ~B) := by
   -- sorry
   apply andI
   · apply impI
@@ -188,7 +182,6 @@ example : Provable (~(A && B) ⇔ ~A || ~B) := by {
     · apply impE (by apply_ax)
       apply andE2 (by apply_ax)
   -- sorry
-}
 
 /- You can prove the following using `induction` on `h`. You will want to tell Lean that you want
   to prove it for all `Δ` simultaneously using `induction h generalizing Δ`.
@@ -198,7 +191,7 @@ example : Provable (~(A && B) ⇔ ~A || ~B) := by {
   `rename_i A B h ih`. Or you can prove a particular case using `case impI ih => <proof>`.
   You will probably need to use the lemma
   `insert_subset_insert : s ⊆ t → insert x s ⊆ insert x t`. -/
-lemma weakening (h : Γ ⊢ A) (h2 : Γ ⊆ Δ) : Δ ⊢ A := by {
+lemma weakening (h : Γ ⊢ A) (h2 : Γ ⊆ Δ) : Δ ⊢ A := by
   -- sorry
   induction h generalizing Δ
   case ax => apply ax; solve_by_elim
@@ -212,39 +205,35 @@ lemma weakening (h : Γ ⊢ A) (h2 : Γ ⊆ Δ) : Δ ⊢ A := by {
   case orE ih₁ ih₂ ih₃ => apply orE <;> solve_by_elim [insert_subset_insert]
   case botC ih => apply botC; solve_by_elim [insert_subset_insert]
   -- sorry
-}
 
 /- Use the `apply?` tactic to find the lemma that states `Γ ⊆ insert x Γ`.
   You can click the blue suggestion in the right panel to automatically apply the suggestion. -/
 
-lemma ProvableFrom.insert (h : Γ ⊢ A) : insert B Γ ⊢ A := by {
+lemma ProvableFrom.insert (h : Γ ⊢ A) : insert B Γ ⊢ A := by
   -- sorry
   apply weakening h
   -- use `apply?` here
   exact subset_insert B Γ
   -- sorry
-}
 
 /- Proving the deduction theorem is now easy. -/
-lemma deduction_theorem (h : Γ ⊢ A) : insert (A ⇒ B) Γ ⊢ B := by {
+lemma deduction_theorem (h : Γ ⊢ A) : insert (A ⇒ B) Γ ⊢ B := by
   -- sorry
   apply impE (ax $ mem_insert _ _)
   exact h.insert
   -- sorry
-}
 
-lemma Provable.mp (h1 : Provable (A ⇒ B)) (h2 : Γ ⊢ A) : Γ ⊢ B := by {
+lemma Provable.mp (h1 : Provable (A ⇒ B)) (h2 : Γ ⊢ A) : Γ ⊢ B := by
   -- sorry
   apply impE _ h2
   apply weakening h1
   -- apply?
   exact empty_subset Γ
   -- sorry
-}
 
 /-- You will want to use the tactics `left` and `right` to prove a disjunction, and the
   tactic `cases h` if `h` is a disjunction to do a case distinction. -/
-theorem soundness_theorem (h : Γ ⊢ A) : Γ ⊨ A := by {
+theorem soundness_theorem (h : Γ ⊢ A) : Γ ⊨ A := by
   -- sorry
   induction h <;> intros v hv
   solve_by_elim
@@ -258,13 +247,11 @@ theorem soundness_theorem (h : Γ ⊢ A) : Γ ⊨ A := by {
   case orI2 ih => exact .inr (ih hv)
   case orE ih₁ ih₂ ih₃ => refine (ih₁ hv).elim (fun hA => ih₂ ?_) (fun hB => ih₃ ?_) <;> simp [*]
   -- sorry
-}
 
-theorem valid_of_provable (h : Provable A) : Valid A := by {
+theorem valid_of_provable (h : Provable A) : Valid A := by
   -- sorry
   exact soundness_theorem h
   -- sorry
-}
 
 /-
   If you want, you can now try some these longer projects.

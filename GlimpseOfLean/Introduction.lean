@@ -50,7 +50,7 @@ to `f x₀`.
 Every thing on the next line describes the objects and assumptions, each with its name.
 The following line is the claim we need to prove. -/
 example (f : ℝ → ℝ) (u : ℕ → ℝ) (x₀ : ℝ) (hu : seq_limit u x₀) (hf : continuous_at f x₀) :
-  seq_limit (f ∘ u) (f x₀) := by { -- This `by` keyword marks the beginning of the proof
+  seq_limit (f ∘ u) (f x₀) := by -- This `by` keyword marks the beginning of the proof
   -- Put your text cursor here and watch the panel to the right.
   -- Then move your cursor from line to line in the proof while monitoring that panel.
 
@@ -75,7 +75,7 @@ example (f : ℝ → ℝ) (u : ℕ → ℝ) (x₀ : ℝ) (hu : seq_limit u x₀)
   -- This follows from property (2) and our assumption on `n`.
   apply Hu n hn
   -- This finishes the proof!
-  }
+  
 
 /-
 Now that this proof is over, you can choose between the short track or the longer one.

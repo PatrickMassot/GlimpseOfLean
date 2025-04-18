@@ -37,7 +37,7 @@ We will also use the `rfl` tactic, which proves equalities that are true
 by definition (in a very strong sense), it stands for "reflexivity".
 -/
 
-example (f g : ℝ → ℝ) (hf : even_fun f) (hg : even_fun g) : even_fun (f + g) := by {
+example (f g : ℝ → ℝ) (hf : even_fun f) (hg : even_fun g) : even_fun (f + g) := by
   -- Our assumption on that f is even means ∀ x, f (-x) = f x
   unfold even_fun at hf
   -- and the same for g
@@ -52,7 +52,6 @@ example (f g : ℝ → ℝ) (hf : even_fun f) (hg : even_fun g) : even_fun (f + 
                _ = f x + g (-x)     := by rw [hf x]
                _ = f x + g x        := by rw [hg x]
                _ = (f + g) x        := by rfl
-}
 
 
 /-
@@ -77,21 +76,19 @@ simply need to move the cursor inside the list.
 Hence we can compress the above proof to:
 -/
 
-example (f g : ℝ → ℝ) : even_fun f → even_fun g → even_fun (f + g) := by {
+example (f g : ℝ → ℝ) : even_fun f → even_fun g → even_fun (f + g) := by
   intro hf hg x
   calc
     (f + g) (-x) = f (-x) + g (-x)  := by rfl
                _ = f x + g x        := by rw [hf, hg]
-}
 
 /-
 Now let's practice. Recall that if you need to learn how to type a unicode
 symbol you can put your mouse cursor above the symbol and wait for one second.
 -/
 
-example (f g : ℝ → ℝ) (hf : even_fun f) : even_fun (g ∘ f) := by {
+example (f g : ℝ → ℝ) (hf : even_fun f) : even_fun (g ∘ f) := by
   sorry
-}
 
 /-
 Let's have more quantifiers, and play with forward and backward reasoning.
@@ -105,14 +102,13 @@ def non_increasing (f : ℝ → ℝ) := ∀ x₁ x₂, x₁ ≤ x₂ → f x₁ 
 
 /- Let's be very explicit and use forward reasoning first. -/
 example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_decreasing g) :
-    non_decreasing (g ∘ f) := by {
+    non_decreasing (g ∘ f) := by
   -- Let x₁ and x₂ be real numbers such that x₁ ≤ x₂
   intro x₁ x₂ h
   -- Since f is non-decreasing, f x₁ ≤ f x₂.
   have step₁ : f x₁ ≤ f x₂ := hf x₁ x₂ h
   -- Since g is non-decreasing, we then get g (f x₁) ≤ g (f x₂).
   exact hg (f x₁) (f x₂) step₁
-}
 
 /-
 In the above proof, note how inconvenient it is to specify `x₁` and `x₂` in `hf x₁ x₂ h` since
@@ -125,11 +121,10 @@ use the `specialize` tactic to replace `hf` by its specialization to the relevan
  -/
 
 example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_decreasing g) :
-    non_decreasing (g ∘ f) := by {
+    non_decreasing (g ∘ f) := by
   intro x₁ x₂ h
   specialize hf x₁ x₂ h
   exact hg (f x₁) (f x₂) hf
-}
 
 /-
 This `specialize` tactic is mostly useful for exploration, or in preparation for rewriting
@@ -137,10 +132,9 @@ in the assumption. One can very often replace its use by using more complicated 
 directly involving the original assumption, as in the next variation:
 -/
 example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_decreasing g) :
-    non_decreasing (g ∘ f) := by {
+    non_decreasing (g ∘ f) := by
   intro x₁ x₂ h
   exact hg (f x₁) (f x₂) (hf x₁ x₂ h)
-}
 
 /-
 Let's see how backward reasoning would look like here.
@@ -149,7 +143,7 @@ using so-called unification.
 -/
 
 example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_decreasing g) :
-    non_decreasing (g ∘ f) := by {
+    non_decreasing (g ∘ f) := by
   -- Let x₁ and x₂ be real numbers such that x₁ ≤ x₂
   intro x₁ x₂ h
   -- We need to prove (g ∘ f) x₁ ≤ (g ∘ f) x₂.
@@ -159,12 +153,10 @@ example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_decreasing g) :
   apply hf
   -- and on x₁ and x₂
   exact h
-}
 
 example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_increasing g) :
-    non_increasing (g ∘ f) := by {
+    non_increasing (g ∘ f) := by
   sorry
-}
 
 /- # Finding lemmas
 
@@ -177,16 +169,14 @@ The following exercises teach you two such techniques.
 
 /- Use `simp` to prove the following. Note that `X : Set ℝ`
 means that `X` is a set containing (only) real numbers. -/
-example (x : ℝ) (X Y : Set ℝ) (hx : x ∈ X) : x ∈ (X ∩ Y) ∪ (X \ Y) := by {
+example (x : ℝ) (X Y : Set ℝ) (hx : x ∈ X) : x ∈ (X ∩ Y) ∪ (X \ Y) := by
   sorry
-}
 
 /- Use `apply?` to find the lemma that every continuous function with compact support
 has a global minimum. -/
 
-example (f : ℝ → ℝ) (hf : Continuous f) (h2f : HasCompactSupport f) : ∃ x, ∀ y, f x ≤ f y := by {
+example (f : ℝ → ℝ) (hf : Continuous f) (h2f : HasCompactSupport f) : ∃ x, ∀ y, f x ≤ f y := by
   sorry
-}
 
 /-
 This is the end of this file where you learned how to handle universal quantifiers.
@@ -216,3 +206,4 @@ You can start with specialized files in the `Topics` folder. You have choice bet
   It ends with a constructor of the product topology and its universal property
   manipulating as few open sets as possible.
 -/
+

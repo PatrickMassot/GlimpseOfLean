@@ -64,20 +64,17 @@ def Valid (A : Formula) : Prop := ∅ ⊨ A
 variable {v : Variable → H} {A B : Formula}
 @[simp] lemma eval_neg : eval v ~A = (eval v A)ᶜ := by simp [neg]
 
-@[simp] lemma eval_top : eval v top = ⊤ := by {
+@[simp] lemma eval_top : eval v top = ⊤ := by
   sorry
-}
 
 @[simp]
-lemma isTrue_equiv : eval v (A ⇔ B) = (eval v A ⇨ eval v B) ⊓ (eval v B ⇨ eval v A) := by {
+lemma isTrue_equiv : eval v (A ⇔ B) = (eval v A ⇨ eval v B) ⊓ (eval v B ⇨ eval v A) := by
   sorry
-}
 
 /- As an exercise, let's prove the following proposition, which holds in intuitionistic logic. -/
 
-example : Valid (~(A && ~A)) := by {
+example : Valid (~(A && ~A)) := by
   sorry
-}
 
 /- Let's define provability w.r.t. intuitionistic logic. -/
 section
@@ -122,19 +119,16 @@ macro_rules
   mem_insert_of_mem y : x ∈ s → x ∈ insert y s
 ```
 -/
-example : Provable ((~A || ~B) ⇒ ~(A && B)) := by {
+example : Provable ((~A || ~B) ⇒ ~(A && B)) := by
   sorry
-}
 
 /- Optional exercise -/
-example : Provable (~(A && ~A)) := by {
+example : Provable (~(A && ~A)) := by
   sorry
-}
 
 /- Optional exercise -/
-example : Provable ((~A && ~B) ⇒ ~(A || B)) := by {
+example : Provable ((~A && ~B) ⇒ ~(A || B)) := by
   sorry
-}
 
 /- You can prove the following using `induction` on `h`. You will want to tell Lean that you want
   to prove it for all `Δ` simultaneously using `induction h generalizing Δ`.
@@ -144,35 +138,29 @@ example : Provable ((~A && ~B) ⇒ ~(A || B)) := by {
   `rename_i A B h ih`. Or you can prove a particular case using `case impI ih => <proof>`.
   You will probably need to use the lemma
   `insert_subset_insert : s ⊆ t → insert x s ⊆ insert x t`. -/
-lemma weakening (h : Γ ⊢ A) (h2 : Γ ⊆ Δ) : Δ ⊢ A := by {
+lemma weakening (h : Γ ⊢ A) (h2 : Γ ⊆ Δ) : Δ ⊢ A := by
   sorry
-}
 
 /- Use the `apply?` tactic to find the lemma that states `Γ ⊆ insert x Γ`.
   You can click the blue suggestion in the right panel to automatically apply the suggestion. -/
 
-lemma ProvableFrom.insert (h : Γ ⊢ A) : insert B Γ ⊢ A := by {
+lemma ProvableFrom.insert (h : Γ ⊢ A) : insert B Γ ⊢ A := by
   sorry
-}
 
 /- Proving the deduction theorem is now easy. -/
-lemma deduction_theorem (h : Γ ⊢ A) : insert (A ⇒ B) Γ ⊢ B := by {
+lemma deduction_theorem (h : Γ ⊢ A) : insert (A ⇒ B) Γ ⊢ B := by
   sorry
-}
 
-lemma Provable.mp (h1 : Provable (A ⇒ B)) (h2 : Γ ⊢ A) : Γ ⊢ B := by {
+lemma Provable.mp (h1 : Provable (A ⇒ B)) (h2 : Γ ⊢ A) : Γ ⊢ B := by
   sorry
-}
 
 /- This is tricky, since you need to compute using operations in a Heyting algebra. -/
 set_option maxHeartbeats 0 in
-theorem soundness_theorem (h : Γ ⊢ A) : Γ ⊨ A := by {
+theorem soundness_theorem (h : Γ ⊢ A) : Γ ⊨ A := by
   sorry
-}
 
-theorem valid_of_provable (h : Provable A) : Valid A := by {
+theorem valid_of_provable (h : Provable A) : Valid A := by
   sorry
-}
 
 /-
   If you want, you can now try some these longer projects.

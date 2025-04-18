@@ -16,10 +16,6 @@ We will learn about a dozen of them. For each tactic, we will see a couple of
 examples and then you will have exercises to do. The goal of each exercise is
 to replace the word `sorry` by a sequence of tactics that bring Lean to report
 there are no remaining goal, without reporting any error along the way.
-
-The opening and closing curly braces for each proof are not mandatory, but they help
-making sure errors don’t escape your attention. In particular you should be careful
-to check they are not underlined in red since this would mean there is an error.
 -/
 
 /- ## Computing
@@ -36,20 +32,18 @@ basic properties of addition, subtraction and multiplication. Knowing about this
 abstract algebra is not required here.
 -/
 
-example (a b : ℝ) : (a+b)^2 = a^2 + 2*a*b + b^2 := by {
+example (a b : ℝ) : (a+b)^2 = a^2 + 2*a*b + b^2 := by
   ring
-}
 
 /-
 Now it’s your turn: replace the word sorry with the relevant tactic to
 finish the exercise.
 -/
 
-example (a b : ℝ) : (a+b)*(a-b) = a^2 - b^2 := by {
+example (a b : ℝ) : (a+b)*(a-b) = a^2 - b^2 := by
   -- sorry
   ring
   -- sorry
-}
 
 /-
 Our next tactic is the `congr` tactic (`congr` stands for “congruence”).
@@ -57,23 +51,21 @@ It tries to prove equalities by comparing both sides and creating new goals each
 sees some mismatch.
 -/
 
-example (a b : ℝ) (f : ℝ → ℝ) : f ((a+b)^2) = f (a^2 + 2*a*b + b^2) := by {
+example (a b : ℝ) (f : ℝ → ℝ) : f ((a+b)^2) = f (a^2 + 2*a*b + b^2) := by
   congr
   -- `congr` recognized the pattern `f _ = f _` and created a new goal
   -- about the mismatching part, namely the arguments supplied to `f`.
   ring
-}
 
 /-
 Try it on the next example.
 -/
 
-example (a b : ℝ) (f : ℝ → ℝ) : f ((a+b)^2 - 2*a*b) = f (a^2 + b^2) := by {
+example (a b : ℝ) (f : ℝ → ℝ) : f ((a+b)^2 - 2*a*b) = f (a^2 + b^2) := by
   -- sorry
   congr
   ring
   -- sorry
-}
 
 /-
 When there are several mismatches, `congr` creates several goals.
@@ -86,10 +78,9 @@ In the example the two functions that are applied are `f` and addition, and we w
 go only through the application of `f`.
 -/
 
-example (a b : ℝ) (f : ℝ → ℝ) : f (a + b) = f (b + a) := by {
+example (a b : ℝ) (f : ℝ → ℝ) : f (a + b) = f (b + a) := by
   congr 1 -- try removing that 1 or increasing it to see the issue.
   ring
-}
 
 /-
 Actually `congr` does more than finding mismatches, it also try to resolve them
@@ -97,9 +88,8 @@ using assumptions. In the next example, `congr` creates the goal `a + b = c` by
 matching, and then immediately proves it by noticing and using assumption `h`.
 -/
 
-example (a b c : ℝ) (h : a + b = c) (f : ℝ → ℝ) : f (a + b) = f c := by {
+example (a b c : ℝ) (h : a + b = c) (f : ℝ → ℝ) : f (a + b) = f c := by
   congr
-}
 
 /-
 The tactics `ring` and `congr` are the basic tools we will use to compute.
@@ -110,12 +100,11 @@ In the following example, it helps to carefully consider the tactic state
 displayed after each `by` after the `calc` line.
 -/
 
-example (a b c d : ℝ) (h : c = b*a - d) (h' : d = a*b) : c = 0 := by {
+example (a b c d : ℝ) (h : c = b*a - d) (h' : d = a*b) : c = 0 := by
   calc
     c = b*a - d   := by congr
     _ = b*a - a*b := by congr
     _ = 0         := by ring
-}
 
 /-
 Note that each `_` stands for the right-hand side of the previous line.
@@ -142,7 +131,7 @@ There is no “click and move the cursor and then stop clicking”.
 This is different from regular selection of text in your editor or browser.
 -/
 
-example (a b c : ℝ) (h : a = -b) (h' : b + c = 0) : b*(a - c) = 0 := by {
+example (a b c : ℝ) (h : a = -b) (h' : b + c = 0) : b*(a - c) = 0 := by
   -- sorry
   calc
     b*(a - c) = b*(-b - c) := by congr
@@ -150,26 +139,23 @@ example (a b c : ℝ) (h : a = -b) (h' : b + c = 0) : b*(a - c) = 0 := by {
     _         = -b*0       := by congr
     _         = 0          := by ring
   -- sorry
-}
 
 /-
 We can also handle inequalities using `gcongr` (which stands for “generalized congruence”)
 instead of `congr`.
 -/
 
-example (a b : ℝ) (h : a ≤ 2*b) : a + b ≤ 3*b := by {
+example (a b : ℝ) (h : a ≤ 2*b) : a + b ≤ 3*b := by
   calc
     a + b ≤ 2*b + b := by gcongr
     _     = 3*b     := by ring
-}
 
-example (a b : ℝ) (h : b ≤ a) : a + b ≤ 2*a := by {
+example (a b : ℝ) (h : b ≤ a) : a + b ≤ 2*a := by
   -- sorry
   calc
     a + b ≤ a + a := by gcongr
     _     = 2*a   := by ring
   -- sorry
-}
 
 /-
 The last tactic you will use in computation is the simplifier `simp`. It will
@@ -177,9 +163,8 @@ repeatedly apply a number of lemmas that are marked as simplification lemmas.
 For instance the proof below simplifies `x - x` to `0` and then `|0|` to `0`.
 -/
 
-example (x : ℝ) : |x - x| = 0 := by {
+example (x : ℝ) : |x - x| = 0 := by
   simp
-}
 
 
 /- ## Universal quantifiers and implications
@@ -213,9 +198,8 @@ Also be careful the space between `f` and `(-x)` is mandatory.
 The `apply` tactic can be used to specialize universally quantified statements.
 -/
 
-example (f : ℝ → ℝ) (hf : even_fun f) : f (-3) = f 3 := by {
+example (f : ℝ → ℝ) (hf : even_fun f) : f (-3) = f 3 := by
   apply hf 3
-}
 
 /-
 Fortunately, Lean is willing to work for us, so we can leave out the `3` and
@@ -223,19 +207,17 @@ let the `apply` tactic compare the goal with the assumption
 and decide to specialize it to `x = 3`.
 -/
 
-example (f : ℝ → ℝ) (hf : even_fun f) : f (-3) = f 3 := by {
+example (f : ℝ → ℝ) (hf : even_fun f) : f (-3) = f 3 := by
   apply hf
-}
 
 /-
 In the following exercise, you get to choose whether you want help from Lean
 or do all the work.
 -/
-example (f : ℝ → ℝ) (hf : even_fun f) : f (-5) = f 5 := by {
+example (f : ℝ → ℝ) (hf : even_fun f) : f (-5) = f 5 := by
   -- sorry
   apply hf
   -- sorry
-}
 
 /-
 This was about using a `∀`. Let us now see how to prove a `∀`.
@@ -250,10 +232,9 @@ at the beginning of each line.
 -/
 
 open Real in -- this line insists that we mean real cos, not the complex numbers one.
-example : even_fun cos := by {
+example : even_fun cos := by
   intro x₀
   simp
-}
 
 /-
 In order to get slightly more interesting examples, we will both use and prove
@@ -264,7 +245,7 @@ In the next proof, we also take the opportunity to introduce the
 for didactic reason, Lean doesn't need those `unfold` invocations.
 -/
 
-example (f g : ℝ → ℝ) (hf : even_fun f) (hg : even_fun g) : even_fun (f + g) := by {
+example (f g : ℝ → ℝ) (hf : even_fun f) (hg : even_fun g) : even_fun (f + g) := by
   -- Our assumption on that f is even means ∀ x, f (-x) = f x
   unfold even_fun at hf -- note how `hf` changes after this line
   -- and the same for g
@@ -280,7 +261,6 @@ example (f g : ℝ → ℝ) (hf : even_fun f) (hg : even_fun g) : even_fun (f + 
   -- put you cursor between `;` and `apply` in the previous line to see the intermediate goal
     _             = f x₀ + g x₀        := by congr 1; apply hg
     _             = (f + g) x₀         := by simp
-}
 
 
 /-
@@ -294,19 +274,18 @@ Also note that `congr` can generate several goals so we don’t have to call it 
 Hence we can compress the above proof to:
 -/
 
-example (f g : ℝ → ℝ)  (hf : even_fun f) (hg : even_fun g) : even_fun (f + g) := by {
+example (f g : ℝ → ℝ)  (hf : even_fun f) (hg : even_fun g) : even_fun (f + g) := by
   intro x₀
   calc
     (f + g) (-x₀) = f (-x₀) + g (-x₀)  := by simp
     _             = f x₀ + g x₀        := by congr 1; apply hf; apply hg
-}
 
 /-
 If you would rather uncompress the proof, you can use the `specialize` tactic to
 specialize a universally quantified assumption before using it.
 -/
 
-example (f g : ℝ → ℝ) (hf : even_fun f) (hg : even_fun g) : even_fun (f + g) := by {
+example (f g : ℝ → ℝ) (hf : even_fun f) (hg : even_fun g) : even_fun (f + g) := by
   -- Let x₀ be any real number
   intro x₀
   specialize hf x₀ -- hf is now only about the x₀ we just introduced
@@ -318,7 +297,6 @@ example (f g : ℝ → ℝ) (hf : even_fun f) (hg : even_fun g) : even_fun (f + 
     _             = f x₀ + g (-x₀)     := by congr
     _             = f x₀ + g x₀        := by congr
     _             = (f + g) x₀         := by simp
-}
 
 /-
 Now let's practice. If you need to learn how to type a unicode symbol, you can
@@ -330,14 +308,13 @@ you want to save some typing. We called it `x₀` only to emphasize it doesn’t
 need to be the same notation as in the statement.
 -/
 
-example (f g : ℝ → ℝ) (hf : even_fun f) : even_fun (g ∘ f) := by {
+example (f g : ℝ → ℝ) (hf : even_fun f) : even_fun (g ∘ f) := by
   -- sorry
   intro x
   calc
     (g ∘ f) (-x) = g (f (-x))   := by simp
     _            = g (f x)      := by congr 1; apply hf
   -- sorry
-}
 
 /-
 Let's now combine the universal quantifier with implication.
@@ -358,21 +335,19 @@ So an assumption `hf : non_decreasing f` is a function that takes as input two n
 and a inequality between them and outputs an inequality between their images under `f`.
 -/
 
-example (f : ℝ → ℝ) (hf : non_decreasing f) (x₁ x₂ : ℝ) (hx : x₁ ≤ x₂) : f x₁ ≤ f x₂ := by {
+example (f : ℝ → ℝ) (hf : non_decreasing f) (x₁ x₂ : ℝ) (hx : x₁ ≤ x₂) : f x₁ ≤ f x₂ := by
   apply hf x₁ x₂ hx
-}
 
 /-
 We can ask Lean to work more for us, as in the following example:
 -/
 
-example (f : ℝ → ℝ) (hf : non_decreasing f) (x₁ x₂ : ℝ) (hx : x₁ ≤ x₂) : f x₁ ≤ f x₂ := by {
+example (f : ℝ → ℝ) (hf : non_decreasing f) (x₁ x₂ : ℝ) (hx : x₁ ≤ x₂) : f x₁ ≤ f x₂ := by
   apply hf -- Lean compares the goal with the assumption `hf`. It recognizes that `hf`
            -- needs to be specialized to the numbers `x₁` and `x₂` that are given, to get
            -- the implication `x₁ ≤ x₂ → f x₁ ≤ f x₂` and then asks for a proof of the
            -- premise `x₁ ≤ x₂`
   apply hx -- Our assumption hx is such a proof
-}
 
 /-
 Note that the tactic `apply` does not mean anything vague like “make something
@@ -386,18 +361,16 @@ two proofs of the same statement.
 -/
 
 example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_decreasing g) :
-    non_decreasing (g ∘ f) := by {
+    non_decreasing (g ∘ f) := by
   intro x₁ x₂ hx -- Note how `intro` is also introducing the assumption `h : x₁ ≤ x₂`
   apply hg (f x₁) (f x₂) (hf x₁ x₂ hx)
-}
 
 example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_decreasing g) :
-    non_decreasing (g ∘ f) := by {
+    non_decreasing (g ∘ f) := by
   intro x₁ x₂ h
   apply hg
   apply hf
   apply h
-}
 
 /-
 Take some time to understand how, in the second proof, Lean saves us the
@@ -406,12 +379,11 @@ into pieces. You can choose your way in the following variation.
 -/
 
 example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_increasing g) :
-    non_increasing (g ∘ f) := by {
+    non_increasing (g ∘ f) := by
   -- sorry
   intro x₁ x₂ hx
   apply hg (f x₁) (f x₂) (hf x₁ x₂ hx)
   -- sorry
-}
 
 /-
 At this stage you should feel that such a proof actually doesn’t require any
@@ -423,7 +395,7 @@ before using it, as we saw with the example of even functions.
 -/
 
 example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_decreasing g) :
-    non_decreasing (g + f) := by {
+    non_decreasing (g + f) := by
   intro x₁ x₂ h
   specialize hf x₁ x₂ h
   specialize hg x₁ x₂ h
@@ -431,7 +403,6 @@ example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_decreasing g) :
     (g + f) x₁ = g x₁ + f x₁ := by simp
     _          ≤ g x₂ + f x₂ := by gcongr
     _          = (g + f) x₂  := by simp
-}
 
 
 /- # Finding lemmas
@@ -443,12 +414,11 @@ applies many lemmas without using their names.
 Use `simp` to prove the following. Note that `X : Set ℝ` means that `X` is a
 set containing (only) real numbers. -/
 
-example (x : ℝ) (X Y : Set ℝ) (hx : x ∈ X) : x ∈ (X ∩ Y) ∪ (X \ Y) := by {
+example (x : ℝ) (X Y : Set ℝ) (hx : x ∈ X) : x ∈ (X ∩ Y) ∪ (X \ Y) := by
   -- sorry
   simp
   apply hx
   -- sorry
-}
 
 /-
 The `apply?` tactic will find lemmas from the library and tell you their names.
@@ -457,12 +427,11 @@ to edit your code.
 Use `apply?` to find the lemma that every continuous function with compact support
 has a global minimum. -/
 
-example (f : ℝ → ℝ) (hf : Continuous f) (h2f : HasCompactSupport f) : ∃ x, ∀ y, f x ≤ f y := by {
+example (f : ℝ → ℝ) (hf : Continuous f) (h2f : HasCompactSupport f) : ∃ x, ∀ y, f x ≤ f y := by
   -- sorry
   -- use `apply?` to find:
   exact Continuous.exists_forall_le_of_hasCompactSupport hf h2f
   -- sorry
-}
 
 /- ## Existential quantifiers
 
@@ -471,9 +440,8 @@ then prove `P x₀`. This `x₀` can be an object from the local context
 or a more complicated expression. In the example below, the property
 to check after `use` is true by definition so the proof is over.
 -/
-example : ∃ n : ℕ, 8 = 2*n := by {
+example : ∃ n : ℕ, 8 = 2*n := by
   use 4
-}
 
 /-
 In order to use `h : ∃ x, P x`, we use the `rcases` tactic to fix
@@ -491,7 +459,7 @@ to type them in this editor.
 
 -/
 
-example (a b c : ℤ) (h₁ : a ∣ b) (h₂ : b ∣ c) : a ∣ c := by {
+example (a b c : ℤ) (h₁ : a ∣ b) (h₂ : b ∣ c) : a ∣ c := by
   rcases h₁ with ⟨k, hk⟩ -- we fix some `k` such that `b = a * k`
   rcases h₂ with ⟨l, hl⟩ -- we fix some `l` such that `c = b * l`
   -- Since `a ∣ c` means `∃ k, c = a*k`, we need the `use` tactic.
@@ -500,9 +468,8 @@ example (a b c : ℤ) (h₁ : a ∣ b) (h₂ : b ∣ c) : a ∣ c := by {
     c = b*l     := by congr
     _ = (a*k)*l := by congr
     _ = a*(k*l) := by ring
-}
 
-example (a b c : ℤ) (h₁ : a ∣ b) (h₂ : a ∣ c) : a ∣ b + c := by {
+example (a b c : ℤ) (h₁ : a ∣ b) (h₂ : a ∣ c) : a ∣ b + c := by
   -- sorry
   rcases h₁ with ⟨k, hk⟩
   rcases h₂ with ⟨l, hl⟩
@@ -511,7 +478,6 @@ example (a b c : ℤ) (h₁ : a ∣ b) (h₂ : a ∣ c) : a ∣ b + c := by {
     b + c = a*k + a*l     := by congr
     _     = a*(k + l)     := by ring
   -- sorry
-}
 
 /-
 ## Conjunctions
@@ -532,11 +498,10 @@ Let us see both in action in a very basic logic proof: let us deduce `Q ∧ P`
 from `P ∧ Q`.
 -/
 
-example (P Q : Prop) (h : P ∧ Q) : Q ∧ P := by {
+example (P Q : Prop) (h : P ∧ Q) : Q ∧ P := by
   constructor
   apply h.2
   apply h.1
-}
 
 /-
 ## Limits
@@ -555,14 +520,13 @@ we’ve seen above: if `u` is constant with value `l` then `u` tends to `l`.
 
 Remember `apply?` can find lemmas whose name you don’t want to remember, such as
 the lemma saying that positive implies non-negative. -/
-example (h : ∀ n, u n = l) : seq_limit u l := by {
+example (h : ∀ n, u n = l) : seq_limit u l := by
   intro ε ε_pos
   use 0
   intro n hn
   calc |u n - l| = |l - l| := by congr; apply h
     _            = 0       := by simp
     _            ≤ ε       := by apply?
-}
 
 /- When dealing with absolute values, we'll use the lemma:
 
@@ -582,7 +546,7 @@ below, we use it to prove `ε/2 > 0` from our assumption `ε > 0`.
 
 -- If `u` tends to `l` and `v` tends `l'` then `u+v` tends to `l+l'`
 example (hu : seq_limit u l) (hv : seq_limit v l') :
-    seq_limit (u + v) (l + l') := by {
+    seq_limit (u + v) (l + l') := by
   intro ε ε_pos
   rcases hu (ε/2) (by apply?) with ⟨N₁, hN₁⟩
   rcases hv (ε/2) (by apply?) with ⟨N₂, hN₂⟩
@@ -597,14 +561,13 @@ example (hu : seq_limit u l) (hv : seq_limit v l') :
     _ ≤ |u n - l| + |v n - l'|                        := by apply?
     _ ≤ ε/2 + ε/2                                     := by gcongr
     _ = ε                                             := by simp
-}
 
 
 /- Let's do something similar: the squeezing theorem using both `ge_max_iff` and `abs_le`.
 You will probably want to rewrite using `abs_le` in several assumptions as well as in the
 goal. You can use `rw [abs_le] at *` for this. -/
 example (hu : seq_limit u l) (hw : seq_limit w l) (h : ∀ n, u n ≤ v n) (h' : ∀ n, v n ≤ w n) :
-    seq_limit v l := by {
+    seq_limit v l := by
   -- sorry
   intro ε ε_pos
   rcases hu ε ε_pos with ⟨N, hN⟩
@@ -625,7 +588,6 @@ example (hu : seq_limit u l) (hw : seq_limit w l) (h : ∀ n, u n ≤ v n) (h' :
     v n - l ≤ w n - l := by gcongr
           _ ≤ ε := by apply hN'.2
   -- sorry
-}
 
 
 /- In the next exercise, we'll use
@@ -637,7 +599,7 @@ as the first step.
 
 -- A sequence admits at most one limit. You will be able to use that lemma in the following
 -- exercises.
-lemma uniq_limit (hl : seq_limit u l) (hl' : seq_limit u l') : l = l' := by {
+lemma uniq_limit (hl : seq_limit u l) (hl' : seq_limit u l') : l = l' := by
   apply eq_of_abs_sub_le_all
   -- sorry
   intro ε ε_pos
@@ -649,7 +611,6 @@ lemma uniq_limit (hl : seq_limit u l) (hl' : seq_limit u l') : l = l' := by {
            _ ≤ ε/2 + ε/2 := by gcongr; apply hN; apply?; apply hN'; apply?
            _ = ε := by simp
   -- sorry
-}
 
 /-
 
@@ -672,14 +633,13 @@ the proof below and try to reconstruct it. Otherwise you can simply take a quick
 at how proofs by induction look like (but we won’t need any other one here).
 -/
 /-- An extraction is greater than id -/
-lemma id_le_extraction' : extraction φ → ∀ n, n ≤ φ n := by {
+lemma id_le_extraction' : extraction φ → ∀ n, n ≤ φ n := by
   intro hyp n
   induction n with
   | zero =>  apply?
   | succ n ih => exact Nat.succ_le_of_lt (by
       calc n ≤ φ n := ih
         _    < φ (n + 1) := by apply hyp; apply?)
-}
 
 /-
 In the exercise, we use `∃ n ≥ N, ...` which is the abbreviation of
@@ -690,7 +650,7 @@ Don’t forget to move the cursor around to see what each `apply?` is proving.
 
 /-- Extractions take arbitrarily large values for arbitrarily large
 inputs. -/
-lemma extraction_ge : extraction φ → ∀ N N', ∃ n ≥ N', φ n ≥ N := by {
+lemma extraction_ge : extraction φ → ∀ N N', ∃ n ≥ N', φ n ≥ N := by
   -- sorry
   intro h N N'
   use max N N'
@@ -700,7 +660,6 @@ lemma extraction_ge : extraction φ → ∀ N N', ∃ n ≥ N', φ n ≥ N := by
     N ≤ max N N' := by apply?
     _ ≤ φ (max N N') := by apply?
   -- sorry
-}
 
 /-- A real number `a` is a cluster point of a sequence `u`
 if `u` has a subsequence converging to `a`. -/
@@ -709,7 +668,7 @@ def cluster_point (u : ℕ → ℝ) (a : ℝ) := ∃ φ, extraction φ ∧ seq_l
 /-- If `a` is a cluster point of `u` then there are values of
 `u` arbitrarily close to `a` for arbitrarily large input. -/
 lemma near_cluster :
-  cluster_point u a → ∀ ε > 0, ∀ N, ∃ n ≥ N, |u n - a| ≤ ε := by {
+  cluster_point u a → ∀ ε > 0, ∀ N, ∃ n ≥ N, |u n - a| ≤ ε := by
   -- sorry
   intro hyp ε ε_pos N
   rcases hyp with ⟨φ, φ_extr, hφ⟩
@@ -720,12 +679,11 @@ lemma near_cluster :
   apply hq'
   apply hN' _ hq
   -- sorry
-}
 
 
 /-- If `u` tends to `l` then its subsequences tend to `l`. -/
 lemma subseq_tendsto_of_tendsto' (h : seq_limit u l) (hφ : extraction φ) :
-  seq_limit (u ∘ φ) l := by {
+  seq_limit (u ∘ φ) l := by
   -- sorry
   intro ε ε_pos
   rcases h ε ε_pos with ⟨N, hN⟩
@@ -736,24 +694,22 @@ lemma subseq_tendsto_of_tendsto' (h : seq_limit u l) (hφ : extraction φ) :
     N ≤ n := by apply?
     _ ≤ φ n := id_le_extraction' hφ n
   -- sorry
-}
 
 /-- If `u` tends to `l` all its cluster points are equal to `l`. -/
-lemma cluster_limit (hl : seq_limit u l) (ha : cluster_point u a) : a = l := by {
+lemma cluster_limit (hl : seq_limit u l) (ha : cluster_point u a) : a = l := by
   -- sorry
   rcases ha with ⟨φ, φ_extr, lim_u_φ⟩
   apply uniq_limit
   apply lim_u_φ
   apply?
   -- sorry
-}
 
 /-- `u` is a Cauchy sequence if its values get arbitrarily close for large
 enough inputs. -/
 def CauchySequence (u : ℕ → ℝ) :=
   ∀ ε > 0, ∃ N, ∀ p q, p ≥ N → q ≥ N → |u p - u q| ≤ ε
 
-example : (∃ l, seq_limit u l) → CauchySequence u := by {
+example : (∃ l, seq_limit u l) → CauchySequence u := by
   -- sorry
   intro hyp
   rcases hyp with ⟨l, hl⟩
@@ -768,5 +724,4 @@ example : (∃ l, seq_limit u l) → CauchySequence u := by {
     _ ≤ ε/2 + ε/2 := by gcongr; apply?; apply?
     _ = ε := by simp
   -- sorry
-}
 
