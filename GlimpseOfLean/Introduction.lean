@@ -52,7 +52,9 @@ The following line is the claim we need to prove. -/
 example (f : ℝ → ℝ) (u : ℕ → ℝ) (x₀ : ℝ) (hu : seq_limit u x₀) (hf : continuous_at f x₀) :
   seq_limit (f ∘ u) (f x₀) := by -- This `by` keyword marks the beginning of the proof
   -- Put your text cursor here and watch the panel to the right.
-  -- Then move your cursor from line to line in the proof while monitoring that panel.
+  -- To the right of the blue `⊢` symbol is what we are trying to prove. Above this
+  -- is our list of variables and hypotheses. As you read the proof, move your cursor from
+  -- line to line (for example with the down-arrow button) and watch the panel change.
 
   -- Our goal is to prove that, for any positive `ε`, there exists a natural
   -- number `N` such that, for any natural number `n` at least `N`,
