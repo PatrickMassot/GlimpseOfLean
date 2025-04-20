@@ -5,7 +5,10 @@ namespace IntuitionisticPropositionalLogic
 
 /- Let's try to implement a language of intuitionistic propositional logic.
 
-Note that there is also version of this file for classical logic: `ClassicalPropositionalLogic.lean`
+This files assumes you already know what is intuitionistic logic and what are Heyting algebras.
+Note that there is also version of this file for classical logic:
+`ClassicalPropositionalLogic.lean` which has no such pre-requisites (but still assumes you are
+interested in setting up a logic framework).
 -/
 
 def Variable : Type := ℕ
@@ -36,7 +39,7 @@ Next we define Heyting algebra semantics.
 
 A valuation valued in Heyting algebra `H` is just a map from variables to `H`
 Let's define how to evaluate a valuation on propositional formulae. -/
-variable {H : Type _} [HeytingAlgebra H]
+variable {H : Type*} [HeytingAlgebra H]
 @[simp]
 def eval (v : Variable → H) : Formula → H
   | bot    => ⊥
