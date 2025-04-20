@@ -166,9 +166,10 @@ There is no functional difference between those two keywords. -/
 
 /-- **Bayes Theorem** -/
 theorem bayesTheorem (hB : ℙ B ≠ 0) : ℙ(A|B) = ℙ A * ℙ(B|A) / ℙ B := by
+  by_cases h : ℙ A = 0 -- this tactic perfoms a case disjunction.
+  -- Observe the goals that are created, and specifically the `h` assumption in both goals
+  · /- inline sorry -/simp [h] /- inline sorry -/
   -- sorry
-  by_cases h : ℙ A = 0
-  · simp [h]
   unfold condProb
   rw [ENNReal.mul_div_cancel h]
   · rw [inter_comm]

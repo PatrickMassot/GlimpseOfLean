@@ -117,6 +117,9 @@ There is no functional difference between those two keywords. -/
 
 /-- **Bayes Theorem** -/
 theorem bayesTheorem (hB : ℙ B ≠ 0) : ℙ(A|B) = ℙ A * ℙ(B|A) / ℙ B := by
+  by_cases h : ℙ A = 0 -- this tactic perfoms a case disjunction.
+  -- Observe the goals that are created, and specifically the `h` assumption in both goals
+  · sorry
   sorry
 
 /- Did you really need all those hypotheses?
