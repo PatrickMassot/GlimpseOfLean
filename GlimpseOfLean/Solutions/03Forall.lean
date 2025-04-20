@@ -216,6 +216,10 @@ You can start with specialized files in the `Topics` folder. You have choice bet
   For this file it is recommended to do `04Exists` first.
 * `Probability` (easier, math) if you want to work with probability measures,
   independent sets, and conditional probability, including Bayes' Theorem.
+* `RingTheory` (medium, math) if you want to do a bit a commutative algebra. It starts
+  very gently with basics about commutative rings, then introduces ideals and proves
+  Nœther’s first isomorphism theorem, and finishes with the Chinese remainder theorem
+  in general commutative rings.
 * `GaloisAdjunctions` (harder, math) if you want some more abstraction
   and learn how to prove things about adjunctions between complete lattices.
   It ends with a constructor of the product topology and its universal property
