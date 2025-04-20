@@ -38,7 +38,7 @@ lemma isInf.lowerBound {s : Set X} {x₀ : X} (h : isInf s x₀) : x₀ ∈ lowe
 def isInf.eq {s : Set X} {x₀ x₁ : X} (hx₀ : isInf s x₀) (hx₁ : isInf s x₁) : x₀ = x₁ := by
   sorry
 
-/-- An element `x₀` is an supremum of a set `s` in `X` if every element
+/-- An element `x₀` is a supremum of a set `s` in `X` if every element
 of `X` is a lower bound of `s` if and only if it below `x₀`.  -/
 def isSup (s : Set X) (x₀ : X) :=
   ∀ x, x ∈ upperBounds s ↔ x₀ ≤ x
@@ -493,4 +493,3 @@ lemma push_generate (f : G →* G') : push f ∘ generate = generate ∘ (Set.im
 
 end Subgroups
 end Tutorial
-
