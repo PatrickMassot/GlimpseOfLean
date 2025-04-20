@@ -69,6 +69,9 @@ variable {v : Variable → Prop} {A B : Formula}
 example : Valid (~~A ⇔ A) := by
   sorry
 
+/- We will frequently need to add an element to a set. This is done using
+the `insert` function: `insert A Γ` means `Γ ∪ {A}`. -/
+
 @[simp] lemma satisfies_insert_iff : Satisfies v (insert A Γ) ↔ IsTrue v A ∧ Satisfies v Γ := by
   simp [Satisfies]
 
@@ -95,7 +98,7 @@ end
 
 local infix:27 (priority := high) " ⊢ " => ProvableFrom
 
-/- A formula is provable if there is a -/
+/- A formula is provable if it is provable from an empty set of assumption. -/
 def Provable (A : Formula) := ∅ ⊢ A
 
 export ProvableFrom (ax impI impE botC andI andE1 andE2 orI1 orI2 orE)
@@ -106,7 +109,8 @@ syntax "solve_mem" : tactic
 syntax "apply_ax" : tactic
 macro_rules
   | `(tactic| solve_mem) =>
-    `(tactic| first | apply mem_insert | apply mem_insert_of_mem; solve_mem
+    `(tactic| first | apply mem_singleton | apply mem_insert |
+                      apply mem_insert_of_mem; solve_mem
                     | fail "tactic \'apply_ax\' failed")
   | `(tactic| apply_ax)  => `(tactic| { apply ax; solve_mem })
 
@@ -115,16 +119,22 @@ macro_rules
   is provable using the `ax` rule.
   Or you can do it manually, using the following lemmas about insert.
 ```
+  mem_singleton x : x ∈ {x}
   mem_insert x s : x ∈ insert x s
   mem_insert_of_mem y : x ∈ s → x ∈ insert y s
 ```
 -/
 
-example : insert A (insert B ∅) ⊢ A && B := by
-  exact andI (ax (mem_insert _ _)) (ax (mem_insert_of_mem _ (mem_insert _ _)))
+-- Let’s first see an example using the `apply_ax` tactic
+example : {A, B} ⊢ A && B := by
+  apply andI
+  apply_ax
+  apply_ax
 
-example : insert A (insert B ∅) ⊢ A && B := by
-  exact andI (by apply_ax) (by apply_ax)
+-- And the same one done by hand in one go.
+example : {A, B} ⊢ A && B := by
+  exact andI (ax (mem_insert _ _)) (ax (mem_insert_of_mem _ (mem_singleton _)))
+
 
 example : Provable (~~A ⇔ A) := by
   sorry
