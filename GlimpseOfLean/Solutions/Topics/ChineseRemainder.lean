@@ -4,7 +4,7 @@ setup
 open PiNotation BigOperators Function Classical
 noncomputable section
 
-namespace Tutorial
+namespace GlimpeOfLean
 
 /-
 # Commutative rings and their quotients
@@ -89,8 +89,9 @@ We can apply `e` as a function from `R` to `S` by writing `e x`, where `x : R`.
 To apply `e` in the other direction, from `S` to `R`, we write `e.symm y`, where `y : S`.
 
 To define a ring isomorphism directly, we have to supply two maps: `toFun : R → S` and
-`invFun : S → R` and show that they are inverses to each other,
-in addition to showing that addition and multiplication are preserved.
+`invFun : S → R` and show that they are inverses to each other, in addition to showing that addition
+and multiplication are preserved. We will see below an example that does not explicitly provide
+the inverse morphism.
 Try showing the composition of two isomorphisms is again an isomorphism.
 
 Hint: `Function.LeftInverse` and `Function.RightInverse` are forall-statements.
@@ -307,11 +308,11 @@ def firstIsomorphismTheorem (f : R →+* S) (hf : Function.Surjective f) :
     }
 
 end universal_property
-end Tutorial
+end GlimpeOfLean
 
 /- ## Arithmetic on ideals and the Chinese remainder theorem
 
-We now take a glimpse of more advanced theory with the Chinese remainder theorem for ideals of a
+We now take a glimpse of more advanced theory with the Chinese remainder theorem for ideals in a
 commutative ring. This is a generalization of the well-known elementary version for integers.
 -/
 section chinese
@@ -328,18 +329,15 @@ variable {R} [CommRing R]
 variable {ι : Type} (I : ι → Ideal R)
 
 /-
-We want to create a ring homomorphism from the quotient of `R` by the intersections
-of the `I i`’s to the product of the quotients `R⧸(I i)`.
-For every `i : ι` we have a homomorphism from `R` to `R⧸(I i)`, namely
-`Quotient.mk (I i)`.
-Gathering all those in a map from `R` to the products `Π i, R ⧸ I i` is a job for
+We want to create a ring homomorphism from the quotient of `R` by the intersections of the `I i`’s
+to the product of the quotients `R⧸(I i)`.
+For every `i : ι` we have a homomorphism from `R` to `R⧸(I i)`, namely `Quotient.mk (I i)`.
+Gathering all those in a map from `R` to the products `Π i, (R ⧸ I i)` is a job for
 `Pi.ringHom`. We will need the lemma `ker_Pi_Quotient_mk` about this `Pi.ringHom`.
 And then we need `Ideal.lift` to factors this through the quotient of `R` by the intersection
 `⨅ i, I i`. Be careful that, depending on the font you are using, the intersection symbol `⨅` and the
 product `Π` could be tricky to distinguish.
-
 -/
-
 
 def chineseMap  : (R ⧸ ⨅ i, I i) →+* Π i, R ⧸ I i :=
   Quotient.lift (⨅ i, I i) (Pi.ringHom fun i : ι ↦ Quotient.mk (I i))
@@ -347,13 +345,11 @@ def chineseMap  : (R ⧸ ⨅ i, I i) →+* Π i, R ⧸ I i :=
 
 /- Let’s record two slighlty different spelling of how this map acts on elements, by definition. -/
 
-lemma chineseMap_mk (x : R) :
-  chineseMap I (Quotient.mk _ x) = fun i : ι ↦ Quotient.mk (I i) x :=
-rfl
+lemma chineseMap_mk (x : R) : chineseMap I (Quotient.mk _ x) = fun i : ι ↦ Quotient.mk (I i) x :=
+  rfl
 
-lemma chineseMap_mk' (x : R) (i : ι) :
-  chineseMap I (Quotient.mk _ x) i = Quotient.mk (I i) x :=
-rfl
+lemma chineseMap_mk' (x : R) (i : ι) : chineseMap I (Quotient.mk _ x) i = Quotient.mk (I i) x :=
+  rfl
 
 /-
 This map is always injective, without any assumption on the ideal family. This is a variation
@@ -370,30 +366,44 @@ Surjectivity by contrast needs some assumption.
 The elementary version deals with a finite family of pairwise coprime integers. In the general case
 we want to use a finite family of pairwise coprime ideals.
 
-There is a commutative semi-ring structure on `Ideal R` (this sounds like an exotic algebraic
+There is a commutative semi-ring structure on `Ideal R`. This sounds like an exotic algebraic
 structure but it’s the same one you have on `ℕ`: it very much looks like a commutative ring except
-there is no subtraction operation). The two ideal `I` and `J` are coprime if `I + J = 1`
+there is no subtraction operation. Two ideal `I` and `J` are coprime if `I + J = 1`
 where `1` is the unit of `Ideal R`, namely the ideal containing all elements of `R`.
-
-The fact that this condition applied to ideal `nℤ` and `mℤ` of `ℤ` being coprime is essentially
+The fact that this condition applied to ideals `nℤ` and `mℤ` of `ℤ` being coprime is essentially
 Bézout’s identity.
+There is also an order relation on `Ideal R`, and `1` is the top element `⊤`.
+
+The key lemma in the proof of the Chinese remainder theorem is the following one which is proved by
+induction on the finite set `s`. There is an interesting point here. On paper you would probably say
+you prove it by induction on the cardinal of `s`. And you would put some order on `s` simply to be
+able to single out a “last” element. Typically `s` would be `{1, …, n}` for some natural number `n`.
+In Lean we simply say `s` is a finite set and apply the induction principle `Finset.induction`
+saying that, in order to prove something for all finite sets in some type `ι`, it suffices to prove
+it for the empty set and, assuming it for some set `s` proving it for `s ∪ {i}` for every `i` not in
+`s`. The structure of the proof is given below, so you don’t
+have to remember how to
+
+The union `s ∪ {i}` is spelled `insert i s`. The following lemmas about this operation will be useful:
 -/
+#check Finset.mem_insert_of_mem
+
+#check Finset.mem_insert_self
 
 variable {R : Type*} [CommRing R] {ι : Type}
 
-lemma coprime_iInf_of_coprime {I : Ideal R} {J : ι → Ideal R} {s : Finset ι} (hf : ∀ j ∈ s, I + J j = 1) :
-    I + (⨅ j ∈ s, J j) = 1 := by
-  revert hf
+lemma coprime_iInf_of_coprime {I : Ideal R} {J : ι → Ideal R} {s : Finset ι} :
+    (∀ j ∈ s, I + J j = 1) → I + (⨅ j ∈ s, J j) = 1 := by
   induction s using Finset.induction with
   | empty =>
       -- sorry
       simp
       -- sorry
   | @insert i s _ hs =>
-      -- sorry
       intro h
       rw [Finset.iInf_insert, inf_comm, one_eq_top, eq_top_iff, ← one_eq_top]
       set K := ⨅ j ∈ s, J j
+      -- sorry
       calc
         1 = I + K            := (hs fun j hj ↦ h j (Finset.mem_insert_of_mem hj)).symm
         _ = I + K*(I + J i)  := by rw [h i (Finset.mem_insert_self i s), mul_one]
@@ -401,18 +411,29 @@ lemma coprime_iInf_of_coprime {I : Ideal R} {J : ι → Ideal R} {s : Finset ι}
         _ ≤ I + K ⊓ J i      := add_le_add mul_le_left mul_le_inf
       -- sorry
 
+/-
+We are now ready to prove surjectivity in the Chinese remainder theorem. We will need to write a sum
+over the finite type `ι`. For any `f : ι → R`, the sum of values of `f` is `∑ i, f i`.
+Useful lemmas about this operation include `map_sum` which says that homomorphisms commute with such
+sums and `Finset.sum_univ_eq_single` which allows to rewrite this sum under the assumption that `f`
+is non-zero only for a single element of `ι`.
+-/
+
 lemma chineseMap_surjective [Fintype ι] {I : ι → Ideal R} (hI : ∀ i j, i ≠ j → I i + I j = 1) :
-    Function.Surjective (chineseMap I) := by
+    Surjective (chineseMap I) := by
   intro g
+  -- The role of the `choose` tactic should be clear if you compare the tactic state before and
+  -- after calling it.
   choose f hf using fun i ↦ Quotient.mk_surjective (g i)
   have key : ∀ i, ∃ e : R, Quotient.mk (I i) e = 1 ∧ ∀ j, j ≠ i → Quotient.mk (I j) e = 0 := by
-    -- sorry
     intro i
     have hI' : ∀ j ∈ ({i} : Finset ι)ᶜ, I i + I j = 1 := by
+      -- sorry
       intros j hj
       apply hI
       simpa [ne_comm] using hj
-
+      -- sorry
+    -- sorry
     rcases Ideal.add_eq_one_iff.mp (coprime_iInf_of_coprime hI') with ⟨u, hu, e, he, hue⟩
     refine ⟨e, ?_, ?_⟩
     · simp [eq_sub_of_add_eq' hue, map_sub, Ideal.Quotient.eq_zero_iff_mem.mpr hu]
@@ -421,7 +442,6 @@ lemma chineseMap_surjective [Fintype ι] {I : ι → Ideal R} (hI : ∀ i j, i �
       simp at he
       tauto
     -- sorry
-
   choose e he using key
   -- sorry
   use Quotient.mk _ (∑ i, f i*e i)
@@ -432,7 +452,9 @@ lemma chineseMap_surjective [Fintype ι] {I : ι → Ideal R} (hI : ∀ i j, i �
     simp [(he j).2 i hj.symm]
   -- sorry
 
-noncomputable def chineseIso [DecidableEq ι] [Fintype ι] (I : ι → Ideal R) (hI : ∀ i j, i ≠ j → I i + I j = 1) :
+/- We can now put everything together to get the Chinese remainder isomorphism. -/
+
+noncomputable def chineseIso [Fintype ι] (I : ι → Ideal R) (hI : ∀ i j, i ≠ j → I i + I j = 1) :
    (R ⧸ ⨅ i, I i) ≃+* Π i, R ⧸ I i :=
 { Equiv.ofBijective _ ⟨chineseMap_injective I, chineseMap_surjective hI⟩, chineseMap I with }
 
