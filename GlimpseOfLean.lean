@@ -5,7 +5,7 @@ import GlimpseOfLean.Solutions.«02Iff»
 import GlimpseOfLean.Solutions.«03Forall»
 import GlimpseOfLean.Solutions.«04Exists»
 import GlimpseOfLean.Solutions.Topics.SequenceLimits
-import GlimpseOfLean.Solutions.Topics.ChineseRemainder
+import GlimpseOfLean.Solutions.Topics.RingTheory
 import GlimpseOfLean.Solutions.Topics.GaloisAdjunctions
 import GlimpseOfLean.Solutions.Topics.ClassicalPropositionalLogic
 import GlimpseOfLean.Solutions.Topics.IntuitionisticPropositionalLogic
