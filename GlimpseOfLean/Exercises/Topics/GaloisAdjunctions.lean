@@ -22,8 +22,11 @@ to lemmas:
 * `le_trans {a b c : X} (h : a ≤ b) (h' : b ≤ c) : a ≤ c`
 * `le_antisymm {a b : X} (h : a ≤ b) (h' : b ≤ a) : a = b`
 
-Curly braces around arguments mean these arguments are implicit, Lean will infer
-those arguments from context.
+
+Curly braces around arguments mean these arguments are implicit, so Lean will never 
+require them, becuse they can certainly be inferred from context; in particular, when
+applying a lemma that contains variables in curly braces, Lean does not *expect* you
+to provide the corresponding values.
 -/
 
 /-- An element `x₀` is an infimum of a set `s` in `X` if every element
