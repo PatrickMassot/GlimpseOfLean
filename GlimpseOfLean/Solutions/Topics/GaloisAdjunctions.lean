@@ -22,12 +22,15 @@ to lemmas:
 * `le_trans {a b c : X} (h : a ≤ b) (h' : b ≤ c) : a ≤ c`
 * `le_antisymm {a b : X} (h : a ≤ b) (h' : b ≤ a) : a = b`
 
-Curly braces around arguments mean these arguments are implicit, Lean will infer
-those arguments from context.
+
+Curly braces around arguments mean these arguments are implicit, so Lean will never
+require them, because they can certainly be inferred from context; in particular, when
+applying a lemma that contains variables in curly braces, you should *not*
+provide the corresponding values.
 -/
 
 /-- An element `x₀` is an infimum of a set `s` in `X` if every element
-of `X` is a lower bound of `s` if and only if it below `x₀`.  -/
+of `X` is a lower bound of `s` if and only if it is below `x₀`.  -/
 def isInf (s : Set X) (x₀ : X) :=
   ∀ x, x ∈ lowerBounds s ↔ x ≤ x₀
 
@@ -44,7 +47,7 @@ def isInf.eq {s : Set X} {x₀ x₁ : X} (hx₀ : isInf s x₀) (hx₁ : isInf s
   · exact (hx₀ _).1 ((hx₁ _).2 le_rfl)
   -- sorry
 
-/-- An element `x₀` is an supremum of a set `s` in `X` if every element
+/-- An element `x₀` is a supremum of a set `s` in `X` if every element
 of `X` is a lower bound of `s` if and only if it below `x₀`.  -/
 def isSup (s : Set X) (x₀ : X) :=
   ∀ x, x ∈ upperBounds s ↔ x₀ ≤ x
@@ -68,11 +71,11 @@ def isInfFun (I : Set X → X) :=
   ∀ s : Set X, isInf s (I s)
 
 /-- A function from `Set X` to `X` is an supremum function if it sends every set
-to an supremum of this set. -/
+to a supremum of this set. -/
 def isSupFun (S : Set X → X) :=
   ∀ s : Set X, isSup s (S s)
 
-/- The next lemma is the first crucial result if this file. If `X` admits an
+/- The next lemma is the first crucial result in this file. If `X` admits an
 infimum function then it automatically admits a supremum function. -/
 
 lemma isSup_of_isInf {I : Set X → X} (h : isInfFun I) : isSupFun (fun s ↦ I (upperBounds s)) := by
@@ -97,7 +100,8 @@ lemma isInf_of_isSup {S : Set X → X} (h : isSupFun S) : isInfFun (fun s ↦ S 
 
 /-- A complete lattice is a type equipped with a partial order, an infimum function and
 a supremum function. For instance `X = Set Y` equipped with the inclusion order,
-the intersection function and the union function is a complete lattice. -/
+the intersection function and the union function is a complete lattice. I particular, the word
+“lattice” here has nothing to do with lattices as discrete subgroups in Euclidean spaces.-/
 class CompleteLattice (X : Type) [PartialOrder X] where
   I : Set X → X
   I_isInf : isInfFun I
@@ -122,7 +126,7 @@ def CompleteLattice.mk_of_Inf {I : Set X → X} (h : isInfFun I) : CompleteLatti
  S := fun s ↦ I (upperBounds s)
  S_isSup := isSup_of_isInf h
 
-/-- Building a complete lattice structure from an supremum function on a partially ordered type. -/
+/-- Building a complete lattice structure from a supremum function on a partially ordered type. -/
 def CompleteLattice.mk_of_Sup {S : Set X → X} (h : isSupFun S) : CompleteLattice X where
  I := fun s ↦ S (lowerBounds s)
  I_isInf := isInf_of_isSup h
@@ -239,7 +243,7 @@ section Adjunction
 ordered types. -/
 
 /-- A pair of functions `l` and `r` between ordered types are adjoint if
-`∀ x y, l x ≤ y ↔ x ≤ r y`. One also say they form a Galois connection.
+`∀ x y, l x ≤ y ↔ x ≤ r y`. One also says they form a Galois connection.
 Here `l` stands for "left" and `r` stands for "right". -/
 def adjunction [PartialOrder X] [PartialOrder Y] (l : X → Y) (r : Y → X) :=
   ∀ x y, l x ≤ y ↔ x ≤ r y
@@ -263,7 +267,7 @@ lemma adjunction.dual [PartialOrder X] [PartialOrder Y] {l : X → Y} {r : Y →
   exact (h x y).symm
   -- sorry
 
-/- In this remaining of the section, `X` and `Y` are complete lattices. -/
+/- In the remaining of the section, `X` and `Y` are complete lattices. -/
 variable [PartialOrder X] [CompleteLattice X] [PartialOrder Y] [CompleteLattice Y]
 
 /- We now come to the second main theorem of this file: the adjoint functor theorem for

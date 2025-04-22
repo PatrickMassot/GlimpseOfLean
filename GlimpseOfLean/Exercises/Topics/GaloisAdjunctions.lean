@@ -23,10 +23,10 @@ to lemmas:
 * `le_antisymm {a b : X} (h : a ≤ b) (h' : b ≤ a) : a = b`
 
 
-Curly braces around arguments mean these arguments are implicit, so Lean will never 
-require them, becuse they can certainly be inferred from context; in particular, when
-applying a lemma that contains variables in curly braces, Lean does not *expect* you
-to provide the corresponding values.
+Curly braces around arguments mean these arguments are implicit, so Lean will never
+require them, because they can certainly be inferred from context; in particular, when
+applying a lemma that contains variables in curly braces, you should *not*
+provide the corresponding values.
 -/
 
 /-- An element `x₀` is an infimum of a set `s` in `X` if every element
@@ -86,7 +86,7 @@ lemma isInf_of_isSup {S : Set X → X} (h : isSupFun S) : isInfFun (fun s ↦ S 
 /-- A complete lattice is a type equipped with a partial order, an infimum function and
 a supremum function. For instance `X = Set Y` equipped with the inclusion order,
 the intersection function and the union function is a complete lattice. I particular, the word
-"lattice" here has nothing to do with lattices as discrete subgroups in Euclidean spaces.-/
+“lattice” here has nothing to do with lattices as discrete subgroups in Euclidean spaces.-/
 class CompleteLattice (X : Type) [PartialOrder X] where
   I : Set X → X
   I_isInf : isInfFun I
@@ -497,3 +497,4 @@ lemma push_generate (f : G →* G') : push f ∘ generate = generate ∘ (Set.im
 
 end Subgroups
 end Tutorial
+
