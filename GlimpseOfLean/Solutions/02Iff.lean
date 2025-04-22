@@ -10,6 +10,11 @@ of `P → Q` as a function sending any proof of `P` to a proof of `Q`
 
 For instance, given a real number `a`, the lemma `sq_pos_of_pos` claims `0 < a → 0 < a^2`
 so the proof belows apply the "function" `sq_pos_of_pos` to the assumption `ha`.
+
+Remember that whenever you see in a Lean file a symbol that you don't see on
+your keyboard, such as →, you can put your mouse cursor above it and learn from
+a tooltip how to type it. In the case of →, you can type it by typing "\to ", so
+backslash-t-o-space.
 -/
 
 example (a : ℝ) (ha : 0 < a) : 0 < a^2 := by
@@ -90,6 +95,13 @@ example (p q r : Prop) : (p → q) → (p → q → r) → p → r := by
   exact h1 h3
   -- sorry
 
+/-
+Note that, when using `intro`, you need to give a name to the assumption.
+Lean will let you use a name that was already use. In that case the new
+assumption will shadow the existing one which becomes inaccessible. So the safe
+thing to do by default is to use a new name.
+-/
+
 /- # Equivalences
 
 ## Using equivalences to rewrite statements
@@ -136,7 +148,7 @@ is used.
 example {a b : ℝ}  (ha : 0 ≤ a) : b ≤ a + b := by
   calc
     b = 0 + b := by ring
-    _ ≤ a + b := by rw [add_le_add_iff_right b] ; exact ha  
+    _ ≤ a + b := by rw [add_le_add_iff_right b] ; exact ha
 
 /-
 ## Using equivalences as pairs of implications
@@ -187,7 +199,7 @@ example (a b : ℝ) : (a-b)*(a+b) = 0 ↔ a^2 = b^2 := by
       (a-b)*(a+b) = a^2 - b^2  := by ring
                 _ = b^2 - b^2  := by rw [h]
                 _ = 0          := by ring
-  
+
 
 /- You can try it yourself in this exercise. -/
 

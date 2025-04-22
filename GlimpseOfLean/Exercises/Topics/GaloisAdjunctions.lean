@@ -4,10 +4,10 @@ open PiNotation
 
 /- # Abstract non-sense 101: Galois adjunctions
 
-In this file we will play with the simplest examples of adjunctions: Galois connections
-between complete lattices. There is a lot about this topic in mathlib, but here we will
-roll our own version for practice. This file builds the fundamental theory of these objects
-and each lemma you prove there is named and can be reused to prove the next lemmas.
+In this file we will play with the simplest examples of adjunctions: Galois connections between
+complete lattices. There is a lot about this topic in Mathlib, the mathematical library of Leon, but
+here we will roll our own version for practice. This file builds the fundamental theory of these
+objects and each lemma you prove in this file is named and can be reused to prove the next lemmas.
 -/
 
 namespace Tutorial
@@ -27,6 +27,14 @@ Curly braces around arguments mean these arguments are implicit, so Lean will ne
 require them, because they can certainly be inferred from context; in particular, when
 applying a lemma that contains variables in curly braces, you should *not*
 provide the corresponding values.
+
+We will also use the definition of the set of lower bounds of a set `s`
+
+`lowerBounds s = {x  | ∀ a ∈ s, x ≤ a}`
+
+and similarly
+
+`upperBounds s = {x  | ∀ a ∈ s, a ≤ x}`
 -/
 
 /-- An element `x₀` is an infimum of a set `s` in `X` if every element
