@@ -4,7 +4,7 @@ setup
 open PiNotation BigOperators Function Classical
 noncomputable section
 
-namespace GlimpeOfLean
+namespace GlimpseOfLean
 
 /-
 # Commutative rings and their quotients
@@ -308,7 +308,7 @@ def firstIsomorphismTheorem (f : R →+* S) (hf : Function.Surjective f) :
     }
 
 end universal_property
-end GlimpeOfLean
+end GlimpseOfLean
 
 /- ## Arithmetic on ideals and the Chinese remainder theorem
 
