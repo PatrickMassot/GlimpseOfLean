@@ -29,8 +29,8 @@ website, you can use the [lean4web server](https://live.lean-lang.org/) hosted b
 If you want to do the longer track then the relevant links are:
 * [01Rewriting](https://live.lean-lang.org/#project=GlimpseOfLean&url=https%3A%2F%2Fraw.githubusercontent.com%2FPatrickMassot%2FGlimpseOfLean%2Frefs%2Fheads%2Fmaster%2FGlimpseOfLean%2FExercises%2F01Rewriting.lean)
 * [02Iff](https://live.lean-lang.org/#project=GlimpseOfLean&url=https%3A%2F%2Fraw.githubusercontent.com%2FPatrickMassot%2FGlimpseOfLean%2Frefs%2Fheads%2Fmaster%2FGlimpseOfLean%2FExercises%2F02Iff.lean)
-* [03Forall](https://raw.githubusercontent.com/PatrickMassot/GlimpseOfLean/refs/heads/master/GlimpseOfLean/Exercises/03Forall.lean)
-* [04Exists](https://raw.githubusercontent.com/PatrickMassot/GlimpseOfLean/refs/heads/master/GlimpseOfLean/Exercises/04Exists.lean)
+* [03Forall](https://live.lean-lang.org/#project=GlimpseOfLean&url=https%3A%2F%2Fraw.githubusercontent.com%2FPatrickMassot%2FGlimpseOfLean%2Frefs%2Fheads%2Fmaster%2FGlimpseOfLean%2FExercises%2F03Forall.lean)
+* [04Exists](https://live.lean-lang.org/#project=GlimpseOfLean&url=https%3A%2F%2Fraw.githubusercontent.com%2FPatrickMassot%2FGlimpseOfLean%2Frefs%2Fheads%2Fmaster%2FGlimpseOfLean%2FExercises%2F04Exists.lean)
 
 for the basics. And then you can choose depending on your mathematical
 interests:
