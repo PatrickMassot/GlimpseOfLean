@@ -41,20 +41,20 @@ A valuation valued in Heyting algebra `H` is just a map from variables to `H`
 Let's define how to evaluate a valuation on propositional formulae. -/
 variable {H : Type*} [HeytingAlgebra H]
 @[simp]
-def eval (v : Variable → H) : Formula → H
+def eval (φ : Variable → H) : Formula → H
   | bot    => ⊥
-  | # P    => v P
-  | A || B => eval v A ⊔ eval v B
-  | A && B => eval v A ⊓ eval v B
-  | A ⇒ B => eval v A ⇨ eval v B
+  | # P    => φ P
+  | A || B => eval φ A ⊔ eval φ B
+  | A && B => eval φ A ⊓ eval φ B
+  | A ⇒ B => eval φ A ⇨ eval φ B
 
 /- We say that `A` is a consequence of `Γ` if for all valuations in any Heyting algebra, if
-  `eval v B` is above a certain element for all `B ∈ Γ` then `eval v A` is above this element.
+  `eval φ B` is above a certain element for all `B ∈ Γ` then `eval φ A` is above this element.
   Note that for finite sets `Γ` this corresponds exactly to
-  `Infimum { eval v B | B ∈ Γ } ≤ eval v A`.
+  `Infimum { eval φ B | B ∈ Γ } ≤ eval φ A`.
   This "yoneda'd" version of the definition of validity is very convenient to work with. -/
 def Models (Γ : Set Formula) (A : Formula) : Prop :=
-  ∀ {H : Type} [HeytingAlgebra H] {v : Variable → H} {c}, (∀ B ∈ Γ, c ≤ eval v B) → c ≤ eval v A
+  ∀ {H : Type} [HeytingAlgebra H] {φ : Variable → H} {c}, (∀ B ∈ Γ, c ≤ eval φ B) → c ≤ eval φ A
 
 local infix:27 (priority := high) " ⊨ " => Models
 def Valid (A : Formula) : Prop := ∅ ⊨ A
@@ -64,16 +64,16 @@ def Valid (A : Formula) : Prop := ∅ ⊨ A
   The tactic `simp` will automatically simplify definitions tagged with `@[simp]` and rewrite
   using theorems tagged with `@[simp]`. -/
 
-variable {v : Variable → H} {A B : Formula}
-@[simp] lemma eval_neg : eval v ~A = (eval v A)ᶜ := by simp [neg]
+variable {φ : Variable → H} {A B : Formula}
+@[simp] lemma eval_neg : eval φ ~A = (eval φ A)ᶜ := by simp [neg]
 
-@[simp] lemma eval_top : eval v top = ⊤ := by
+@[simp] lemma eval_top : eval φ top = ⊤ := by
   -- sorry
   simp [top]
   -- sorry
 
 @[simp]
-lemma isTrue_equiv : eval v (A ⇔ B) = (eval v A ⇨ eval v B) ⊓ (eval v B ⇨ eval v A) := by
+lemma isTrue_equiv : eval φ (A ⇔ B) = (eval φ A ⇨ eval φ B) ⊓ (eval φ B ⇨ eval φ A) := by
   -- sorry
   simp [equiv]
   -- sorry
@@ -208,7 +208,7 @@ lemma Provable.mp (h1 : Provable (A ⇒ B)) (h2 : Γ ⊢ A) : Γ ⊢ B := by
 set_option maxHeartbeats 0 in
 theorem soundness_theorem (h : Γ ⊢ A) : Γ ⊨ A := by
   -- sorry
-  induction h <;> intros H hH v c hv
+  induction h <;> intros H hH φ c hφ
   solve_by_elim
   case impI ih =>
     simp
@@ -216,38 +216,38 @@ theorem soundness_theorem (h : Γ ⊢ A) : Γ ⊨ A := by
     simp
     intros B hB
     -- apply?
-    exact inf_le_of_left_le (hv B hB)
+    exact inf_le_of_left_le (hφ B hB)
   case impE ih₁ ih₂ =>
-    specialize ih₁ hv
+    specialize ih₁ hφ
     simp at ih₁
-    rwa [inf_eq_left.mpr (ih₂ hv)] at ih₁
-  case andI ih₁ ih₂ => simp [ih₁ hv, ih₂ hv]
+    rwa [inf_eq_left.mpr (ih₂ hφ)] at ih₁
+  case andI ih₁ ih₂ => simp [ih₁ hφ, ih₂ hφ]
   case andE1 ih =>
-    specialize ih hv
+    specialize ih hφ
     simp at ih
     exact ih.1
   case andE2 ih =>
-    specialize ih hv
+    specialize ih hφ
     simp at ih
     exact ih.2
   case orI1 ih =>
     simp
-    exact le_trans (ih hv) le_sup_left
+    exact le_trans (ih hφ) le_sup_left
   case orI2 ih =>
     simp
-    exact le_trans (ih hv) le_sup_right
+    exact le_trans (ih hφ) le_sup_right
   case orE Γ A B C _h1 _h2 _h3 ih₁ ih₂ ih₃ =>
-    specialize ih₁ hv
-    have h2v : ∀ D ∈ insert A Γ, c ⊓ eval v A ≤ eval v D := by
-      simp; intros D hD; exact inf_le_of_left_le (hv D hD) -- apply? found this
-    have h3v : ∀ D ∈ insert B Γ, c ⊓ eval v B ≤ eval v D := by
-      simp; intros D hD; exact inf_le_of_left_le (hv D hD) -- apply? found this
+    specialize ih₁ hφ
+    have h2φ : ∀ D ∈ insert A Γ, c ⊓ eval φ A ≤ eval φ D := by
+      simp; intros D hD; exact inf_le_of_left_le (hφ D hD) -- apply? found this
+    have h3φ : ∀ D ∈ insert B Γ, c ⊓ eval φ B ≤ eval φ D := by
+      simp; intros D hD; exact inf_le_of_left_le (hφ D hD) -- apply? found this
     simp at ih₁
     rw [← inf_eq_left.mpr ih₁, inf_sup_left]
-    rw [← sup_idem (a := eval v C)]
-    exact sup_le_sup (ih₂ h2v) (ih₃ h3v)
+    rw [← sup_idem (a := eval φ C)]
+    exact sup_le_sup (ih₂ h2φ) (ih₃ h3φ)
   case botE ih =>
-    specialize ih hv
+    specialize ih hφ
     simp at ih
     simp [ih]
   -- sorry
