@@ -41,20 +41,20 @@ A valuation valued in Heyting algebra `H` is just a map from variables to `H`
 Let's define how to evaluate a valuation on propositional formulae. -/
 variable {H : Type*} [HeytingAlgebra H]
 @[simp]
-def eval (v : Variable → H) : Formula → H
+def eval (φ : Variable → H) : Formula → H
   | bot    => ⊥
-  | # P    => v P
-  | A || B => eval v A ⊔ eval v B
-  | A && B => eval v A ⊓ eval v B
-  | A ⇒ B => eval v A ⇨ eval v B
+  | # P    => φ P
+  | A || B => eval φ A ⊔ eval φ B
+  | A && B => eval φ A ⊓ eval φ B
+  | A ⇒ B => eval φ A ⇨ eval φ B
 
 /- We say that `A` is a consequence of `Γ` if for all valuations in any Heyting algebra, if
-  `eval v B` is above a certain element for all `B ∈ Γ` then `eval v A` is above this element.
+  `eval φ B` is above a certain element for all `B ∈ Γ` then `eval φ A` is above this element.
   Note that for finite sets `Γ` this corresponds exactly to
-  `Infimum { eval v B | B ∈ Γ } ≤ eval v A`.
+  `Infimum { eval φ B | B ∈ Γ } ≤ eval φ A`.
   This "yoneda'd" version of the definition of validity is very convenient to work with. -/
 def Models (Γ : Set Formula) (A : Formula) : Prop :=
-  ∀ {H : Type} [HeytingAlgebra H] {v : Variable → H} {c}, (∀ B ∈ Γ, c ≤ eval v B) → c ≤ eval v A
+  ∀ {H : Type} [HeytingAlgebra H] {φ : Variable → H} {c}, (∀ B ∈ Γ, c ≤ eval φ B) → c ≤ eval φ A
 
 local infix:27 (priority := high) " ⊨ " => Models
 def Valid (A : Formula) : Prop := ∅ ⊨ A
@@ -64,14 +64,14 @@ def Valid (A : Formula) : Prop := ∅ ⊨ A
   The tactic `simp` will automatically simplify definitions tagged with `@[simp]` and rewrite
   using theorems tagged with `@[simp]`. -/
 
-variable {v : Variable → H} {A B : Formula}
-@[simp] lemma eval_neg : eval v ~A = (eval v A)ᶜ := by simp [neg]
+variable {φ : Variable → H} {A B : Formula}
+@[simp] lemma eval_neg : eval φ ~A = (eval φ A)ᶜ := by simp [neg]
 
-@[simp] lemma eval_top : eval v top = ⊤ := by
+@[simp] lemma eval_top : eval φ top = ⊤ := by
   sorry
 
 @[simp]
-lemma isTrue_equiv : eval v (A ⇔ B) = (eval v A ⇨ eval v B) ⊓ (eval v B ⇨ eval v A) := by
+lemma isTrue_equiv : eval φ (A ⇔ B) = (eval φ A ⇨ eval φ B) ⊓ (eval φ B ⇨ eval φ A) := by
   sorry
 
 /- As an exercise, let's prove the following proposition, which holds in intuitionistic logic. -/
@@ -175,4 +175,3 @@ theorem valid_of_provable (h : Provable A) : Valid A := by
 -/
 
 end IntuitionisticPropositionalLogic
-

@@ -37,15 +37,15 @@ local infix:29 (priority := high) " ⇔ " => equiv
 /- Let's define truth w.r.t. a valuation, i.e. classical validity -/
 
 @[simp]
-def IsTrue (v : Variable → Prop) : Formula → Prop
+def IsTrue (φ : Variable → Prop) : Formula → Prop
   | ⊥      => False
-  | # P    => v P
-  | A || B => IsTrue v A ∨ IsTrue v B
-  | A && B => IsTrue v A ∧ IsTrue v B
-  | A ⇒ B => IsTrue v A → IsTrue v B
+  | # P    => φ P
+  | A || B => IsTrue φ A ∨ IsTrue φ B
+  | A && B => IsTrue φ A ∧ IsTrue φ B
+  | A ⇒ B => IsTrue φ A → IsTrue φ B
 
-def Satisfies (v : Variable → Prop) (Γ : Set Formula) : Prop := ∀ {A}, A ∈ Γ → IsTrue v A
-def Models (Γ : Set Formula) (A : Formula) : Prop := ∀ {v}, Satisfies v Γ → IsTrue v A
+def Satisfies (φ : Variable → Prop) (Γ : Set Formula) : Prop := ∀ {A}, A ∈ Γ → IsTrue φ A
+def Models (Γ : Set Formula) (A : Formula) : Prop := ∀ {φ}, Satisfies φ Γ → IsTrue φ A
 local infix:27 (priority := high) " ⊨ " => Models
 def Valid (A : Formula) : Prop := ∅ ⊨ A
 
@@ -54,13 +54,13 @@ def Valid (A : Formula) : Prop := ∅ ⊨ A
   The tactic `simp` will automatically simplify definitions tagged with `@[simp]` and rewrite
   using theorems tagged with `@[simp]`. -/
 
-variable {v : Variable → Prop} {A B : Formula}
-@[simp] lemma isTrue_neg : IsTrue v ~A ↔ ¬ IsTrue v A := by simp [neg]
+variable {φ : Variable → Prop} {A B : Formula}
+@[simp] lemma isTrue_neg : IsTrue φ ~A ↔ ¬ IsTrue φ A := by simp [neg]
 
-@[simp] lemma isTrue_top : IsTrue v ⊤ := by
+@[simp] lemma isTrue_top : IsTrue φ ⊤ := by
   sorry
 
-@[simp] lemma isTrue_equiv : IsTrue v (A ⇔ B) ↔ (IsTrue v A ↔ IsTrue v B) := by
+@[simp] lemma isTrue_equiv : IsTrue φ (A ⇔ B) ↔ (IsTrue φ A ↔ IsTrue φ B) := by
   sorry
 
 /- As an exercise, let's prove (using classical logic) the double negation elimination principle.
@@ -72,7 +72,7 @@ example : Valid (~~A ⇔ A) := by
 /- We will frequently need to add an element to a set. This is done using
 the `insert` function: `insert A Γ` means `Γ ∪ {A}`. -/
 
-@[simp] lemma satisfies_insert_iff : Satisfies v (insert A Γ) ↔ IsTrue v A ∧ Satisfies v Γ := by
+@[simp] lemma satisfies_insert_iff : Satisfies φ (insert A Γ) ↔ IsTrue φ A ∧ Satisfies φ Γ := by
   simp [Satisfies]
 
 /- Let's define provability w.r.t. classical logic. -/
@@ -199,4 +199,3 @@ theorem valid_of_provable (h : Provable A) : Valid A := by
 -/
 
 end ClassicalPropositionalLogic
-
