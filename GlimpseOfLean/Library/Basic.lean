@@ -17,6 +17,26 @@ macro (name := ring) "ring" : tactic =>
 
 end
 
+open Lean PrettyPrinter Delaborator SubExpr in
+@[app_delab Max.max]
+def delabMax' : Delab := do
+  let e ← getExpr
+  guard <| e.isAppOfArity ``Max.max 4
+  let m := mkIdent `max
+  let x ← withNaryArg 2 delab
+  let y ← withNaryArg 3 delab
+  `($(m) $(x) $(y))
+
+open Lean PrettyPrinter Delaborator SubExpr in
+@[app_delab Min.min]
+def delabMin' : Delab := do
+  let e ← getExpr
+  guard <| e.isAppOfArity ``Min.min 4
+  let m := mkIdent `min
+  let x ← withNaryArg 2 delab
+  let y ← withNaryArg 3 delab
+  `($(m) $(x) $(y))
+
 -- The mathlib version is unusable because it is stated in terms of ≤
 lemma ge_max_iff {α : Type*} [LinearOrder α] {p q r : α} : r ≥ max p q  ↔ r ≥ p ∧ r ≥ q :=
   max_le_iff
