@@ -82,7 +82,7 @@ example (p q r : Prop) : (p → q) → (p → q → r) → p → r := by
 
 /-
 Note that, when using `intro`, you need to give a name to the assumption.
-Lean will let you use a name that was already use. In that case the new
+Lean will let you use a name that was already used. In that case the new
 assumption will shadow the existing one which becomes inaccessible. So the safe
 thing to do by default is to use a new name.
 -/
@@ -134,10 +134,10 @@ example {a b : ℝ}  (ha : 0 ≤ a) : b ≤ a + b := by
 /-
 ## Using equivalences as pairs of implications
 
-In the second line in the above proof is a bit silly: we use statement rewriting to reduce
+The second line in the above proof is a bit silly: we use statement rewriting to reduce
 the goal to our assumption `ha`, but it would be more natural to see the equivalence as a
 double implication. We can access the two implications of an equivalence `h : P ↔ Q` as
-`h.1 : P → Q` and `h.2 : Q → P`. This allows to rewrite the above proof as:
+`h.1 : P → Q` and `h.2 : Q → P`. This allows us to rewrite the above proof as:
 -/
 
 example {a b : ℝ}  (ha : 0 ≤ a) : b ≤ a + b := by
