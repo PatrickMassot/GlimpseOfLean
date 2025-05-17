@@ -48,7 +48,7 @@ In order to announce an intermediate statement we use:
 
 This triggers the apparition of a new goal: proving the statement.
 After the proof is done, the statement becomes available under the name `my_name`.
-If the proof is a single `exact` then you tactic then you can get rid
+If the proof is a single `exact` tactic then you can get rid
 of `by` and `exact` and directly put the argument of `exact` after the `:=`.
 -/
 
