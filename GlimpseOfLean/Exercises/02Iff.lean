@@ -48,7 +48,7 @@ In order to announce an intermediate statement we use:
 
 This triggers the apparition of a new goal: proving the statement.
 After the proof is done, the statement becomes available under the name `my_name`.
-If the proof is a single `exact` then you tactic then you can get rid
+If the proof is a single `exact` tactic then you can get rid
 of `by` and `exact` and directly put the argument of `exact` after the `:=`.
 -/
 
@@ -66,7 +66,7 @@ example (a b : ℝ) (ha : 0 < a) (hb : 0 < b) : 0 < a^2 + b^2 := by
 
 /- ## Proving implications
 
-In order to prove an implication, we need to assume to premise and prove the conclusion.
+In order to prove an implication, we need to assume the premise and prove the conclusion.
 This is done using the `intro` tactic. Secretly the exercise above was proving the
 implication `a > 0 → (a^2)^2 > 0` but the premise was already introduced for us.
 -/
@@ -82,7 +82,7 @@ example (p q r : Prop) : (p → q) → (p → q → r) → p → r := by
 
 /-
 Note that, when using `intro`, you need to give a name to the assumption.
-Lean will let you use a name that was already use. In that case the new
+Lean will let you use a name that was already used. In that case the new
 assumption will shadow the existing one which becomes inaccessible. So the safe
 thing to do by default is to use a new name.
 -/
@@ -134,10 +134,10 @@ example {a b : ℝ}  (ha : 0 ≤ a) : b ≤ a + b := by
 /-
 ## Using equivalences as pairs of implications
 
-In the second line in the above proof is a bit silly: we use statement rewriting to reduce
+The second line in the above proof is a bit silly: we use statement rewriting to reduce
 the goal to our assumption `ha`, but it would be more natural to see the equivalence as a
 double implication. We can access the two implications of an equivalence `h : P ↔ Q` as
-`h.1 : P → Q` and `h.2 : Q → P`. This allows to rewrite the above proof as:
+`h.1 : P → Q` and `h.2 : Q → P`. This allows us to rewrite the above proof as:
 -/
 
 example {a b : ℝ}  (ha : 0 ≤ a) : b ≤ a + b := by
