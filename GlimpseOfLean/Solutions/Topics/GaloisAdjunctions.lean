@@ -5,7 +5,7 @@ open PiNotation
 /- # Abstract non-sense 101: Galois adjunctions
 
 In this file we will play with the simplest examples of adjunctions: Galois connections between
-complete lattices. There is a lot about this topic in Mathlib, the mathematical library of Leon, but
+complete lattices. There is a lot about this topic in Mathlib, the mathematical library of Lean, but
 here we will roll our own version for practice. This file builds the fundamental theory of these
 objects and each lemma you prove in this file is named and can be reused to prove the next lemmas.
 -/
