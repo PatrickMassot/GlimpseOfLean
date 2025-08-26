@@ -152,7 +152,7 @@ To define an ideal, we give a definition for the carrier set, and then prove it 
 under multiplication on the left (hence also on the right since our rings are commutative here).
 
 Try showing the intersection of two ideals is again an ideal (of course Mathlib already knows this,
-it is only an exericse).
+it is only an exercise).
 -/
 def Ideal.inter (I J : Ideal R) : Ideal R where
   carrier := I ∩ J
@@ -200,7 +200,7 @@ example (I : Ideal R) : ker (Ideal.Quotient.mk I) = I :=
 
 /-
 The quotient `R⧸I` and the homomorphism `Ideal.Quotient.mk I` form the “smallest” pair of
-a ring and a homomorphim from `R` vanishing on `I`: any other such homomorphism factors
+a ring and a homomorphism from `R` vanishing on `I`: any other such homomorphism factors
 through it. This is the universal property of `R⧸I`. The factored homomorphism is
 `Ideal.Quotient.lift I f hfI : R ⧸ I →+* S`
 where `f : R →+* S` and `hfI : ∀ a ∈ I, f a = 0`.

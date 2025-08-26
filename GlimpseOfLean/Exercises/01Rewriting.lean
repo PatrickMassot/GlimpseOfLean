@@ -118,7 +118,7 @@ example (a b c : ℝ) : exp (a + b - c) = (exp a * exp b) / (exp c * exp 0) := b
 Since equality is a symmetric relation, we can also replace the right-hand side of an
 equality by the left-hand side using `←` as in the following example.
 -/
-example (a b c : ℝ) (h : a = b + c) (h' : a + e = d + c) : b + c + e = d + c := by
+example (a b c d e : ℝ) (h : a = b + c) (h' : a + e = d + c) : b + c + e = d + c := by
   rw [← h, h']
 
 /-
@@ -127,8 +127,9 @@ you can put your mouse cursor above it and learn from a tooltip how to type it.
 In the case of ←, you can type it by typing "\l ", so backslash-l-space.
 
 Note this rewriting from right to left story is all about sides in the equality you want to
-*use*, not about sides in what you want to *prove*. The `rw [← h]` will replace the right-hand side
-by the left-hand side, so it will look for `b + c` in the current goal and replace it with `a`.
+*use*, not about sides in what you want to *prove*. The `rw [← h]` in the previous example
+replaced the right-hand side by the left-hand side, so it looked for `b + c` in the current
+goal and replaced it with `a`.
 -/
 
 example (a b c d : ℝ) (h : a = b + b) (h' : b = c) (h'' : a = d) : b + c = d := by

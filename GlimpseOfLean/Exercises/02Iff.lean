@@ -46,6 +46,7 @@ In order to announce an intermediate statement we use:
 
   `have my_name : my_statement := by`
 
+and then increase the indentation level.
 This triggers the apparition of a new goal: proving the statement.
 After the proof is done, the statement becomes available under the name `my_name`.
 If the proof is a single `exact` tactic then you can get rid
@@ -71,7 +72,7 @@ This is done using the `intro` tactic. Secretly the exercise above was proving t
 implication `a > 0 → (a^2)^2 > 0` but the premise was already introduced for us.
 -/
 
-example (a : ℝ) : a > 0 → b > 0 → a + b > 0 := by
+example (a b : ℝ) : a > 0 → b > 0 → a + b > 0 := by
   intro ha hb -- You can choose any names here
   exact add_pos ha hb
 
@@ -103,11 +104,11 @@ In the following exercises we will use the lemma:
 -/
 
 example {a b c : ℝ} : c + a ≤ c + b ↔ a ≤ b := by
-  rw [← sub_nonneg]
-  have key : (c + b) - (c + a) = b - a := by-- Here we introduce an intermediate statement named key
-    ring   -- and prove it in an indented block (here this block is only one line long)
-  rw [key] -- we can now use `key`. This `rw` uses an equality result, not an equivalence
-  rw [sub_nonneg] -- and switch back to reach the tautology a ≤ b ↔ a ≤ b
+  rw [← sub_nonneg] -- This `rw` uses an equivalence
+  have key : (c + b) - (c + a) = b - a := by
+    ring
+  rw [key] -- This `rw` uses an equality result, not an equivalence
+  rw [sub_nonneg] -- and we switch back to reach the tautology a ≤ b ↔ a ≤ b
 
 /-
 Let's prove a variation
@@ -152,6 +153,12 @@ example (a b : ℝ) (hb : 0 ≤ b) : a ≤ a + b := by
   sorry
 
 /-
+Important note: in the previous exercises, we used lemmas like `add_le_add_iff_left` as
+elementary examples to manipulate equivalences. But invoking those lemmas by hand when
+working on interesting mathematics would be awfully tedious. There are tactics
+whose job is to do these things automatically, but this is not the topic of this file.
+
+
 ## Proving equivalences
 
 In order to prove an equivalence one can use `rw` until the

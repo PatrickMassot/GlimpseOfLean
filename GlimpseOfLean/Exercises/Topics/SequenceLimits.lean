@@ -8,6 +8,10 @@ sequences of real numbers.
 mathlib has a much more general definition of limits, but here
 we want to practice using the logical operators and relations
 covered in the previous files.
+
+There are many exercises in this file, so do not hesitate to take a
+look at the solutions folder if you are stuck, there will be other
+exercises.
 -/
 
 /-
@@ -35,7 +39,7 @@ A sequence `u` is a function from `ℕ` to `ℝ`, hence Lean says
 The definition we'll be using is:
 -/
 
-/-- Definition of « u tends to l » -/
+/-- Definition of “u tends to l” -/
 def seq_limit (u : ℕ → ℝ) (l : ℝ) := ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| ≤ ε
 
 /-
@@ -66,7 +70,20 @@ example (h : ∀ n, u n = l) : seq_limit u l := by
   sorry
 
 
-/- When dealing with absolute values, we'll use lemmas:
+/-
+A small user interface remark: you may have noticed in the previous example that
+your editor shows a somewhat ghostly `{u l}` after the `example` word.
+This text is not actually present in the Lean file, and cannot be edited.
+It is displayed as a hint that Lean inferred we wanted to work with some `u` and `l`.
+The fact that `u` should be a sequence and `l` a real numbered was inferred because
+the announced conclusion was `seq_limit u l`.
+
+The short version of the above paragraph is you can mostly ignore those ghostly
+indications and trust your common sense that `u` is a sequence and `l` a limit.
+-/
+
+/-
+When dealing with absolute values, we'll use lemmas:
 
 `abs_sub_comm (x y : ℝ) : |x - y| = |y - x|`
 
@@ -117,10 +134,14 @@ example (hu : seq_limit u l) (hv : seq_limit v l') :
     |(u + v) n - (l + l')| = |u n + v n - (l + l')|   := rfl
     _ = |(u n - l) + (v n - l')|                      := by ring
     _ ≤ |u n - l| + |v n - l'|                        := by apply abs_add
-    _ ≤ ε                                             := by linarith [fact₁, fact₂]
+    _ ≤ ε                                             := by linarith
 
 
-/- Let's do something similar: the squeezing theorem. -/
+/- Let's do something similar: the squeezing theorem.
+In that example it can help to use the `specialize` tactic (introduced in the file
+`03Forall.lean`) so that the `linarith` tactic can pick up the relevant files
+from the assumptions.
+-/
 example (hu : seq_limit u l) (hw : seq_limit w l) (h : ∀ n, u n ≤ v n) (h' : ∀ n, v n ≤ w n) :
     seq_limit v l := by
   sorry

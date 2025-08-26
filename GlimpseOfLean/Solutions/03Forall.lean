@@ -176,7 +176,7 @@ The following exercises teach you two techniques to avoid needing to remember na
 * `apply?` will find lemmas from the library.
 -/
 
-/- Use `simp` to prove the following. Note that `X : Set ℝ`
+/- Use `simp` as a first step to prove the following. Note that `X : Set ℝ`
 means that `X` is a set containing (only) real numbers. -/
 example (x : ℝ) (X Y : Set ℝ) (hx : x ∈ X) : x ∈ (X ∩ Y) ∪ (X \ Y) := by
   -- sorry
@@ -222,10 +222,6 @@ In the latter case, you should come back to `04Exists` if you get stuck on anyth
 (where `∧` is the symbol for conjunctions, aka the logical “and” operator).
 
 You can start with specialized files in the `Topics` folder. You have choice between
-* `ClassicalPropositionalLogic` (easier, logic) if you want to learn
-  how to do classical propositional logic in Lean.
-* `IntuitionisticPropositionalLogic` (harder, logic) if you want a bigger challenge
-  and do intuitionistic propositional logic.
 * `SequenceLimit` (easier, math) if you want to do some elementary calculus.
   For this file it is recommended to do `04Exists` first.
 * `Probability` (easier, math) if you want to work with probability measures,
@@ -238,4 +234,11 @@ You can start with specialized files in the `Topics` folder. You have choice bet
   and learn how to prove things about adjunctions between complete lattices.
   It ends with a constructor of the product topology and its universal property
   manipulating as few open sets as possible.
+* `ClassicalPropositionalLogic` (easier, logic) if you want to learn
+  how to do classical propositional logic in Lean.
+* `IntuitionisticPropositionalLogic` (harder, logic) if you want a bigger challenge
+  and do intuitionistic propositional logic.
+
+Note the two logic files are really for people interested in logic as a goal, not logic
+as a tool.
 -/

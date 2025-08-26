@@ -199,3 +199,4 @@ theorem valid_of_provable (h : Provable A) : Valid A := by
 -/
 
 end ClassicalPropositionalLogic
+
