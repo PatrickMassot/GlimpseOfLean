@@ -61,7 +61,7 @@ that can automate the tedious steps for you.
 
 One can actually do several rewritings in one command.
 -/
-example (a b c d : ℝ) (h : a = b + c) (h' : b = d - e) : a + e = d + c := by
+example (a b c d e : ℝ) (h : a = b + c) (h' : b = d - e) : a + e = d + c := by
   rw [h, h']
   ring
 
