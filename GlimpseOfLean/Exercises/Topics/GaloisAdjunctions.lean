@@ -153,24 +153,12 @@ In the first lemma below, you will probably want to use
 or reprove it as part of your proof.
 -/
 
-lemma Inf_subset {s t : Set X} (h : s ⊆ t): Inf t ≤ Inf s := by
-  sorry
-
-lemma Sup_subset {s t : Set X} (h : s ⊆ t): Sup s ≤ Sup t :=
-  Inf_subset (X := OrderDual X) h
-
 lemma Inf_pair {x x' : X} : x ≤ x' ↔ Inf {x, x'} = x := by
   sorry
 
 lemma Sup_pair {x x' : X} : x ≤ x' ↔ Sup {x, x'} = x' := by
   rw [Set.pair_comm x x']
   exact Inf_pair (X := OrderDual X)
-
-lemma Inf_self_le (x : X) : Inf {x' | x ≤ x'} = x := by
-  sorry
-
-lemma Sup_le_self (x : X) : Sup {x' | x' ≤ x} = x :=
-  Inf_self_le (X := OrderDual X) x
 
 /- Let us prove that `Set` forms a complete lattice. -/
 
@@ -241,7 +229,8 @@ the reference solutions are
 
 Proof hint: one direction is easy and doesn't use the crucial assumption. For
 the other direction, you should probably first prove that `Monotone l`, ie
-`∀ ⦃a b⦄, a ≤ b → l a ≤ l b`.
+`∀ ⦃a b⦄, a ≤ b → l a ≤ l b`, and then prove that, for every `y`,
+`Sup (l '' { x | l x ≤ y }) ≤ y`.
 -/
 
 theorem adjunction_of_Sup {l : X → Y} (h : ∀ s : Set X, l (Sup s) = Sup (l '' s)) :

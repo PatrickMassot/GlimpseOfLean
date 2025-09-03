@@ -45,14 +45,21 @@ def isInf (s : Set X) (x₀ : X) :=
 lemma isInf.lowerBound {s : Set X} {x₀ : X} (h : isInf s x₀) : x₀ ∈ lowerBounds s := by
   -- sorry
   rw [h]
+  -- Slower alternative:
+  -- specialize h x₀
+  -- apply h.2
+  -- apply le_rfl
   -- sorry
 
 /-- A set has at most one infimum. -/
 def isInf.eq {s : Set X} {x₀ x₁ : X} (hx₀ : isInf s x₀) (hx₁ : isInf s x₁) : x₀ = x₁ := by
   -- sorry
   apply le_antisymm
-  · exact (hx₁ _).1 ((hx₀ _).2 le_rfl)
-  · exact (hx₀ _).1 ((hx₁ _).2 le_rfl)
+  · exact (hx₁ x₀).1 (isInf.lowerBound hx₀)
+    -- Slower alternative:
+    -- apply (hx₁ x₀).1
+    -- apply isInf.lowerBound hx₀
+  · exact (hx₀ x₁).1 (isInf.lowerBound hx₁)
   -- sorry
 
 /-- An element `x₀` is a supremum of a set `s` in `X` if every element
@@ -168,16 +175,6 @@ In the first lemma below, you will probably want to use
 or reprove it as part of your proof.
 -/
 
-lemma Inf_subset {s t : Set X} (h : s ⊆ t): Inf t ≤ Inf s := by
-  -- sorry
-  apply (CompleteLattice.I_isInf s _).1
-  apply lowerBounds_mono_set h
-  exact lowerBound_Inf t
-  -- sorry
-
-lemma Sup_subset {s t : Set X} (h : s ⊆ t): Sup s ≤ Sup t :=
-  Inf_subset (X := OrderDual X) h
-
 lemma Inf_pair {x x' : X} : x ≤ x' ↔ Inf {x, x'} = x := by
   -- sorry
   constructor
@@ -189,30 +186,20 @@ lemma Inf_pair {x x' : X} : x ≤ x' ↔ Inf {x, x'} = x := by
       apply hz
       simp
     · intro hz
-      simp [hz, hz.trans h]
+      simp
+      constructor
+      · apply hz
+      · calc z ≤ x  := by apply hz -- or simply `:= hz`
+             _ ≤ x' := by apply h -- or simply `:= h`
   · intro h
-    rw [← h]
-    apply lowerBound_Inf
-    simp
+    calc
+      x = Inf {x, x'} := by rw [h]
+      _ ≤ x' := by apply lowerBound_Inf; simp
   -- sorry
 
 lemma Sup_pair {x x' : X} : x ≤ x' ↔ Sup {x, x'} = x' := by
   rw [Set.pair_comm x x']
   exact Inf_pair (X := OrderDual X)
-
-lemma Inf_self_le (x : X) : Inf {x' | x ≤ x'} = x := by
-  -- sorry
-  apply (CompleteLattice.I_isInf _).eq
-  intro x'
-  constructor
-  · intro h
-    exact h le_rfl
-  · intro h x'' hx''
-    exact h.trans hx''
-  -- sorry
-
-lemma Sup_le_self (x : X) : Sup {x' | x' ≤ x} = x :=
-  Inf_self_le (X := OrderDual X) x
 
 /- Let us prove that `Set` forms a complete lattice. -/
 
@@ -304,7 +291,8 @@ the reference solutions are
 
 Proof hint: one direction is easy and doesn't use the crucial assumption. For
 the other direction, you should probably first prove that `Monotone l`, ie
-`∀ ⦃a b⦄, a ≤ b → l a ≤ l b`.
+`∀ ⦃a b⦄, a ≤ b → l a ≤ l b`, and then prove that, for every `y`,
+`Sup (l '' { x | l x ≤ y }) ≤ y`.
 -/
 
 theorem adjunction_of_Sup {l : X → Y} (h : ∀ s : Set X, l (Sup s) = Sup (l '' s)) :
@@ -320,12 +308,16 @@ theorem adjunction_of_Sup {l : X → Y} (h : ∀ s : Set X, l (Sup s) = Sup (l '
       have := h {a, b}
       rw [Sup_pair.1 hab, Set.image_pair] at this
       exact Sup_pair.2 this.symm
-
+    have Sup_le_y : Sup (l '' { x | l x ≤ y }) ≤ y := by
+      apply (CompleteLattice.S_isSup (l '' { x | l x ≤ y }) y).1
+      intro y' hy'
+      rcases hy' with ⟨x, hx, hxy'⟩
+      rw [← hxy']
+      apply hx
     calc
       l x ≤ l (mk_right l y) := l_mono h'
       _   = Sup (l '' { x | l x ≤ y }) := h {x | l x ≤ y}
-      _   ≤ Sup { y' | y' ≤ y } := Sup_subset (Set.image_preimage_subset l { y' | y' ≤ y })
-      _   = y := Sup_le_self y
+      _   ≤ y := Sup_le_y
   -- sorry
 
 /- Of course we can play the same game to construct left adjoints. -/
