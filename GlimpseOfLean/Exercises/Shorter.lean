@@ -345,10 +345,10 @@ example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_decreasing g) :
 
 example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_decreasing g) :
     non_decreasing (g ∘ f) := by
-  intro x₁ x₂ h
+  intro x₁ x₂ hx
   apply hg
   apply hf
-  apply h
+  apply hx
 
 /-
 Take some time to understand how, in the second proof, Lean saves us the
