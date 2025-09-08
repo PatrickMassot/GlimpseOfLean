@@ -60,9 +60,10 @@ lemma IndepSet.symm : IndepSet A B → IndepSet B A := by
   exact h
   -- sorry
 
-/- Many lemmas in measure theory require sets to be measurable (`MeasurableSet A`).
-If you are presented with a goal like `⊢ MeasurableSet (A ∩ B)`, try the `measurability` tactic.
-That tactic produces measurability proofs. -/
+/- Many lemmas in measure theory require sets to be measurable (`MeasurableSet A`),
+or to be equal to a measurable set up to a set of zero measure (`NullMeasurableSet A ℙ`).
+If you are presented with a goal like `⊢ MeasurableSet (A ∩ B)` or `⊢ NullMeasurableSet (A ∩ B) ℙ`,
+try the `measurability` tactic. That tactic produces measurability proofs. -/
 
 -- Hints: `compl_eq_univ_diff`, `measure_diff`, `inter_univ`, `measure_compl`, `ENNReal.mul_sub`
 lemma IndepSet.compl_right (hA : MeasurableSet A) (hB : MeasurableSet B) :
