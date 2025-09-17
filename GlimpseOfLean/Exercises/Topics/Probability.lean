@@ -54,9 +54,10 @@ def IndepSet (A B : Set Ω) : Prop := ℙ (A ∩ B) = ℙ A * ℙ B
 lemma IndepSet.symm : IndepSet A B → IndepSet B A := by
   sorry
 
-/- Many lemmas in measure theory require sets to be measurable (`MeasurableSet A`).
-If you are presented with a goal like `⊢ MeasurableSet (A ∩ B)`, try the `measurability` tactic.
-That tactic produces measurability proofs. -/
+/- Many lemmas in measure theory require sets to be measurable (`MeasurableSet A`),
+or to be equal to a measurable set up to a set of zero measure (`NullMeasurableSet A ℙ`).
+If you are presented with a goal like `⊢ MeasurableSet (A ∩ B)` or `⊢ NullMeasurableSet (A ∩ B) ℙ`,
+try the `measurability` tactic. That tactic produces measurability proofs. -/
 
 -- Hints: `compl_eq_univ_diff`, `measure_diff`, `inter_univ`, `measure_compl`, `ENNReal.mul_sub`
 lemma IndepSet.compl_right (hA : MeasurableSet A) (hB : MeasurableSet B) :
@@ -133,4 +134,3 @@ theorem bayesTheorem' (A B : Set Ω) : ℙ(A|B) = ℙ A * ℙ(B|A) / ℙ B := by
 
 lemma condProb_of_indepSet (h : IndepSet B A) (hB : ℙ B ≠ 0) : ℙ(A|B) = ℙ A := by
   sorry
-
