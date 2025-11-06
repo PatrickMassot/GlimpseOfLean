@@ -4,8 +4,9 @@ import GlimpseOfLean.Library.Basic
 
 ## Using implications
 
-Lean denotes implication by the symbol `→` instead of `⇒` because it sees a proof
-of `P → Q` as a function sending any proof of `P` to a proof of `Q`
+In Lean, the inhabitants of a proposition are precisely the proofs of that proposition.
+Proving an implication `P ⇒ Q` amounts to producing a function that turns proofs of `P`
+into proofs of `Q`. Therefore, Lean denotes implication by the symbol `→` instead of `⇒`:
 (increase font size if you can't see the difference between → and ⇒).
 
 For instance, given a real number `a`, the lemma `sq_pos_of_pos` claims `0 < a → 0 < a^2`
@@ -33,6 +34,8 @@ example (a : ℝ) (ha : 0 < a) : 0 < (a^2)^2 := by
 
 /-
 Try to do the next exercise using the lemma `add_pos : 0 < x → 0 < y → 0 < x + y`.
+Here `p → q → r` means `p → (q → r)`, so the lemma `add_pos` states that `0 < x + y` holds
+if *both* `0 < x` and `0 < y` hold.
 Note that after you `apply add_pos` you will have two goals, that you will have to
 prove one-by-one.
 -/
@@ -76,8 +79,7 @@ example (a b : ℝ) : a > 0 → b > 0 → a + b > 0 := by
   intro ha hb -- You can choose any names here
   exact add_pos ha hb
 
-/- Now prove the following simple statement in propositional logic.
-Note that `p → q → r` means `p → (q → r)`. -/
+/- Now prove the following simple statement in propositional logic. -/
 example (p q r : Prop) : (p → q) → (p → q → r) → p → r := by
   sorry
 
@@ -198,4 +200,3 @@ equivalences. You learned about tactics:
 * `have`
 * `constructor`
 -/
-
