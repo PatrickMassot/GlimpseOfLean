@@ -137,16 +137,15 @@ Let's see an example.
 -- If `u` tends to `l` and `v` tends `l'` then `u+v` tends to `l+l'`
 example (hu : seq_limit u l) (hv : seq_limit v l') :
     seq_limit (u + v) (l + l') := by
-  intros ε ε_pos
+  intro ε ε_pos
   rcases hu (ε/2) (by linarith) with ⟨N₁, hN₁⟩
   rcases hv (ε/2) (by linarith) with ⟨N₂, hN₂⟩
   use max N₁ N₂
-  intros n hn
-  have : n ≥ N₁ := by exact le_of_max_le_left hn
+  intro n hn
   rw [ge_max_iff] at hn
-  rcases hn with ⟨_hn₁, hn₂⟩
-  have fact₁ : |u n - l| ≤ ε/2 := hN₁ n (by linarith)
-  have fact₂ : |v n - l'| ≤ ε/2 := hN₂ n (by linarith)
+  rcases hn with ⟨hn₁, hn₂⟩ 
+  have fact₁ : |u n - l| ≤ ε/2 := hN₁ n hn₁ 
+  have fact₂ : |v n - l'| ≤ ε/2 := hN₂ n hn₂ 
   -- omit
   /-
   -- alternative proof without using `calc`
