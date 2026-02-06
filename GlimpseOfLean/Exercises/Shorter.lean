@@ -241,7 +241,7 @@ example (f g : ℝ → ℝ) (hf : even_fun f) (hg : even_fun g) : even_fun (f + 
   calc
     (f + g) (-x₀) = f (-x₀) + g (-x₀)  := by simp
     _             = f x₀ + g (-x₀)     := by congr 1; apply hf
-  -- put you cursor between `;` and `apply` in the previous line to see the intermediate goal
+  -- put your cursor between `;` and `apply` in the previous line to see the intermediate goal
     _             = f x₀ + g x₀        := by congr 1; apply hg
     _             = (f + g) x₀         := by simp
 
