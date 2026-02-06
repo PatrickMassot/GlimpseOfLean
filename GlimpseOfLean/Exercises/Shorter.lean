@@ -340,7 +340,7 @@ two proofs of the same statement.
 
 example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_decreasing g) :
     non_decreasing (g ∘ f) := by
-  intro x₁ x₂ hx -- Note how `intro` is also introducing the assumption `h : x₁ ≤ x₂`
+  intro x₁ x₂ hx -- Note how `intro` is also introducing the assumption `hx : x₁ ≤ x₂`
   apply hg (f x₁) (f x₂) (hf x₁ x₂ hx)
 
 example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_decreasing g) :
