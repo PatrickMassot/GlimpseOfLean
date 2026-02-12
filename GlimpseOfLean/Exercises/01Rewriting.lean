@@ -1,5 +1,6 @@
 import GlimpseOfLean.Library.Basic
-import Mathlib.Data.Complex.Exponential
+import Mathlib.Analysis.Complex.Exponential
+
 open Real
 
 /-

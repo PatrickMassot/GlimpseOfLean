@@ -91,7 +91,7 @@ When dealing with absolute values, we'll use lemmas:
 
 We will also use variants of the triangle inequality
 
-`abs_add (x y : ℝ) : |x + y| ≤ |x| + |y|`
+`abs_add_le (x y : ℝ) : |x + y| ≤ |x| + |y|`
 or
 `abs_sub_le  (a c b : ℝ) : |a - b| ≤ |a - c| + |c - b|`
 or the primed version:
@@ -125,14 +125,14 @@ example (hu : seq_limit u l) (hv : seq_limit v l') :
   use max N₁ N₂
   intro n hn
   rw [ge_max_iff] at hn
-  rcases hn with ⟨hn₁, hn₂⟩ 
-  have fact₁ : |u n - l| ≤ ε/2 := hN₁ n hn₁ 
-  have fact₂ : |v n - l'| ≤ ε/2 := hN₂ n hn₂ 
+  rcases hn with ⟨hn₁, hn₂⟩
+  have fact₁ : |u n - l| ≤ ε/2 := hN₁ n hn₁
+  have fact₂ : |v n - l'| ≤ ε/2 := hN₂ n hn₂
   
   calc
     |(u + v) n - (l + l')| = |u n + v n - (l + l')|   := rfl
     _ = |(u n - l) + (v n - l')|                      := by ring
-    _ ≤ |u n - l| + |v n - l'|                        := by apply abs_add
+    _ ≤ |u n - l| + |v n - l'|                        := by apply abs_add_le
     _ ≤ ε                                             := by linarith
 
 

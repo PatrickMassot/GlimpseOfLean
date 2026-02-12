@@ -102,7 +102,7 @@ When dealing with absolute values, we'll use lemmas:
 
 We will also use variants of the triangle inequality
 
-`abs_add (x y : ℝ) : |x + y| ≤ |x| + |y|`
+`abs_add_le (x y : ℝ) : |x + y| ≤ |x| + |y|`
 or
 `abs_sub_le  (a c b : ℝ) : |a - b| ≤ |a - c| + |c - b|`
 or the primed version:
@@ -143,9 +143,9 @@ example (hu : seq_limit u l) (hv : seq_limit v l') :
   use max N₁ N₂
   intro n hn
   rw [ge_max_iff] at hn
-  rcases hn with ⟨hn₁, hn₂⟩ 
-  have fact₁ : |u n - l| ≤ ε/2 := hN₁ n hn₁ 
-  have fact₂ : |v n - l'| ≤ ε/2 := hN₂ n hn₂ 
+  rcases hn with ⟨hn₁, hn₂⟩
+  have fact₁ : |u n - l| ≤ ε/2 := hN₁ n hn₁
+  have fact₂ : |v n - l'| ≤ ε/2 := hN₂ n hn₂
   -- omit
   /-
   -- alternative proof without using `calc`
@@ -154,14 +154,14 @@ example (hu : seq_limit u l) (hv : seq_limit v l') :
   · ring
   rw [this]
   trans |u n - l| + |v n - l'|
-  apply abs_add
+  apply abs_add_le
   linarith [fact₁, fact₂]
   -/
   -- omit
   calc
     |(u + v) n - (l + l')| = |u n + v n - (l + l')|   := rfl
     _ = |(u n - l) + (v n - l')|                      := by ring
-    _ ≤ |u n - l| + |v n - l'|                        := by apply abs_add
+    _ ≤ |u n - l| + |v n - l'|                        := by apply abs_add_le
     _ ≤ ε                                             := by linarith
 
 
@@ -343,7 +343,7 @@ example : (∃ l, seq_limit u l) → CauchySequence u := by
   intro p q hp hq
   calc
     |u p - u q| = |u p - l + (l - u q)| := by ring_nf
-    _ ≤ |u p - l| + |l - u q| := by apply abs_add
+    _ ≤ |u p - l| + |l - u q| := by apply abs_add_le
     _ = |u p - l| + |u q - l| := by rw [abs_sub_comm (u q) l]
     _ ≤ ε := by linarith [hN p hp, hN q hq]
   -- sorry
@@ -365,6 +365,6 @@ example (hu : CauchySequence u) (hl : cluster_point u l) : seq_limit u l := by
   intro n hn
   calc
     |u n - l| = |u n - u N' + (u N' - l)| := by ring_nf
-    _ ≤ |u n - u N'| + |u N' - l| := by apply abs_add
+    _ ≤ |u n - u N'| + |u N' - l| := by apply abs_add_le
     _ ≤ ε := by linarith [hN n N' hn hNN', hN']
   -- sorry

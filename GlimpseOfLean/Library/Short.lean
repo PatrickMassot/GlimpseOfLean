@@ -1,6 +1,6 @@
 import Mathlib.Tactic
 import Mathlib.Data.Real.Basic
-import Mathlib.Data.Complex.Trigonometric
+import Mathlib.Analysis.Complex.Trigonometric
 
 @[inherit_doc Mathlib.Tactic.RingNF.ring]
 macro "ring" : tactic =>
