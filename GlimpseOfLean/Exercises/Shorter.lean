@@ -124,6 +124,15 @@ a new calculation step.
 Note that subterm selection is done using Shift-click.
 There is no “click and move the cursor and then stop clicking”.
 This is different from regular selection of text in your editor or browser.
+
+Note that in order to do this computation with the tools presented here, you need
+to carefully plan your path to make sure `a` and `b+c` appear somewhere
+so that `congr` can use the assumptions. If you find this puzzle frustrating then
+don’t hesitate to skip this exercise.
+
+Note also that `lean` is perfectly capable of solving the whole exercise in one
+command —namely `grind`— using a Gröbner basis algorithm. But here the point is to
+pratice doing computations by hand.
 -/
 
 example (a b c : ℝ) (h : a = -b) (h' : b + c = 0) : b*(a - c) = 0 := by
@@ -280,6 +289,34 @@ example (f g : ℝ → ℝ) (hf : even_fun f) (hg : even_fun g) : even_fun (f + 
     _             = f x₀ + g (-x₀)     := by congr
     _             = f x₀ + g x₀        := by congr
     _             = (f + g) x₀         := by simp
+
+/-
+All exercises in this file can be done without introducting any intermediate statements.
+But experience shows this can be frustrating to some people. If you feel the need
+to state something that is not the current goal, you can use
+```
+have my_statement_name : statement := by
+   indented proof
+```
+as in the following example.
+-/
+
+example (f g : ℝ → ℝ) (hf : even_fun f) (hg : even_fun g) : even_fun (f + g) := by
+  -- Let x₀ be any real number
+  intro x₀
+  -- We now record some useful facts.
+  have hfx₀ : f (-x₀) = f x₀ := by
+    apply hf
+  have hgx₀ : g (-x₀) = g x₀ := by
+    apply hg
+  -- and let's compute
+  -- (note how `congr` now finds assumptions finishing those steps)
+  calc
+    (f + g) (-x₀) = f (-x₀) + g (-x₀)  := by simp
+    _             = f x₀ + g (-x₀)     := by congr
+    _             = f x₀ + g x₀        := by congr
+    _             = (f + g) x₀         := by simp
+
 
 /-
 Now let's practice. If you need to learn how to type a unicode symbol, you can
