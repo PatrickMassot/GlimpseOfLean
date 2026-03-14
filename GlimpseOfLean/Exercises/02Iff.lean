@@ -41,8 +41,9 @@ prove one-by-one.
 -/
 
 example (a b : ℝ) (ha : 0 < a) (hb : 0 < b) : 0 < a^2 + b^2 := by
-  sorry
-
+  apply add_pos
+  exact sq_pos_of_pos ha
+  exact sq_pos_of_pos hb
 /-
 You can also give a proof with forward reasoning, using the `have` tactic.
 In order to announce an intermediate statement we use:
@@ -65,8 +66,11 @@ example (a : ℝ) (ha : 0 < a) : 0 < (a^2)^2 := by
 /- Now prove the same lemma as before using forwards reasoning. -/
 
 example (a b : ℝ) (ha : 0 < a) (hb : 0 < b) : 0 < a^2 + b^2 := by
-  sorry
-
+  have ha' : 0 < a^2 := by
+    exact sq_pos_of_pos ha
+  have hb' : 0 < b^2 := by
+    exact sq_pos_of_pos hb
+  exact add_pos ha' hb'
 
 /- ## Proving implications
 
@@ -81,8 +85,11 @@ example (a b : ℝ) : a > 0 → b > 0 → a + b > 0 := by
 
 /- Now prove the following simple statement in propositional logic. -/
 example (p q r : Prop) : (p → q) → (p → q → r) → p → r := by
-  sorry
-
+  intro h₁ h₂ h₃
+  apply h₂
+  exact h₃
+  apply h₁ at h₃
+  exact h₃
 /-
 Note that, when using `intro`, you need to give a name to the assumption.
 Lean will let you use a name that was already used. In that case the new
@@ -200,4 +207,3 @@ equivalences. You learned about tactics:
 * `have`
 * `constructor`
 -/
-

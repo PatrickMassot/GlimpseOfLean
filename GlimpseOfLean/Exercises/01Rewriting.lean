@@ -25,7 +25,7 @@ your proof is finished.
 -/
 
 example (a b : ℝ) : (a+b)^2 = a^2 + 2*a*b + b^2 := by
-  sorry
+  ring
 
 /- In the first example above, take a closer look at where Lean displays parentheses.
 The `ring` tactic certainly knows about associativity of multiplication, but sometimes
@@ -75,7 +75,8 @@ but it doesn't use the assumptions `h` and `h'`
 -/
 
 example (a b c d : ℝ) (h : b = d + d) (h' : a = b + c) : a + b = c + 4 * d := by
-  sorry
+  rw [h',h]
+  ring
 
 /- ## Rewriting with a lemma
 
@@ -111,7 +112,7 @@ right-hand side.
 -/
 
 example (a b c : ℝ) : exp (a + b - c) = (exp a * exp b) / (exp c * exp 0) := by
-  sorry
+  rw [exp_sub, exp_add, exp_zero, mul_one]
 
 /-
 ## Rewriting from right to left
@@ -134,7 +135,8 @@ goal and replaced it with `a`.
 -/
 
 example (a b c d : ℝ) (h : a = b + b) (h' : b = c) (h'' : a = d) : b + c = d := by
-  sorry
+  rw [← h', ← h]
+  exact h''
 
 /- ## Rewriting in a local assumption
 
@@ -173,12 +175,11 @@ Let's do some exercises using `calc`.
 
 example (a b c : ℝ) (h : a = b + c) : exp (2 * a) = (exp b) ^ 2 * (exp c) ^ 2 := by
   calc
-    exp (2 * a) = exp (2 * (b + c))                 := by sorry
-              _ = exp ((b + b) + (c + c))           := by sorry
-              _ = exp (b + b) * exp (c + c)         := by sorry
-              _ = (exp b * exp b) * (exp c * exp c) := by sorry
-              _ = (exp b) ^ 2 * (exp c)^2           := by sorry
-
+    exp (2 * a) = exp (2 * (b + c))                 := by rw [h]
+              _ = exp ((b + b) + (c + c))           := by ring
+              _ = exp (b + b) * exp (c + c)         := by rw [exp_add]
+              _ = (exp b * exp b) * (exp c * exp c) := by rw [exp_add, exp_add]
+              _ = (exp b) ^ 2 * (exp c)^2           := by ring
 /-
 From a practical point of view, when writing such a proof, it is sometimes convenient to:
 * pause the tactic state view update in VScode by clicking the Pause icon button
@@ -191,8 +192,10 @@ Aligning the equal signs and `:=` signs is not necessary but looks tidy.
 -/
 
 example (a b c d : ℝ) (h : c = d*a + b) (h' : b = a*d) : c = 2*a*d := by
-  sorry
-
+  rw [h'] at h
+  rw [mul_comm] at h
+  ring_nf at *
+  exact h
 /-
 Congratulations, this is the end of your first exercise file! You've seen what typing
 a Lean proof looks like and have learned about the following tactics:
@@ -201,4 +204,3 @@ a Lean proof looks like and have learned about the following tactics:
 * `exact`
 * `calc`
 -/
-
