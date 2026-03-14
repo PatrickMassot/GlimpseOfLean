@@ -197,8 +197,15 @@ example (a b : ℝ) : (a-b)*(a+b) = 0 ↔ a^2 = b^2 := by
 /- You can try it yourself in this exercise. -/
 
 example (a b : ℝ) : a = b ↔ b - a = 0 := by
-  sorry
-
+  constructor
+  · intro h
+    rw [←h]
+    ring
+  · intro h
+    calc
+      a = a + 0 := by ring
+      _ = a + (b - a) := by rw [←h]
+      _ = b := by ring
 /-
 This is the end of this file where you learned how to handle implications and
 equivalences. You learned about tactics:
