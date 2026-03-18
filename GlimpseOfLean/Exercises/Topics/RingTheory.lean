@@ -65,14 +65,15 @@ Try filling in the `sorry`s below using `intro` and `simp`.
 def RingHom.comp (g : S →+* T) (f : R →+* S) : R →+* T where
   toFun x := g (f x)
   map_one' := by
-    sorry
+    rw [map_one, map_one]
   map_mul' := by
-    sorry
+    intro x y
+    rw [map_mul,map_mul]
   map_zero' := by
-    sorry
+    rw [map_zero,map_zero]
   map_add' := by
-    sorry
-
+    intro x y
+    rw [map_add,map_add]
 /-
 A ring isomorphism between `R` and `S` is written `e : R ≃+* S`.
 We can apply `e` as a function from `R` to `S` by writing `e x`, where `x : R`.
@@ -91,13 +92,17 @@ def RingEquiv.comp (g : S ≃+* T) (f : R ≃+* S) : R ≃+* T where
   toFun x := g (f x)
   invFun x := f.symm (g.symm x)
   left_inv := by
-    sorry
+    intro x
+    simp only [RingEquiv.symm_apply_apply]
   right_inv := by
-    sorry
+    intro x
+    simp only [RingEquiv.apply_symm_apply]
   map_add' := by
-    sorry
+    intro x y
+    rw [map_add,map_add]
   map_mul' := by
-    sorry
+    intro x y
+    rw [map_mul,map_mul]
 
 end homomorphisms
 
@@ -132,14 +137,29 @@ under multiplication on the left (hence also on the right since our rings are co
 Try showing the intersection of two ideals is again an ideal (of course Mathlib already knows this,
 it is only an exercise).
 -/
-def Ideal.inter (I J : Ideal R) : Ideal R where
+
+def Ideal.inter' (I J : Ideal R) : Ideal R where
   carrier := I ∩ J
   add_mem' := by
-    sorry
+    intro a b ha hb
+    apply Set.mem_inter
+    have ha' : a ∈ I := Set.mem_of_mem_inter_left ha
+    have hb' : b ∈ I := Set.mem_of_mem_inter_left hb
+    exact add_mem ha' hb'
+    have ha' : a ∈ J := Set.mem_of_mem_inter_right ha
+    have hb' : b ∈ J := Set.mem_of_mem_inter_right hb
+    exact add_mem ha' hb'
   zero_mem' := by
-    sorry
+    have hI_zero : 0 ∈ I := zero_mem I
+    have hJ_zero : 0 ∈ J := zero_mem J
+    exact Set.mem_inter hI_zero hJ_zero
   smul_mem' := by
-    sorry
+    intro c x hx
+    have hI_x : x ∈ I := Set.mem_of_mem_inter_left hx
+    have hJ_x : x ∈ J := Set.mem_of_mem_inter_right hx
+    have hI_c : c • x ∈ I := Submodule.smul_mem I c hI_x
+    have hJ_c : c • x ∈ J := Submodule.smul_mem J c hJ_x
+    exact Set.mem_inter hI_c hJ_c
 
 /-
 Finally, let's look at ideal quotients. If `I` is an ideal of the ring `R`,
@@ -188,13 +208,14 @@ variable {S} [CommRing S]
 
 def kerLift (f : R →+* S) : R ⧸ ker f →+* S :=
   Ideal.Quotient.lift (ker f) f fun x ↦ by
-    sorry
+    intro x
+    exact AddMonoidHom.mem_mker.mp x
 
 /-
 After a new definition, it is a good idea to make lemmas for its basic properties.
 -/
 theorem kerLift_mk (f : R →+* S) (x : R) : kerLift f (Ideal.Quotient.mk (ker f) x) = f x := by
-  sorry
+  exact Eq.symm (RingHom.congr_fun rfl x)
 
 /-
 When we are given a quotient element `x : R ⧸ I`, it is often a useful proof step to
@@ -217,7 +238,8 @@ theorem kerLift_injective' (f : R →+* S) (x : R ⧸ ker f) (hx : kerLift f x =
   rcases Ideal.Quotient.mk_surjective x with ⟨x', hx'⟩
   rw [← hx']
   rw [← hx'] at hx
-  sorry
+  exact Ideal.Quotient.eq_zero_iff_mem.mpr hx
+
 
 /-
 Let's restate that result using `Function.Injective`.
@@ -225,6 +247,7 @@ Let's restate that result using `Function.Injective`.
 theorem kerLift_injective (f : R →+* S) : Injective (kerLift f) := by
   rw [injective_iff_map_eq_zero]
   exact kerLift_injective' f
+  #print axioms kerLift_injective
 
 /-
 ## First isomorphism theorem
@@ -380,4 +403,3 @@ noncomputable def chineseIso [Fintype ι] (I : ι → Ideal R) (hI : ∀ i j, i 
 
 end Ideal
 end chinese
-
