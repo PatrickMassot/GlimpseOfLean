@@ -122,7 +122,7 @@ seen on the video at
 
 https://www.imo.universite-paris-saclay.fr/~patrick.massot/calc_widget.webm
 
-As you can see there, the `calc?` tactic propose to create a one-line compution,
+As you can see there, the `calc?` tactic propose to create a one-line computation,
 and then putting the cursor after `:= by` allows to select subterms to replace in
 a new calculation step.
 
